@@ -1,0 +1,37 @@
+body {
+  font-size:12px;
+  padding:0px;
+  margin:0px;
+  overflow-x:hidden;
+  overflow-y:hidden;
+}
+
+a:hover{color:#01839f; text-decoration:underline;}
+td { border-color:#8AF; }
+td.t_sld { border-top-style: solid ; border-top-width: 1px ; }
+td.b_sld { border-bottom-style: solid ; border-bottom-width: 1px ;}
+td.r_sld { border-right-style: solid ; border-right-width: 1px ;}
+td.l_sld { border-left-style: solid ; border-left-width: 1px ; }
+td.textW { color: white; }
+
+.flow_board {
+    background-image: url(../images/flow_board_bg.gif);
+    height: 800px;
+    width: 1000px;
+    background-repeat: no-repeat;
+}
+.flow_pic1 img { position: relative; left: 191px; top: 700px; } /**费用*/
+.flow_pic2 img { position: relative; left: 331px; top: 440px; } /**总账*/
+.flow_pic3 img { position: relative; left: 651px; top: 430px; } /**收款*/
+.flow_pic4 img { position: relative; left: 791px; top: 210px; } /**开票*/
+.flow_pic5 img { position: relative; left: 921px; top: -20px; } /**销售*/
+.flow_pic6 img { position: relative; left: 751px; top: -200px; } /**发货*/
+.flow_pic7 img { position: relative; left: 511px; top: -420px; } /**收货*/
+.flow_pic8 img { position: relative; left: 375px; top: -600px; } /**采购*/
+.flow_pic9 img { position: relative; left: 235px; top: -555px; } /**收票*/
+.flow_pic10 img { position: relative; left: 105px; top: -500px; } /**付款*/
+.flow_pic11 img { position: relative; left: 495px; top: -600px; } /**库存*/
+
+div.layout-panel>div.panel-header>div.panel-title{
+	color:  #444;
+}

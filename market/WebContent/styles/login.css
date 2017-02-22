@@ -1,0 +1,79 @@
+﻿body{
+/*   background:url(../images/loginbg.gif) repeat-x top #8bacd7; */
+  text-align: center;
+  font-family:'微软雅黑';
+}
+div,ul,li{ margin:0; padding:0; list-style:none;}
+
+#LoginCircle{
+  /*margin-top:168px; */
+  width:655px;
+  height:252px;
+  position: absolute;
+  left: 50%; /*配合margin-left的负值实现水平居中*/
+  margin-left: -330px; /*值的大小等于元素宽度的一半*/
+  top:50%; /*配合margin-top的负值实现垂直居中*/
+  margin-top: -168px; /*值的大小等于元素高度的一半*/ 
+}
+
+#LoginDoc{
+  width:650px;
+  height:242px;
+  margin:3px;
+  background:url(../images/logindocbg.gif) no-repeat center center #f9fbfe;
+}
+
+#SysName{
+  float:left;
+  width:45%;
+  font-family:'微软雅黑';
+  font-size:26px;
+  margin:90px 0 0 30px;
+  color:#004ea2;
+  line-height:28px;
+}
+
+#SysInput{
+  float:left;
+  width:55%;
+  height:120px;
+  margin-top:60px;
+}
+
+.InputStyle{
+  border:0;
+  font-size:20px;
+/*  background:url(../images/inputstyle.gif) repeat-x; */
+  color:#2f2f2f;
+  font-family:"verdana";
+  height:68px;
+  line-height:68px;
+}
+
+.button_height20{
+  border: #66a4fa 1px solid;
+  font-size: 10pt;
+  background: url(../images/bottom_over.gif);
+  cursor: hand;
+  height: 22px;
+}
+.button_height20_over{
+  border: #66a4fa 1px solid;
+  font-size: 9pt;
+  background: url(../images/bottom.gif);
+  cursor: hand; 
+  height: 22px;
+}
+
+#copyright{
+  text-align:right;
+  color:#000;
+}
+.logo{width:190px; height:64px; position:absolute;  left:50%; margin-left:-95px; top:50px;}
+.login_box{ width:552px; height:442px; background:url(../images/login_bg.png) no-repeat; position:absolute; left:50%; top:50%; margin-left:-276px; margin-top:-234px; margin-bottom:}
+.login_box h1{width:100%; height:76px; text-align:center; color:#fff; font-size:30px; font-weight:normal;}
+.login_box ul{width:432px; overflow:hidden; margin:0 auto;}
+.login_box ul li{width:432px; height:68px; overflow:hidden; margin:15px 0;}
+.login_box ul li label{width:103px; height:66px; float:left; margin:1px 0 0 1px; background:url(../images/llabel_bg.png) no-repeat; text-align:center; color:#2f2f2f; font-size:22px; line-height:66px;}
+.login_box ul .txt_bg{background:url(../images/ltxt_bg.png) no-repeat;}
+.button_login{width:432px; height:68px; background:url(../images/login_btn.png) no-repeat; text-align:center; color:#fff; font-size:22px; border:0; font-family:"微软雅黑";}

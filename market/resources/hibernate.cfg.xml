@@ -1,0 +1,30 @@
+<!-- NOTE: If you're working offline, you might have to change the DOCTYPE 
+	to the following: <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate 
+	Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"> -->
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<mapping class="cn.yj.market.frame.vo.MarketAnimal" />
+		<mapping class="cn.yj.market.frame.vo.MarketCallBack" />
+		<mapping class="cn.yj.market.frame.vo.MarketCallBackRecord" />
+		<mapping class="cn.yj.market.frame.vo.MarketGiftConfig" />
+		<mapping class="cn.yj.market.frame.vo.MarketGiftConfigLine" />
+		<mapping class="cn.yj.market.frame.vo.MarketGoods" />
+		<mapping class="cn.yj.market.frame.vo.MarketGoodsUnitPrice" />
+		<mapping class="cn.yj.market.frame.vo.MarketIllness" />
+		<mapping class="cn.yj.market.frame.vo.MarketMember" />
+		<mapping class="cn.yj.market.frame.vo.MarketMemberNoSeq" />
+		<mapping class="cn.yj.market.frame.vo.MarketMemberGiftAccumulation" />
+		<mapping class="cn.yj.market.frame.vo.MarketMemberVoucher" />
+		<mapping class="cn.yj.market.frame.vo.MarketMemberYearAccumulation" />
+		<mapping class="cn.yj.market.frame.vo.MarketMemberYearAccumulationLine" />
+		<mapping class="cn.yj.market.frame.vo.MarketOnceBuy" />
+		<mapping class="cn.yj.market.frame.vo.MarketOrder" />
+		<mapping class="cn.yj.market.frame.vo.MarketOrderGiftLine" />
+		<mapping class="cn.yj.market.frame.vo.MarketOrderLine" />
+		<mapping class="cn.yj.market.frame.vo.MarketPayoff" />
+		<mapping class="cn.yj.market.frame.vo.MarketUser" />
+	</session-factory>
+</hibernate-configuration>
