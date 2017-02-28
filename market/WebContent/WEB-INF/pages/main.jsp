@@ -301,15 +301,19 @@
     var CURRENT_TAB ;
     var CURRENT_IDX ;
     function changeTab(title,index){
-    	if(CURRENT_TAB && CURRENT_IDX != 0){
-    		$('#tabs').tabs('update' ,{
-    			tab: CURRENT_TAB,
+    	var ct ;
+    	if( CURRENT_IDX != 0){
+    		ct = $('#tabs').tabs('getTab' ,CURRENT_IDX) ;
+    	}
+		if(ct){
+			$('#tabs').tabs('update' ,{
+    			tab: ct,
     			type: 'header' ,
     			options: {
     				iconCls: 'icon-tab-normal'
 		    	}
 			});
-    	}
+		}
     	CURRENT_TAB = $('#tabs').tabs('getTab' ,index);
     	CURRENT_IDX = index ;
     	if(index == 0){
@@ -323,7 +327,6 @@
 	    	}
 		});
     }
-
     </script>
 
   </head>

@@ -8,10 +8,6 @@
     <link rel="stylesheet" type="text/css" href="/styles/themes/lightblue/easyui.css" id="themesCss">
 	<%@ include file="/common/cssAndJs.jsp"%>
     <script type="text/javascript"> 
-    $.extend($.fn.validatebox.defaults.rules, {
-        /*必须和某个字段相等*/
-        equalTo: { validator: function (value, param) { return $(param[0]).val() == value; }, message: '字段不匹配' }
-       });
     
     // 页面键盘屏蔽
     $(document).keydown(function(event){
@@ -115,7 +111,7 @@
 	</div>
 	<div id="newMemberWin" class="easyui-window" title="新增会员" 
 			data-options="modal:true,closed:true,iconCls:'icon-add',cache:false,minimizable:false,maximizable:false,collapsible:false,resizable:false
-						 ,href:''" style="width:800px;height:500px;padding:5px;">
+						 ,href:''" style="width:600px;height:480px;padding:5px;">
 		</div>
   </body>
 </html>
