@@ -46,6 +46,7 @@ public final class JsonUtils {
     static {
         DEFAULT_JSON_CONFIG.put(java.util.Date.class, DATE_TIME_CONFIG);
         DEFAULT_JSON_CONFIG.put(java.sql.Date.class, DATE_TIME_CONFIG);
+        DEFAULT_JSON_CONFIG.put(java.sql.Timestamp.class, DATE_TIME_CONFIG);
     }
 
     /**

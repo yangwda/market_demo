@@ -13,6 +13,26 @@
 	    	  closeWin() ;
 	      });
 	}
+	$(document).ready(function(){
+		var row = $('#memberListTable').datagrid('getSelected');
+		if(!row){
+			msg_error('错误' ,'无法获取需要修改的会员信息。');
+			closeWin() ;
+			return ;
+		}
+	 	$('#memberInfoForm').form('load',{
+	 		memberId: row.memberId ,
+	 		memberName: row.memberName ,
+	 		memberAddress: row.memberAddress ,
+	 		memberPhone: row.memberPhone ,
+	 		memberBusiRemark: row.memberBusiRemark ,
+	 		common: row.common ,
+	 		memberTel: row.memberTel ,
+	 		memberQQ: row.memberQQ ,
+	 		memberWeixin: row.memberWeixin 
+	 	});
+		$('#memberNo').text(row.memberNo) ;
+	});
 </script>
 
 <div class="easyui-layout" data-options="fit:true">
@@ -21,7 +41,10 @@
 	    	<table cellpadding="5" style="width:100%">
 	    		<tr>
 	    			<td>姓名:</td>
-	    			<td><input class="easyui-textbox" type="text" name="memberName" data-options="width:345"></input></td>
+	    			<td>
+	    				<input type="hidden" name="memberId" />
+	    				<input class="easyui-textbox" type="text" name="memberName" data-options="width:345"></input>
+	    			</td>
 	    		</tr>
 	    		<tr>
 	    			<td>会员编号:</td>
@@ -64,47 +87,4 @@
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="closeWin();" style="width:15%">取消</a>
 	</div>
 </div>
-<script type="text/javascript">
-$(document).ready(function(){
-	var row = $('#memberListTable').datagrid('getSelected');
-	if(!row){
-		msg_error('错误' ,'无法获取需要修改的会员信息。');
-		closeWin() ;
-		return ;
-	}
-// 	$('#memberInfoForm').form('load',{
-// 		memberName: row.memberName ,
-// 		memberAddress: row.memberAddress ,
-// 		memberPhone: row.memberPhone ,
-// 		memberBusiRemark: row.memberBusiRemark ,
-// 		common: row.common ,
-// 		memberTel: row.memberTel ,
-// 		memberQQ: row.memberQQ ,
-// 		memberWeixin: row.memberWeixin 
-// 	});
-// 	console.log(row) ;
-// 	var fd = {
-//  		memberName: row.memberName ,
-//  		memberAddress: row.memberAddress ,
-//  		memberPhone: row.memberPhone ,
-//  		memberBusiRemark: row.memberBusiRemark ,
-//  		common: row.common ,
-//  		memberTel: row.memberTel ,
-//  		memberQQ: row.memberQQ ,
-//  		memberWeixin: row.memberWeixin 
-// 	} ;
-// 	console.log(fd) ;
-	$('#memberInfoForm').form('load',{
-		memberName: 'memberName' ,
-		memberAddress: 'memberAddress' ,
-		memberPhone: 'memberPhone' ,
-		memberBusiRemark: 'memberBusiRemark' ,
-		common: 'common' ,
-		memberTel: 'memberTel' ,
-		memberQQ: 'memberQQ' ,
-		memberWeixin: 'memberWeixin' 
-	});
-	$('#memberNo').text(row.memberNo) ;
-});
-</script>
 

@@ -2,6 +2,7 @@ package cn.yj.market.module.common.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -72,10 +73,42 @@ public class MemberController extends BaseController {
 		if (member == null) {
             return ResponseJsonData.responseError("系统错误，无法获取会员信息！");
         }
+		if (StringUtils.isBlank(member.getMemberName())) {
+			return ResponseJsonData.responseError("请填写会员姓名！") ;
+		}
+		if (StringUtils.isBlank(member.getMemberPhone())) {
+			return ResponseJsonData.responseError("请填写会员手机号码！") ;
+		}
+		
 		//-- TODO 校验逻辑
+		if (StringUtils.length(member.getMemberName()) > 100) {
+			return ResponseJsonData.responseError("会员姓名过长！") ;
+		}
+		if (StringUtils.length(member.getCommon()) > 2000) {
+			return ResponseJsonData.responseError("会员姓名过长！") ;
+		}
+		if (StringUtils.length(member.getMemberAddress()) > 1000) {
+			return ResponseJsonData.responseError("会员姓名过长！") ;
+		}
+		if (StringUtils.length(member.getMemberBusiRemark()) > 2000) {
+			return ResponseJsonData.responseError("会员姓名过长！") ;
+		}
+		if (StringUtils.length(member.getMemberPhone()) > 200) {
+			return ResponseJsonData.responseError("会员姓名过长！") ;
+		}
+		if (StringUtils.length(member.getMemberQQ()) > 200) {
+			return ResponseJsonData.responseError("会员姓名过长！") ;
+		}
+		if (StringUtils.length(member.getMemberTel()) > 200) {
+			return ResponseJsonData.responseError("会员姓名过长！") ;
+		}
+		if (StringUtils.length(member.getMemberWeixin()) > 200) {
+			return ResponseJsonData.responseError("会员姓名过长！") ;
+		}
+		
+		
         if (member.getMemberId() != null) {
         	try {
-        		memberBO.saveMember(member);
         		memberBO.updateMember(member.getMemberId(), member.getMemberName(), member.getMemberTel(), member.getMemberPhone(), 
         				member.getMemberQQ(), member.getMemberWeixin(), member.getMemberAddress(), member.getMemberBusiRemark(), member.getCommon());
 			} catch (Exception e) {

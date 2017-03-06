@@ -17,6 +17,7 @@
     $(document).ready(function(){
     	$('#memberListTable').datagrid({
 		    fit: true,
+// 		    fitColumns: true,
 		    rownumbers: true,
 		    pagination: true,
 		    pageSize: 20,
@@ -25,7 +26,7 @@
 		    loadMsg: '加载中，请稍后......',
 		    nowrap: false,
 		    columns:[[
-		      {title:'会员编号', field:'memberNo', width:80},
+		      {title:'会员编号', field:'memberNo', width:160},
 		      {title:'会员名称', field:'memberName', width:80},
 		      {title:'地址', field:'memberAddress', width:130},
 		      {title:'手机', field:'memberPhone', width:80},
@@ -83,14 +84,14 @@
 			<table cellpadding="0" cellspacing="1" border="0" width="100%">
 				<tr>
 					<td width="3px"></td>
-					<td align="right"><span>会员编号:</span></td>
-					<td><input class="easyui-textbox" name="id" id="id"
+					<td align="left"><span>会员编号:</span></td>
+					<td><input class="easyui-textbox" name="memberNo" id="memberNo"
 						style="width: 100px"></td>
-					<td align="right"><span>会员姓名:</span></td>
-					<td><input class="easyui-textbox" name="whId" id="whId" data-options=""
+					<td align="left"><span>会员姓名:</span></td>
+					<td><input class="easyui-textbox" name="memberName" id="memberName" data-options=""
 						style="width: 196px"></td>
-					<td align="right"><span>手机号：</span></td>
-					<td><input class="easyui-textbox" id="incode1" name="incode1"
+					<td align="left"><span>手机/电话号：</span></td>
+					<td><input class="easyui-textbox" id="memberPhone" name="memberPhone"
 						style="width: 100px" /></td>
 					<td align="right"><a href="#" class="easyui-linkbutton"
 						data-options="plain:true,iconCls:'icon-search'"
