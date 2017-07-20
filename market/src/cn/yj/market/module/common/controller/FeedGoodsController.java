@@ -51,7 +51,7 @@ public class FeedGoodsController extends BaseController {
 			goodsPage = goodsBO.getPage(condition, SessionUtil.getPageRequestParams()) ;
 		} catch (Exception e) {
 			response.setStatus(ERROR);
-			response.setMessage("系统错误，无法查询会员信息！");
+			response.setMessage("系统错误，无法查询饲料信息！");
 		}
 		if (goodsPage != null) {
 			response.pagedGridData(goodsPage.getTotal(), goodsPage.getRecords());
@@ -74,7 +74,7 @@ public class FeedGoodsController extends BaseController {
 	@ResponseBody
 	public JSONObject saveGoodsInfo(MarketGoods goods) {
 		if (goods == null) {
-            return ResponseJsonData.responseError("系统错误，无法获取会员信息！");
+            return ResponseJsonData.responseError("系统错误，无法获取饲料信息！");
         }
 		if (StringUtils.isBlank(goods.getGoodsName())) {
 			return ResponseJsonData.responseError("请填写饲料名称！") ;

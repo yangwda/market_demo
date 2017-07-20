@@ -4,7 +4,7 @@
 <html>
   <head>
     <%@ include file="/common/meta.jsp"%>
-    <title>会员信息</title>
+    <title>药品信息</title>
     <link rel="stylesheet" type="text/css" href="/styles/themes/lightblue/easyui.css" id="themesCss">
 	<%@ include file="/common/cssAndJs.jsp"%>
     <script type="text/javascript"> 
@@ -53,14 +53,14 @@
 	    });//.datagrid('load' ,params);
 	}
 
-	//弹出新增会员页面
+	//弹出新增药品页面
 	function newDrugGoods(){
 		$("#newDrugGoodsWin").window({ href:'' ,iconCls : 'icon-add'}).window('open');
 		$("#newDrugGoodsWin").window('center').window('setTitle' ,'新增药品');
 		$("#newDrugGoodsWin").window('refresh' ,'${ctx}/drug/loadContent?pn=goods/new_goods_win');
 	}
 
-	//弹出修改会员信息页面
+	//弹出修改药品信息页面
 	function modify(){
 		var row = $('#drugGoodsListTable').datagrid('getSelected');
 		if(!row){
