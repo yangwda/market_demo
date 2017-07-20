@@ -30,9 +30,11 @@ public class MemberDaoImpl extends GenericDao<MarketMember> implements
 				try {
 					memberName = new String(condition.getMemberName().getBytes(),"UTF-8");
 				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
+					LOGGER.error("## ERROR in search member ,use name condition convert to utf8 string .. ", e);
 				}
-				criteria.add( Restrictions.like("memberName", "%"+memberName+"%")) ;
+				if (StringUtils.isNotBlank(memberName)) {
+					criteria.add( Restrictions.like("memberName", "%"+memberName+"%")) ;
+				}
 			}
 			if (StringUtils.isNotBlank(condition.getMemberNo())) {
 				criteria.add( Restrictions.like("memberNo", "%"+condition.getMemberNo()+"%")) ;
@@ -42,9 +44,11 @@ public class MemberDaoImpl extends GenericDao<MarketMember> implements
 				try {
 					memberAddress = new String(condition.getMemberAddress().getBytes(),"UTF-8");
 				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
+					LOGGER.error("## ERROR in search member ,use address condition convert to utf8 string .. " ,e);
 				}
-				criteria.add( Restrictions.like("memberAddress", "%"+memberAddress+"%")) ;
+				if (StringUtils.isNotBlank(memberAddress)) {
+					criteria.add( Restrictions.like("memberAddress", "%"+memberAddress+"%")) ;
+				}
 			}
 			if (condition.getMemberPhone() != null) {
 				criteria.add(Restrictions.disjunction()

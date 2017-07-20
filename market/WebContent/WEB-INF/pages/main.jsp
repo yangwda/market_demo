@@ -377,7 +377,7 @@
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('兽种类', '/jump/sysBuilding', 'icon-tab-light', false)" >兽种类</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('疾病种类', '/jump/sysBuilding', 'icon-tab-light', false)" >疾病种类</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('其他赠品管理', '/jump/sysBuilding', 'icon-tab-light', false)" >其他赠品管理</a></li>
-            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('药品管理', '/jump/sysBuilding', 'icon-tab-light', false)" >药品管理</a></li>
+            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('药品管理', '/drug/', 'icon-tab-light', false)" >药品管理</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('饲料管理', '/jump/sysBuilding', 'icon-tab-light', false)" >饲料管理</a></li>
           </ul>
         </div>

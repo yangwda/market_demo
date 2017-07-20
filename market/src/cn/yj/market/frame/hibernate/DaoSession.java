@@ -12,8 +12,6 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -27,6 +25,8 @@ import org.hibernate.internal.CriteriaImpl;
 import org.hibernate.internal.CriteriaImpl.OrderEntry;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.util.Assert;
@@ -38,7 +38,7 @@ import cn.yj.market.frame.util.ObjectUtils;
 
 public class DaoSession {
 	
-	protected final Log logger = LogFactory.getLog(DaoSession.class) ;
+	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	
     @Resource
     private SessionFactory sessionFactory;
@@ -68,24 +68,6 @@ public class DaoSession {
 		return getSession() ;
 	}
 
-    @Resource
-    private SessionFactory oracleSessionFactory;
-    @Autowired
-    @Required
-    public void setOracleSessionFactory(SessionFactory oracleSessionFactory) {
-        this.oracleSessionFactory = oracleSessionFactory;
-    }
-
-    public SessionFactory getOracleSessionFactory() {
-        return oracleSessionFactory;
-    }
-    public Session getOracleSession() throws HibernateException {
-        Session sess = getOracleSessionFactory().getCurrentSession();
-        if (sess == null) {
-            sess = getOracleSessionFactory().openSession();
-        }
-        return sess;
-    }
     
     
     //    public Object saveObj(Object obj) {

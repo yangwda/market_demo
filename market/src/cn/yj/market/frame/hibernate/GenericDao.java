@@ -23,8 +23,6 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.transform.ResultTransformer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import cn.yj.market.frame.page.Page;
 
@@ -33,9 +31,6 @@ import cn.yj.market.frame.page.Page;
  * 
  */
 public abstract class GenericDao<T extends BasePojo> extends DaoSession implements Dao<T> {
-    //
-    private static final Logger LOGGER = LoggerFactory.getLogger(GenericDao.class);
-
     //
     protected final Class<T> actualType;
 
