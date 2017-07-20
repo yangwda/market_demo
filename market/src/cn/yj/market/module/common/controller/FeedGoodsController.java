@@ -24,8 +24,8 @@ import com.alibaba.fastjson.JSONObject;
 
 
 @Controller
-@RequestMapping("/drug")
-public class DrugGoodsController extends BaseController {
+@RequestMapping("/feed")
+public class FeedGoodsController extends BaseController {
 	
 	@Autowired
 	private GoodsBO goodsBO;
@@ -37,7 +37,7 @@ public class DrugGoodsController extends BaseController {
      */
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView index() {
-        return new ModelAndView("goods/drug_goods_index");
+        return new ModelAndView("goods/feed_goods_index");
     }
     
 	@RequestMapping(value = "/getGoodsPageList", method = { RequestMethod.GET,
@@ -77,51 +77,51 @@ public class DrugGoodsController extends BaseController {
             return ResponseJsonData.responseError("系统错误，无法获取会员信息！");
         }
 		if (StringUtils.isBlank(goods.getGoodsName())) {
-			return ResponseJsonData.responseError("请填写药品名称！") ;
+			return ResponseJsonData.responseError("请填写饲料名称！") ;
 		}
 		if (StringUtils.isBlank(goods.getGoodsNo())) {
-			return ResponseJsonData.responseError("请填写药品编码！") ;
+			return ResponseJsonData.responseError("请填写饲料编码！") ;
 		}
 		if (StringUtils.isBlank(goods.getGoodsManufacturer())) {
-			return ResponseJsonData.responseError("请填写药品厂商信息！") ;
+			return ResponseJsonData.responseError("请填写饲料厂商信息！") ;
 		}
 		if (StringUtils.isBlank(goods.getGoodsUsage())) {
-			return ResponseJsonData.responseError("请填写药品使用说明信息！") ;
+			return ResponseJsonData.responseError("请填写饲料使用说明信息！") ;
 		}
 //		if (StringUtils.isBlank(goods.getGoodsType())) {
-//			return ResponseJsonData.responseError("请填写药品类型信息！") ;
+//			return ResponseJsonData.responseError("请填写饲料类型信息！") ;
 //		}
 		if (StringUtils.isBlank(goods.getGoodsStatus())) {
-			return ResponseJsonData.responseError("请填写药品销售状态信息！") ;
+			return ResponseJsonData.responseError("请填写饲料销售状态信息！") ;
 		}
 		
 		//-- TODO 校验逻辑
 		if (StringUtils.length(goods.getGoodsName()) > 200) {
-			return ResponseJsonData.responseError("药品名称过长！") ;
+			return ResponseJsonData.responseError("饲料名称过长！") ;
 		}
 		if (StringUtils.length(goods.getCommon()) > 2000) {
 			return ResponseJsonData.responseError("其他备注过长！") ;
 		}
 		if (StringUtils.length(goods.getGoodsNo()) > 200) {
-			return ResponseJsonData.responseError("药品编码过长！") ;
+			return ResponseJsonData.responseError("饲料编码过长！") ;
 		}
 		if (StringUtils.length(goods.getGoodsManufacturer()) > 200) {
-			return ResponseJsonData.responseError("药品厂商信息过长！") ;
+			return ResponseJsonData.responseError("饲料厂商信息过长！") ;
 		}
 		if (StringUtils.length(goods.getGoodsUsage()) > 2000) {
-			return ResponseJsonData.responseError("药品使用说明信息过长！") ;
+			return ResponseJsonData.responseError("饲料使用说明信息过长！") ;
 		}
 		if (StringUtils.length(goods.getGoodsType()) > 100) {
-			return ResponseJsonData.responseError("药品类型信息过长！") ;
+			return ResponseJsonData.responseError("饲料类型信息过长！") ;
 		}
 		if (StringUtils.length(goods.getGoodsStatus()) > 100) {
-			return ResponseJsonData.responseError("药品销售状态信息过长！") ;
+			return ResponseJsonData.responseError("饲料销售状态信息过长！") ;
 		}
 		if (StringUtils.length(goods.getGoodsRemark()) > 200) {
-			return ResponseJsonData.responseError("药品特征信息备注过长！") ;
+			return ResponseJsonData.responseError("饲料特征信息备注过长！") ;
 		}
 		
-		goods.setGoodsType("药品");
+		goods.setGoodsType("饲料");
 		goods.setCreateTime(new Date());
 		
         if (goods.getGoodsId() != null) {
@@ -130,16 +130,16 @@ public class DrugGoodsController extends BaseController {
         				goods.getGoodsManufacturer(), goods.getGoodsUsage(), goods.getGoodsType(), 
         				goods.getGoodsRemark(), goods.getCommon());
 			} catch (Exception e) {
-				return ResponseJsonData.responseError("系统错误，无法保存药品信息！") ;
+				return ResponseJsonData.responseError("系统错误，无法保存饲料信息！") ;
 			}
         }
         else {
         	try {
         		goodsBO.saveGoods(goods);
 			} catch (Exception e) {
-				return ResponseJsonData.responseError("系统错误，无法保存药品信息！") ;
+				return ResponseJsonData.responseError("系统错误，无法保存饲料信息！") ;
 			}
 		}
-        return ResponseJsonData.responseSuccess("药品信息保存成功！") ;
+        return ResponseJsonData.responseSuccess("饲料信息保存成功！") ;
 	}
 }
