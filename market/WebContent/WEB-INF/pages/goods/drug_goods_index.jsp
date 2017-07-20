@@ -69,7 +69,7 @@
 		}
 		$("#newDrugGoodsWin").window({ href:'' ,iconCls : 'icon-edit' }).window('open');
 		$('#newDrugGoodsWin').window('setTitle', '修改药品信息').window('center');
-		$("#newDrugGoodsWin").window('refresh' ,'${ctx}/drug/loadContent?pn=goods/modify_goods_win&memberId=' + row.memberId );
+		$("#newDrugGoodsWin").window('refresh' ,'${ctx}/drug/loadContent?pn=goods/modify_goods_win&goodsId=' + row.goodsId );
 	}
 
     </script>
@@ -83,16 +83,16 @@
 				<tr>
 					<td width="3px"><input type="hidden" name="goodsType" value="药品"/></td>
 					<td align="left"><span>药品编号:</span></td>
-					<td><input class="easyui-textbox" name="memberNo" id="memberNo"
+					<td><input class="easyui-textbox" name="goodsNo" id="goodsNo"
 						style="width: 100px"></td>
 					<td align="left"><span>药品名称:</span></td>
-					<td><input class="easyui-textbox" name="memberName" id="memberName" data-options=""
+					<td><input class="easyui-textbox" name="goodsName" id="goodsName" data-options=""
 						style="width: 196px"></td>
 					<td align="left"><span>厂商/备注:</span></td>
-					<td><input class="easyui-textbox" name="memberName" id="memberName" data-options=""
+					<td><input class="easyui-textbox" name="common" id="common" data-options=""
 						style="width: 196px"></td>
 					<td align="left"><span>在售/停售：</span></td>
-					<td><input class="easyui-textbox" id="memberPhone" name="memberPhone"
+					<td><input class="easyui-textbox" id="goodsStatus" name="goodsStatus"
 						style="width: 100px" /></td>
 					<td align="right"><a href="#" class="easyui-linkbutton"
 						data-options="plain:true,iconCls:'icon-search'"
