@@ -6,7 +6,7 @@
 	function closeWin(){
 		$("#newDrugGoodsWin").window('close') ;
 	}
-	function saveMemberInfo(){
+	function saveGoodsInfo(){
 	      var params = $("#drugGoodsInfoForm").serializeArray();
 	      execAjax("${ctx}/drug/saveGoodsInfo", params, true, function(retData){
 	    	  doRefreshDataGrid() ;
@@ -75,7 +75,7 @@
 		
 	</div>
 	<div data-options="region:'south',border:false" style="height:30px" align="center">
-		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="saveMemberInfo();" style="width:15%">保存</a>
+		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="saveGoodsInfo();" style="width:15%">保存</a>
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="closeWin();" style="width:15%">取消</a>
 	</div>
 </div>
