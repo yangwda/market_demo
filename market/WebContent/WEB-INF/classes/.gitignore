@@ -1,11 +1,2 @@
-/applicationContext-bo.xml
-/applicationContext-dao.xml
-/applicationContext-resources.xml
-/applicationContext.xml
 /cn/
-/hibernate.cfg.xml
-/jdbc.properties
-/log4j.xml
-/marketweb-servlet-config.xml
-/sys.properties
 /test/
