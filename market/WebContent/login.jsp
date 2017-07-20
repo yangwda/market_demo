@@ -4,7 +4,7 @@
   <head>
     <title>MARGON CRM</title>
     <%@ include file="/common/meta.jsp" %>
-
+	<link rel="stylesheet" type="text/css" href="/styles/themes/lightblue/easyui.css" id="themesCss">
     <%@ include file="/common/cssAndJs.jsp" %>
     <script type="text/javascript" src="/scripts/jshash-2.2/md5-min.js"></script>
     
