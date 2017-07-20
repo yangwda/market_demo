@@ -28,10 +28,8 @@
 	 		goodsUsage: row.goodsUsage ,
 	 		goodsStatus: row.goodsStatus ,
 	 		goodsRemark: row.goodsRemark ,
-	 		common: row.common ,
-	 		memberWeixin: row.memberWeixin 
+	 		common: row.common
 	 	});
-		$('#memberNo').text(row.memberNo) ;
 	});
 </script>
 
