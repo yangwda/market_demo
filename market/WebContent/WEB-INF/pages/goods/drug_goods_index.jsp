@@ -81,7 +81,7 @@
 		<form id="drugGoodsSearchForm">
 			<table cellpadding="0" cellspacing="1" border="0" width="100%">
 				<tr>
-					<td width="3px"></td>
+					<td width="3px"><input type="hidden" name="goodsType" value="药品"/></td>
 					<td align="left"><span>药品编号:</span></td>
 					<td><input class="easyui-textbox" name="memberNo" id="memberNo"
 						style="width: 100px"></td>
