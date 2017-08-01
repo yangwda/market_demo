@@ -28,6 +28,9 @@
 	 		goodsUsage: row.goodsUsage ,
 	 		goodsStatus: row.goodsStatus ,
 	 		goodsRemark: row.goodsRemark ,
+	 		punit1: row.punit1 ,
+	 		punit2: row.punit2 ,
+	 		punit3: row.punit3 ,
 	 		common: row.common 
 	 	});
 	});
@@ -67,6 +70,15 @@
 	    		<tr>
 	    			<td>其他备注:</td>
 	    			<td><input class="easyui-textbox" name="common" data-options="multiline:true,width:345" style="height:60px"></input></td>
+	    		</tr>
+	    		<tr>
+	    			<td>包装/单价:</td>
+	    			<td>
+	    				<input class="easyui-textbox" name="punit1" data-options="width:345"></input>例：1*4*20<br>
+	    				<input class="easyui-textbox" name="punit2" data-options="width:345"></input>例：箱*包*袋<br>
+	    				<input class="easyui-textbox" name="punit3" data-options="width:345"></input>例：245*70*15<br>
+	    				示例表示：1箱4包，每包5袋；1袋15块钱，1包70块钱，一箱245块钱
+	    			</td>
 	    		</tr>
 	    	</table>
 	    </form>

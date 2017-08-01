@@ -31,12 +31,17 @@
 		      {title:'厂商信息', field:'goodsManufacturer', width:130},
 		      {title:'使用说明', field:'goodsUsage', width:80},
 		      {title:'在售/停售', field:'goodsStatus', width:250},
+		      {title:'规格/单价', field:'punit1' ,formatter: unitPriceFormater, width:120},
 		      {title:'饲料特性', field:'goodsRemark', width:150},
 		      {title:'备注', field:'common', width:80},
 		      {title:'创建时间', field:'createTime', width:80}
 		    ]]
 		  });
     });
+    
+    function unitPriceFormater(value,row,index) {
+    	return value + "<br>" + row.punit2 + "<br>" + row.punit3 ;
+    }
     
     var doRefreshDataGrid = function(){
 		$('#feedGoodsListTable').datagrid('loadData', { total: 0, rows: [] }); 
@@ -113,7 +118,7 @@
 	</div>
 	<div id="newFeedGoodsWin" class="easyui-window" title="新增饲料" 
 			data-options="modal:true,closed:true,iconCls:'icon-add',cache:false,minimizable:false,maximizable:false,collapsible:false,resizable:false
-						 ,href:''" style="width:600px;height:480px;padding:5px;">
+						 ,href:''" style="width:600px;height:490px;padding:5px;">
 		</div>
   </body>
 </html>
