@@ -374,7 +374,7 @@
         </div>
         <div title="药料管理" style="padding:1px;" data-options="iconCls:'icon-product'">
           <ul class="easyui-tree">
-            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('兽种类', '/jump/sysBuilding', 'icon-tab-light', false)" >兽种类</a></li>
+            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('兽种类', '/animal/', 'icon-tab-light', false)" >兽种类</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('疾病种类', '/illness/', 'icon-tab-light', false)" >疾病种类</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('其他赠品管理', '/gift/', 'icon-tab-light', false)" >其他赠品管理</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('药品管理', '/drug/', 'icon-tab-light', false)" >药品管理</a></li>
