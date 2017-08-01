@@ -29,7 +29,7 @@ public class MarketGoodsUnitPrice extends BasePojo {
 	private Long goodsUnitId ;
 	private Long goodsId ;
 	private String goodsUnitName ;
-	private String goodsUnitRate ;
+	private Integer goodsUnitRate ;
 	private BigDecimal goodsUnitPrice ;
 
 	public Long getGoodsUnitId() {
@@ -50,10 +50,10 @@ public class MarketGoodsUnitPrice extends BasePojo {
 	public void setGoodsUnitName(String goodsUnitName) {
 		this.goodsUnitName = goodsUnitName;
 	}
-	public String getGoodsUnitRate() {
+	public Integer getGoodsUnitRate() {
 		return goodsUnitRate;
 	}
-	public void setGoodsUnitRate(String goodsUnitRate) {
+	public void setGoodsUnitRate(Integer goodsUnitRate) {
 		this.goodsUnitRate = goodsUnitRate;
 	}
 	public BigDecimal getGoodsUnitPrice() {

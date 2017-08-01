@@ -20,7 +20,7 @@
                 <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
                 <!-- Hibernate Search index directory -->
 				<!-- <prop key="hibernate.search.default.indexBase">${app.search.index.basedir}</prop> -->
-                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.connection.SetBigStringTryClob">true</prop>
                 <!-- 
                 <prop name="hibernate.query.factory_class">org.hibernate.hql.classic.ClassicQueryTranslatorFactory</prop>

@@ -128,7 +128,7 @@ public class FeedGoodsController extends BaseController {
         	try {
         		goodsBO.updateGoods(goods.getGoodsId(), goods.getGoodsName(), goods.getGoodsNo(), 
         				goods.getGoodsManufacturer(), goods.getGoodsUsage(), goods.getGoodsType(), 
-        				goods.getGoodsRemark(), goods.getCommon());
+        				goods.getGoodsRemark(), goods.getCommon(), goods.getPunit1(), goods.getPunit2(), goods.getPunit3());
 			} catch (Exception e) {
 				return ResponseJsonData.responseError("系统错误，无法保存饲料信息！") ;
 			}

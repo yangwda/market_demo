@@ -27,16 +27,22 @@
 		    nowrap: false,
 		    columns:[[
 		      {title:'药品编号', field:'goodsNo', width:160},
-		      {title:'药品名称', field:'goodsName', width:80},
+		      {title:'药品名称', field:'goodsName', width:120},
 		      {title:'厂商信息', field:'goodsManufacturer', width:130},
-		      {title:'使用说明', field:'goodsUsage', width:80},
-		      {title:'在售/停售', field:'goodsStatus', width:250},
+		      {title:'使用说明', field:'goodsUsage', width:160},
+		      {title:'在售/停售', field:'goodsStatus', width:80},
+		      {title:'规格/单价', field:'punit1' ,formatter: unitPriceFormater, width:120},
 		      {title:'药品特性', field:'goodsRemark', width:150},
 		      {title:'备注', field:'common', width:80},
 		      {title:'创建时间', field:'createTime', width:80}
 		    ]]
 		  });
     });
+    
+    function unitPriceFormater(value,row,index) {
+    	return value + "<br>" + row.punit2 + "<br>" + row.punit3 ;
+    }
+    
     
     var doRefreshDataGrid = function(){
 		$('#drugGoodsListTable').datagrid('loadData', { total: 0, rows: [] }); 
@@ -113,7 +119,7 @@
 	</div>
 	<div id="newDrugGoodsWin" class="easyui-window" title="新增药品" 
 			data-options="modal:true,closed:true,iconCls:'icon-add',cache:false,minimizable:false,maximizable:false,collapsible:false,resizable:false
-						 ,href:''" style="width:600px;height:480px;padding:5px;">
+						 ,href:''" style="width:600px;height:490px;padding:5px;">
 		</div>
   </body>
 </html>

@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import cn.yj.market.frame.bean.ResponseJsonData;
 import cn.yj.market.frame.controller.BaseController;
 import cn.yj.market.frame.page.Page;
+import cn.yj.market.frame.util.CoreUtils;
 import cn.yj.market.frame.util.SessionUtil;
 import cn.yj.market.frame.vo.MarketGoods;
 import cn.yj.market.module.common.bean.GoodsSearchCondition;
@@ -120,6 +122,33 @@ public class DrugGoodsController extends BaseController {
 		if (StringUtils.length(goods.getGoodsRemark()) > 200) {
 			return ResponseJsonData.responseError("药品特征信息备注过长！") ;
 		}
+		if (StringUtils.isNotBlank(goods.getPunit1())
+				|| StringUtils.isNotBlank(goods.getPunit2())
+				|| StringUtils.isNotBlank(goods.getPunit3())) {
+			if (StringUtils.isBlank(goods.getPunit1())) {
+				return ResponseJsonData.responseError("药品规格/单价信息填写有误！") ;
+			}
+			if (StringUtils.isBlank(goods.getPunit2())) {
+				return ResponseJsonData.responseError("药品规格/单价信息填写有误！") ;
+			}
+			if (StringUtils.isBlank(goods.getPunit3())) {
+				return ResponseJsonData.responseError("药品规格/单价信息填写有误！") ;
+			}
+			String[] a1 = goods.getPunit1().split("\\*") ;
+			String[] a2 = goods.getPunit2().split("\\*") ;
+			String[] a3 = goods.getPunit3().split("\\*") ;
+			if (a1.length != a2.length || a2.length != a3.length) {
+				return ResponseJsonData.responseError("药品规格/单价信息填写有误！") ;
+			}
+			for (int i = 0; i < a3.length; i++) {
+				if (!CoreUtils.isInteger(a1[i])) {
+					return ResponseJsonData.responseError("药品规格/单价信息填写有误！") ;
+				}
+				if (!NumberUtils.isNumber(a3[i])) {
+					return ResponseJsonData.responseError("药品规格/单价信息填写有误！") ;
+				}
+			}
+		}
 		
 		goods.setGoodsType("药品");
 		goods.setCreateTime(new Date());
@@ -128,7 +157,7 @@ public class DrugGoodsController extends BaseController {
         	try {
         		goodsBO.updateGoods(goods.getGoodsId(), goods.getGoodsName(), goods.getGoodsNo(), 
         				goods.getGoodsManufacturer(), goods.getGoodsUsage(), goods.getGoodsType(), 
-        				goods.getGoodsRemark(), goods.getCommon());
+        				goods.getGoodsRemark(), goods.getCommon(), goods.getPunit1(), goods.getPunit2(), goods.getPunit3());
 			} catch (Exception e) {
 				return ResponseJsonData.responseError("系统错误，无法保存药品信息！") ;
 			}

@@ -58,7 +58,15 @@ public class GoodsDaoImpl extends GenericDao<MarketGoods> implements GoodsDao {
 		}
 		
 		criteria.addOrder(Order.asc("goodsId")) ;
-		return pagedQuery(criteria, pageRequestParams.getPageNum(), pageRequestParams.getPageSize()) ;
+		Page<MarketGoods> page =  pagedQuery(criteria, pageRequestParams.getPageNum(), pageRequestParams.getPageSize()) ;
+		
+		if (page.getRecords() != null) {
+			for (MarketGoods goods : page.getRecords()) {
+				goods.getPunit1() ;
+			}
+		}
+		
+		return page ;
 	}
 
 }
