@@ -2,12 +2,16 @@ package cn.yj.market.frame.vo;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import cn.yj.market.frame.hibernate.BasePojo;
 
@@ -37,6 +41,12 @@ public class MarketGiftConfig extends BasePojo {
 	private String goodsName;
 	private String goodsNo;
 	private BigDecimal buyLimit;
+	
+	@OneToMany(mappedBy="giftConfigId",fetch=FetchType.LAZY)
+	private List<MarketGiftConfigLine> lineList ;
+	
+	@Transient
+	private MarketGiftConfigLine line ;
 
 	public Long getGiftConfigId() {
 		return giftConfigId;
@@ -97,5 +107,22 @@ public class MarketGiftConfig extends BasePojo {
 	}
 	public void setBuyLimit(BigDecimal buyLimit) {
 		this.buyLimit = buyLimit;
+	}
+	public List<MarketGiftConfigLine> getLineList() {
+		return lineList;
+	}
+	public void setLineList(List<MarketGiftConfigLine> lineList) {
+		this.lineList = lineList;
+	}
+	public MarketGiftConfigLine getLine() {
+		if (line == null) {
+			if (lineList != null && !lineList.isEmpty()) {
+				line = lineList.get(0) ;
+			}
+		}
+		return line;
+	}
+	public void setLine(MarketGiftConfigLine line) {
+		this.line = line;
 	}
 }

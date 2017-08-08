@@ -1,6 +1,7 @@
 package cn.yj.market.module.common.dao.hibernate;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
@@ -67,6 +68,60 @@ public class GoodsDaoImpl extends GenericDao<MarketGoods> implements GoodsDao {
 		}
 		
 		return page ;
+	}
+	
+	@Override
+	public List<MarketGoods> getGoodsAutofill(String likeStr) {
+		if (StringUtils.isBlank(likeStr)) {
+			return null ;
+		}
+		Criteria criteria = getCurrentSession().createCriteria(MarketGoods.class) ;
+		criteria.add(Restrictions.eq("goodsStatus", "在售")) ;
+		criteria.add(Restrictions.eq("goodsType", "药品")) ;
+		criteria.add(Restrictions.disjunction()
+				.add(Restrictions.like("goodsManufacturer", "%"+likeStr+"%"))
+				.add(Restrictions.like("goodsUsage", "%"+likeStr+"%"))
+				.add(Restrictions.like("goodsRemark", "%"+likeStr+"%"))
+				.add(Restrictions.like("goodsName", "%"+likeStr+"%"))
+				.add(Restrictions.like("goodsNo", "%"+likeStr+"%"))
+				.add(Restrictions.like("common", "%"+likeStr+"%"))
+				) ;
+		criteria.addOrder(Order.asc("goodsId")) ;
+		criteria.setFirstResult(0).setMaxResults(20) ;
+		List<MarketGoods> gl = criteria.list() ;
+		if (gl != null) {
+			for (MarketGoods goods : gl) {
+				goods.getPunit1() ;
+			}
+		}
+		return gl;
+	}
+	
+	@Override
+	public List<MarketGoods> getGiftGoodsAutofill(String likeStr) {
+		if (StringUtils.isBlank(likeStr)) {
+			return null ;
+		}
+		Criteria criteria = getCurrentSession().createCriteria(MarketGoods.class) ;
+		criteria.add(Restrictions.eq("goodsStatus", "在售")) ;
+		criteria.add(Restrictions.disjunction()
+				.add(Restrictions.like("goodsManufacturer", "%"+likeStr+"%"))
+				.add(Restrictions.like("goodsUsage", "%"+likeStr+"%"))
+				.add(Restrictions.like("goodsRemark", "%"+likeStr+"%"))
+				.add(Restrictions.like("goodsName", "%"+likeStr+"%"))
+				.add(Restrictions.like("goodsNo", "%"+likeStr+"%"))
+				.add(Restrictions.like("common", "%"+likeStr+"%"))
+				) ;
+		criteria.addOrder(Order.asc("goodsId")) ;
+		criteria.setFirstResult(0).setMaxResults(20) ;
+		
+		List<MarketGoods> gl = criteria.list() ;
+		if (gl != null) {
+			for (MarketGoods goods : gl) {
+				goods.getPunit1() ;
+			}
+		}
+		return gl;
 	}
 
 }

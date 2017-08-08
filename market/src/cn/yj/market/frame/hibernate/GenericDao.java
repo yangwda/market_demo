@@ -334,7 +334,7 @@ public abstract class GenericDao<T extends BasePojo> extends DaoSession implemen
         }
         return criteria.getExecutableCriteria(getSession()).list();
     }
-
+    
     protected final SQLQuery getSqlQuery(String sql) {
 
         SQLQuery sqlQuery = getSession().createSQLQuery(sql);

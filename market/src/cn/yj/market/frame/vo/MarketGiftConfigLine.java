@@ -30,6 +30,7 @@ public class MarketGiftConfigLine extends BasePojo {
 	private String giftGoodsName ;
 	private String giftGoodsNo ;
 	private Long giftGoodsCount ;
+	private String giftGoodsCountUnit ;
 
 	public Long getGiftConfigLineId() {
 		return giftConfigLineId;
@@ -66,5 +67,11 @@ public class MarketGiftConfigLine extends BasePojo {
 	}
 	public void setGiftGoodsCount(Long giftGoodsCount) {
 		this.giftGoodsCount = giftGoodsCount;
+	}
+	public String getGiftGoodsCountUnit() {
+		return giftGoodsCountUnit;
+	}
+	public void setGiftGoodsCountUnit(String giftGoodsCountUnit) {
+		this.giftGoodsCountUnit = giftGoodsCountUnit;
 	}
 }

@@ -100,4 +100,14 @@ public class MarketGoodsBOImpl extends BaseBo implements GoodsBO {
 			goodsDao.update(goods);
 		}
 	}
+	
+	@Override
+	public List<MarketGoods> getGiftGoodsAutofill(String likeStr) {
+		return goodsDao.getGiftGoodsAutofill(likeStr);
+	}
+	
+	@Override
+	public List<MarketGoods> getGoodsAutofill(String likeStr) {
+		return goodsDao.getGoodsAutofill(likeStr);
+	}
 }
