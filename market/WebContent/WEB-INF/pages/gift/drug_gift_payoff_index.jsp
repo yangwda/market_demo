@@ -113,7 +113,7 @@
 			</table>
 		</form>
 	</div>
-	<div data-options="region:'center'" style="padding:0px;" id="tableDiv">
+	<div data-options="region:'center',border:false" style="padding:0px;" id="tableDiv">
   		<table id="drugGiftPayoffListTable"></table>
 	</div>
 	<div id="newDrugGiftPayoffWin" class="easyui-window" title="新增药品赠品" 

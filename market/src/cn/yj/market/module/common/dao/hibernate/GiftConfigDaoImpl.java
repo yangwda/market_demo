@@ -37,7 +37,7 @@ public class GiftConfigDaoImpl extends GenericDao<MarketGiftConfig> implements G
 			}
 			if (StringUtils.isNotBlank(condition.getDateCondition())) {
 				if ("在用".equals(condition.getDateCondition())) {
-					criteria.add( Restrictions.sqlRestriction(" giftConfigBeginTime >= SYSDATE()  and giftConfigEndTime <= SYSDATE() ")) ;
+					criteria.add( Restrictions.sqlRestriction(" giftConfigBeginTime <= SYSDATE()  and SYSDATE() <= giftConfigEndTime  ")) ;
 				}
 				if ("未开始".equals(condition.getDateCondition())) {
 					criteria.add( Restrictions.sqlRestriction(" SYSDATE() < giftConfigBeginTime ")) ;

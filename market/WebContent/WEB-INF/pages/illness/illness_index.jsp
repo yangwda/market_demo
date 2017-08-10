@@ -96,7 +96,7 @@
 			</table>
 		</form>
 	</div>
-	<div data-options="region:'center'" style="padding:0px;" id="tableDiv">
+	<div data-options="region:'center',border:false" style="padding:0px;" id="tableDiv">
   		<table id="illnessListTable"></table>
 	</div>
 	<div id="newIllnessWin" class="easyui-window" title="新增疾病" 

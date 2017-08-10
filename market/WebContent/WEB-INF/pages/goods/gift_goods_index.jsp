@@ -108,7 +108,7 @@
 			</table>
 		</form>
 	</div>
-	<div data-options="region:'center'" style="padding:0px;" id="tableDiv">
+	<div data-options="region:'center',border:false" style="padding:0px;" id="tableDiv">
   		<table id="giftGoodsListTable"></table>
 	</div>
 	<div id="newGiftGoodsWin" class="easyui-window" title="新增赠品" 
