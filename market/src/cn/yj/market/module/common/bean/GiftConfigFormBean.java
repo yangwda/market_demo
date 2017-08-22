@@ -22,6 +22,9 @@ public class GiftConfigFormBean {
 	private String giftGoodsCount ;
 	private String giftGoodsCountUnit ;
 	
+	// line array
+	String[] lineStrArr ;
+	
 	public String getGiftConfigId() {
 		return giftConfigId;
 	}
@@ -117,5 +120,11 @@ public class GiftConfigFormBean {
 	}
 	public void setGiftGoodsCountUnit(String giftGoodsCountUnit) {
 		this.giftGoodsCountUnit = giftGoodsCountUnit;
+	}
+	public String[] getLineStrArr() {
+		return lineStrArr;
+	}
+	public void setLineStrArr(String[] lineStrArr) {
+		this.lineStrArr = lineStrArr;
 	}
 }

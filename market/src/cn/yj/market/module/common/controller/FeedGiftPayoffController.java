@@ -1,5 +1,8 @@
 package cn.yj.market.module.common.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -16,11 +19,11 @@ import cn.yj.market.frame.controller.BaseController;
 import cn.yj.market.frame.page.Page;
 import cn.yj.market.frame.util.CoreUtils;
 import cn.yj.market.frame.util.SessionUtil;
-import cn.yj.market.frame.vo.MarketGiftConfig;
-import cn.yj.market.frame.vo.MarketGiftConfigLine;
+import cn.yj.market.frame.vo.MarketGiftCTConfig;
+import cn.yj.market.frame.vo.MarketGiftCTConfigLine;
 import cn.yj.market.module.common.bean.GiftConfigFormBean;
 import cn.yj.market.module.common.bean.GiftConfigSearchCondition;
-import cn.yj.market.module.common.bo.GiftConfigBO;
+import cn.yj.market.module.common.bo.FeedGiftConfigBO;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -30,7 +33,7 @@ import com.alibaba.fastjson.JSONObject;
 public class FeedGiftPayoffController extends BaseController {
 	
 	@Autowired
-	private GiftConfigBO giftConfigBO;
+	private FeedGiftConfigBO giftConfigBO;
 	
 	/**
      * index 页
@@ -48,7 +51,7 @@ public class FeedGiftPayoffController extends BaseController {
 	public JSONObject getFeedGiftPageList(GiftConfigSearchCondition condition) {
 		
 		ResponseJsonData response = new ResponseJsonData() ;
-		Page<MarketGiftConfig> goodsPage = null;
+		Page<MarketGiftCTConfig> goodsPage = null;
 		try {
 			goodsPage = giftConfigBO.getPage(condition, SessionUtil.getPageRequestParams()) ;
 		} catch (Exception e) {
@@ -76,64 +79,89 @@ public class FeedGiftPayoffController extends BaseController {
 	@ResponseBody
 	public JSONObject saveFeedGiftPayoff(GiftConfigFormBean giftConfigForm) {
 		if (giftConfigForm == null) {
-            return ResponseJsonData.responseError("系统错误，无法获取药品赠品活动信息！");
+            return ResponseJsonData.responseError("系统错误，无法获取饲料赠品活动信息！");
         }
 		//config
 		if (StringUtils.isBlank(giftConfigForm.getGoodsName())) {
-			return ResponseJsonData.responseError("请填写活动药品名称！") ;
+			return ResponseJsonData.responseError("请填写活动饲料名称！") ;
 		}
 		if (StringUtils.isBlank(giftConfigForm.getGoodsNo())) {
-			return ResponseJsonData.responseError("请填写活动药品编码！") ;
+			return ResponseJsonData.responseError("请填写活动饲料编码！") ;
 		}
 		if (StringUtils.isBlank(giftConfigForm.getGoodsId())) {
-			return ResponseJsonData.responseError("请填写活动药品ID！") ;
+			return ResponseJsonData.responseError("请填写活动饲料ID！") ;
 		}
 		if (StringUtils.isBlank(giftConfigForm.getGiftConfigDesc())) {
-			return ResponseJsonData.responseError("请填写药品赠品活动描述！") ;
+			return ResponseJsonData.responseError("请填写饲料赠品活动描述！") ;
 		}
 		if (StringUtils.isBlank(giftConfigForm.getGiftConfigEndTime())) {
-			return ResponseJsonData.responseError("请填写药品赠品活动开始时间！") ;
+			return ResponseJsonData.responseError("请填写饲料赠品活动开始时间！") ;
 		}
 		if (StringUtils.isBlank(giftConfigForm.getGiftConfigEndTime())) {
-			return ResponseJsonData.responseError("请填写药品赠品活动结束时间！") ;
+			return ResponseJsonData.responseError("请填写饲料赠品活动结束时间！") ;
 		}
-		if (StringUtils.isBlank(giftConfigForm.getBuyLimit())) {
-			return ResponseJsonData.responseError("请填写药品赠品活动购买金额额度！") ;
-		}
+		
 		// line 
-		if (StringUtils.isBlank(giftConfigForm.getGiftGoodsNo()) || StringUtils.isBlank(giftConfigForm.getGiftGoodsId())) {
-			return ResponseJsonData.responseError("请填写赠品信息！") ;
-		}
-		if (StringUtils.isBlank(giftConfigForm.getGiftGoodsCount())) {
-			return ResponseJsonData.responseError("请填写赠品数量！") ;
+		if (giftConfigForm.getLineStrArr() == null || giftConfigForm.getLineStrArr().length < 1) {
+			return ResponseJsonData.responseError("请填写饲料赠品优惠明细！") ;
 		}
 		
 		//-- TODO 校验逻辑
 		// config
 		if (StringUtils.length(giftConfigForm.getGiftConfigDesc()) > 200) {
-			return ResponseJsonData.responseError("药品赠品活动描述过长！") ;
+			return ResponseJsonData.responseError("饲料赠品活动描述过长！") ;
 		}
 		if (StringUtils.isNotBlank(giftConfigForm.getGiftConfigRemarks())) {
 			if (StringUtils.length(giftConfigForm.getGiftConfigRemarks()) > 2000) {
-				return ResponseJsonData.responseError("药品赠品活动备注过长！") ;
+				return ResponseJsonData.responseError("饲料赠品活动备注过长！") ;
 			}
 		}
-		if (!NumberUtils.isNumber(giftConfigForm.getBuyLimit())) {
-			return ResponseJsonData.responseError("药品赠品活动购买金额额度无效！") ;
-		}
 		if (!CoreUtils.isDate(giftConfigForm.getGiftConfigBeginTime())) {
-			return ResponseJsonData.responseError("药品赠品活动开始时间无效！") ;
+			return ResponseJsonData.responseError("饲料赠品活动开始时间无效！") ;
 		}
 		if (!CoreUtils.isDate(giftConfigForm.getGiftConfigEndTime())) {
-			return ResponseJsonData.responseError("药品赠品活动结束时间无效！") ;
+			return ResponseJsonData.responseError("饲料赠品活动结束时间无效！") ;
 		}
 		
 		// line 
-		if (!NumberUtils.isDigits(giftConfigForm.getGiftGoodsCount())) {
-			return ResponseJsonData.responseError("赠品数量无效！") ;
+//		var ss = checkType + "@@@" + buyLimit + "@@@" + buyLimitPunit + "@@@" 
+//				+ goodsId + "@@@" + goodsName + "@@@" + goodsNo + "@@@" + giftGoodsCount + "@@@" + "giftGoodsCountUnit" ;
+		List<MarketGiftCTConfigLine> lineList = new ArrayList<MarketGiftCTConfigLine>() ;
+		for (String lineStr : giftConfigForm.getLineStrArr()) {
+			String[] lineProps = lineStr.split("@@@") ;
+			if (lineProps.length != 8) {
+				return ResponseJsonData.responseError("饲料赠品优惠明细无效！") ;
+			}
+			for (String ps : lineProps) {
+				if ("NULL".equalsIgnoreCase(ps)) {
+					return ResponseJsonData.responseError("饲料赠品优惠明细无效！") ;
+				}
+			}
+			if (!NumberUtils.isNumber(lineProps[1])) {
+				return ResponseJsonData.responseError("饲料赠品优惠明细无效！") ;
+			}
+			if (!NumberUtils.isNumber(lineProps[6])) {
+				return ResponseJsonData.responseError("饲料赠品优惠明细无效！") ;
+			}
+			
+			MarketGiftCTConfigLine line = new MarketGiftCTConfigLine() ;
+			if (StringUtils.isNotBlank(giftConfigForm.getGiftConfigId())) {
+				line.setGiftConfigId(NumberUtils.toLong(giftConfigForm.getGiftConfigId()));
+			}
+			line.setCheckType(lineProps[0]);
+			line.setBuyLimit(Integer.valueOf(lineProps[1]));
+			line.setBuyLimitPunit(lineProps[2]);
+			line.setGiftGoodsId(Long.valueOf(lineProps[3]));
+			line.setGiftGoodsName(lineProps[4]);
+			line.setGiftGoodsNo(lineProps[5]);
+			line.setGiftGoodsCount(Long.valueOf(lineProps[6]));
+			line.setGiftGoodsCountUnit(lineProps[7]);
+			
+			lineList.add(line) ;
 		}
 		
-		MarketGiftConfig config = new MarketGiftConfig() ;
+		
+		MarketGiftCTConfig config = new MarketGiftCTConfig() ;
 		if (StringUtils.isNotBlank(giftConfigForm.getGiftConfigId())) {
 			config.setGiftConfigId(NumberUtils.toLong(giftConfigForm.getGiftConfigId()));
 		}
@@ -145,36 +173,21 @@ public class FeedGiftPayoffController extends BaseController {
 		config.setGoodsId(NumberUtils.toLong(giftConfigForm.getGoodsId()));
 		config.setGoodsNo(giftConfigForm.getGoodsNo());
 		config.setGoodsName(giftConfigForm.getGoodsName());
-		config.setBuyLimit(NumberUtils.createBigDecimal(giftConfigForm.getBuyLimit()));
-		
-		MarketGiftConfigLine line = new MarketGiftConfigLine() ;
-		if (StringUtils.isNotBlank(giftConfigForm.getGiftConfigLineId())) {
-			line.setGiftConfigLineId(NumberUtils.toLong(giftConfigForm.getGiftConfigLineId()));
-		}
-		if (StringUtils.isNotBlank(giftConfigForm.getGiftConfigId())) {
-			line.setGiftConfigId(NumberUtils.toLong(giftConfigForm.getGiftConfigId()));
-		}
-		line.setGiftGoodsId(NumberUtils.toLong(giftConfigForm.getGiftGoodsId()));
-		line.setGiftGoodsName(giftConfigForm.getGiftGoodsName());
-		line.setGiftGoodsNo(giftConfigForm.getGiftGoodsNo());
-		line.setGiftGoodsCount(NumberUtils.toLong(giftConfigForm.getGiftGoodsCount()));
-		line.setGiftGoodsCountUnit(giftConfigForm.getGiftGoodsCountUnit());
-		
 		
         if (config.getGiftConfigId() != null) {
         	try {
-        		giftConfigBO.updateGiftConfig(config, line);
+        		giftConfigBO.updateGiftConfig(config, lineList);
 			} catch (Exception e) {
-				return ResponseJsonData.responseError("系统错误，无法保存药品赠品活动信息！") ;
+				return ResponseJsonData.responseError("系统错误，无法保存饲料赠品活动信息！") ;
 			}
         }
         else {
         	try {
-        		giftConfigBO.saveGiftConfig(config, line) ;
+        		giftConfigBO.saveGiftConfig(config, lineList) ;
 			} catch (Exception e) {
-				return ResponseJsonData.responseError("系统错误，无法保存药品赠品活动信息！") ;
+				return ResponseJsonData.responseError("系统错误，无法保存饲料赠品活动信息！") ;
 			}
 		}
-        return ResponseJsonData.responseSuccess("药品赠品活动信息保存成功！") ;
+        return ResponseJsonData.responseSuccess("饲料赠品活动信息保存成功！") ;
 	}
 }

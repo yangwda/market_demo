@@ -15,4 +15,6 @@ public interface GoodsBO {
 	void modifyGoodsStatus(Long goodsId ,String goodsStatus) ;
 	List<MarketGoods> getGoodsAutofill(String likeStr);
 	List<MarketGoods> getGiftGoodsAutofill(String likeStr);
+	List<MarketGoods> getFeedGoodsAutofill(String likeStr);
+	MarketGoods getGoodsById(Long goodsId);
 }

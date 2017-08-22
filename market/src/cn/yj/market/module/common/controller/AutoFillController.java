@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.yj.market.frame.controller.BaseController;
+import cn.yj.market.frame.util.CoreUtils;
 import cn.yj.market.frame.vo.MarketGoods;
 import cn.yj.market.module.common.bean.GoodsSearchCondition;
 import cn.yj.market.module.common.bo.GoodsBO;
@@ -48,6 +49,31 @@ public class AutoFillController extends BaseController {
 		return ja.toJSONString() ;
 	}
 	
+	@RequestMapping(value = "/getFeedGoodsAutofill", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	@ResponseBody
+	public String getFeedGoodsAutofill(GoodsSearchCondition condition) {
+		JSONArray ja = new JSONArray() ;
+		if (StringUtils.isBlank(condition.getGoodsName())) {
+			return ja.toJSONString() ;
+		}
+		
+		List<MarketGoods> goodsList = goodsBO.getFeedGoodsAutofill(StringUtils.trim(condition.getGoodsName())) ;
+		
+		if (goodsList != null) {
+			for (MarketGoods marketGoods : goodsList) {
+				JSONObject jo = new JSONObject() ;
+				jo.put("goodsName", marketGoods.getGoodsName()) ;
+				jo.put("goodsNo", marketGoods.getGoodsNo()) ;
+				jo.put("goodsId", marketGoods.getGoodsId()) ;
+				jo.put("punit2", marketGoods.getPunit2()) ;
+				ja.add(jo) ;
+			}
+		}
+		
+		return ja.toJSONString() ;
+	}
+	
 	@RequestMapping(value = "/getGiftGoodsAutofill", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	@ResponseBody
@@ -70,6 +96,29 @@ public class AutoFillController extends BaseController {
 			}
 		}
 		
+		return ja.toJSONString() ;
+	}
+	
+	@RequestMapping(value = "/loadGoodsPunitList", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	@ResponseBody
+	public String loadGoodsPunitList(String goodsId) {
+		JSONArray ja = new JSONArray() ;
+		if (CoreUtils.isLong(goodsId)) {
+			MarketGoods goods = goodsBO.getGoodsById(Long.valueOf(goodsId)) ;
+			
+			if (goods != null) {
+				String punit2 = goods.getPunit2() ;
+				if (StringUtils.isNotBlank(punit2)) {
+					String[] pua = punit2.split("\\*") ;
+					for (String pu : pua) {
+						JSONObject jo = new JSONObject() ;
+						jo.put("punit", pu) ;
+						ja.add(jo) ;
+					}
+				}
+			}
+		}
 		return ja.toJSONString() ;
 	}
 }

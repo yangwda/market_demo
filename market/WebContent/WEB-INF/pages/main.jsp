@@ -199,14 +199,19 @@
     
     var sessionFlg = 'sessionFlg';
 
-    
+    function closeWindow() {
+//     	window.opener=null;
+//     	window.open('','_self','');
+//     	window.close();
+    }
     // 退出系统
     function exitWeb(){
       $.messager.confirm('提示', '您确认退出系统?',
         function(r){
           if (r){// 确认关闭
             $.get("/main/logOut",function(data,status){
-              location.href = "/";
+            	closeWindow();
+            	location.href = "/";
             });
           }
       });
@@ -345,8 +350,8 @@
 		<table width="100%" height="100%">
 			<tr><td valign="bottom" style="font-size:14px;color:white;">
 				<strong>当前用户：${user.userName}&nbsp;&nbsp;|&nbsp;</strong>
-				<a href="#" onclick="updatePsw()" style="font-size:14px;color:white;"><strong>修改密码</strong></a>
-				<strong>&nbsp;|&nbsp;</strong>
+<!-- 				<a href="#" onclick="updatePsw()" style="font-size:14px;color:white;"><strong>修改密码</strong></a> -->
+<!-- 				<strong>&nbsp;|&nbsp;</strong> -->
         		<a href="#" onclick="exitWeb()" style="font-size:14px;color:white;"><strong>退出</strong></a>
 			</td></tr>
 		</table>
@@ -357,6 +362,7 @@
         <div title="日常业务" style="padding:1px;" data-options="iconCls:'icon-daily-busi'">
           <ul class="easyui-tree">
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('药料销售', '/jump/sysBuilding', 'icon-tab-light', false)" >药料销售</a></li>
+            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('销售退货', '/jump/sysBuilding', 'icon-tab-light', false)" >销售退货</a></li>
           </ul>
         </div>
         <div title="优惠促销" style="padding:1px;" data-options="iconCls:'icon-favorable'">

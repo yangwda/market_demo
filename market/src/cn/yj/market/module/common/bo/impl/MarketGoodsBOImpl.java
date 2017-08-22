@@ -110,4 +110,21 @@ public class MarketGoodsBOImpl extends BaseBo implements GoodsBO {
 	public List<MarketGoods> getGoodsAutofill(String likeStr) {
 		return goodsDao.getGoodsAutofill(likeStr);
 	}
+
+	@Override
+	public List<MarketGoods> getFeedGoodsAutofill(String likeStr) {
+		return goodsDao.getFeedGoodsAutofill(likeStr);
+	}
+
+	@Override
+	public MarketGoods getGoodsById(Long goodsId) {
+		if (goodsId == null) {
+			return null ;
+		}
+		MarketGoods r = goodsDao.get(goodsId);
+		if (r != null) {
+			r.getPunit2() ;
+		}
+		return r;
+	}
 }

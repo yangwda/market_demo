@@ -11,6 +11,8 @@
 		<mapping class="cn.yj.market.frame.vo.MarketCallBackRecord" />
 		<mapping class="cn.yj.market.frame.vo.MarketGiftConfig" />
 		<mapping class="cn.yj.market.frame.vo.MarketGiftConfigLine" />
+		<mapping class="cn.yj.market.frame.vo.MarketGiftCTConfig" />
+		<mapping class="cn.yj.market.frame.vo.MarketGiftCTConfigLine" />
 		<mapping class="cn.yj.market.frame.vo.MarketGoods" />
 		<mapping class="cn.yj.market.frame.vo.MarketGoodsUnitPrice" />
 		<mapping class="cn.yj.market.frame.vo.MarketIllness" />

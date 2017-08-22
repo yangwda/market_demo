@@ -124,4 +124,31 @@ public class GoodsDaoImpl extends GenericDao<MarketGoods> implements GoodsDao {
 		return gl;
 	}
 
+	@Override
+	public List<MarketGoods> getFeedGoodsAutofill(String likeStr) {
+		if (StringUtils.isBlank(likeStr)) {
+			return null ;
+		}
+		Criteria criteria = getCurrentSession().createCriteria(MarketGoods.class) ;
+		criteria.add(Restrictions.eq("goodsStatus", "在售")) ;
+		criteria.add(Restrictions.eq("goodsType", "饲料")) ;
+		criteria.add(Restrictions.disjunction()
+				.add(Restrictions.like("goodsManufacturer", "%"+likeStr+"%"))
+				.add(Restrictions.like("goodsUsage", "%"+likeStr+"%"))
+				.add(Restrictions.like("goodsRemark", "%"+likeStr+"%"))
+				.add(Restrictions.like("goodsName", "%"+likeStr+"%"))
+				.add(Restrictions.like("goodsNo", "%"+likeStr+"%"))
+				.add(Restrictions.like("common", "%"+likeStr+"%"))
+				) ;
+		criteria.addOrder(Order.asc("goodsId")) ;
+		criteria.setFirstResult(0).setMaxResults(20) ;
+		List<MarketGoods> gl = criteria.list() ;
+		if (gl != null) {
+			for (MarketGoods goods : gl) {
+				goods.getPunit1() ;
+			}
+		}
+		return gl;
+	}
+
 }
