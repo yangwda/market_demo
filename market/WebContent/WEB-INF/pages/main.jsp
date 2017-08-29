@@ -369,7 +369,7 @@
           <ul class="easyui-tree">
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('药品赠品[按金额]', '/drugGift/', 'icon-tab-light', false)" >药品赠品[按金额]</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('饲料赠品[按数量]', '/feedGift/', 'icon-tab-light', false)" >饲料赠品[按数量]</a></li>
-            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('单次购买活动', '/jump/sysBuilding', 'icon-tab-light', false)" >单次购买活动</a></li>
+            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('单次购买活动', '/oncebuy/', 'icon-tab-light', false)" >单次购买活动</a></li>
           </ul>
         </div>
         <div title="会员管理" style="padding:1px;" data-options="iconCls:'icon-member'">

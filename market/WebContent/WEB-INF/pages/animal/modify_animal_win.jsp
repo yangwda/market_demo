@@ -16,7 +16,7 @@
 	$(document).ready(function(){
 		var row = $('#animalListTable').datagrid('getSelected');
 		if(!row){
-			msg_error('错误' ,'无法获取需要修改的疾病信息。');
+			msg_error('错误' ,'无法获取需要修改的兽种类信息。');
 			closeWin() ;
 			return ;
 		}
@@ -32,7 +32,7 @@
 		<form id="animalInfoForm" class="easyui-form" method="post" data-options="">
 	    	<table cellpadding="5" style="width:100%">
 	    		<tr>
-	    			<td>疾病名称:</td>
+	    			<td>兽种类名称:</td>
 	    			<td>
 	    				<input type="hidden" name="animalId" />
 	    				<input class="easyui-textbox" type="text" name="animalName" data-options="width:345"></input>
