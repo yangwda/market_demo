@@ -47,6 +47,16 @@ public class MarketGiftConfig extends BasePojo {
 	
 	@Transient
 	private MarketGiftConfigLine line ;
+	
+	public String giftCommonStr() {
+		if(getLine() == null){
+			return "无" ;
+		}
+		StringBuilder cb = new StringBuilder("满 ") ;
+		cb.append(buyLimit).append("元") ;
+		cb.append(" 送 ").append(getLine().getGiftGoodsName()).append(" ").append(getLine().getGiftGoodsCount()).append(getLine().getGiftGoodsCountUnit()) ;
+		return cb.toString() ;
+	}
 
 	public Long getGiftConfigId() {
 		return giftConfigId;

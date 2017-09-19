@@ -16,4 +16,8 @@ public interface GoodsDao extends Dao<MarketGoods> {
 	List<MarketGoods> getGiftGoodsAutofill(String likeStr);
 
 	List<MarketGoods> getFeedGoodsAutofill(String likeStr);
+
+	List<MarketGoods> getBuyGoodsAutofill(String likeStr);
+
+	List<MarketGoods> queryGoodsList(List<Long> goodsIdList);
 }

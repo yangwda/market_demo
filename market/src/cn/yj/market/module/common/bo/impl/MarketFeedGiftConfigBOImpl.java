@@ -56,4 +56,10 @@ public class MarketFeedGiftConfigBOImpl extends BaseBo implements FeedGiftConfig
 			lineDao.save(line) ;
 		}
 	}
+
+	@Override
+	public List<MarketGiftCTConfig> queryFeedGiftConfigListByGoodsIdList(
+			List<Long> giftFeedGoodsIdList) {
+		return configDao.queryFeedGiftConfigListByGoodsIdList(giftFeedGoodsIdList);
+	}
 }

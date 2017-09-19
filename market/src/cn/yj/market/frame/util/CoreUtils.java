@@ -7,8 +7,12 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +22,7 @@ import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DateUtils;
 
 import cn.yj.market.frame.constants.DateTimeFormatStringConstants;
+import cn.yj.market.frame.vo.MarketGoodsUnitPrice;
 
 public final class CoreUtils {
 	private CoreUtils(){}
@@ -173,7 +178,29 @@ public final class CoreUtils {
         }
         return null;
     }
-
+    
+    /**
+     * 验证给定字符串是否是Long
+     * 
+     * @param str
+     * @return
+     */
+    public static boolean isDouble(String str) {
+    	try {
+    		Double.parseDouble(str);
+    		return true;
+    	} catch (Exception e) {
+    		return false;
+    	}
+    }
+    
+    public static Double parseDouble(String val) {
+    	if (isDouble(val)) {
+    		return Double.parseDouble(val);
+    	}
+    	return null;
+    }
+    
     public static String toDigitalString(BigDecimal val) {
         if (val == null)
             return "0.00";
@@ -384,7 +411,92 @@ public final class CoreUtils {
 		return noBuilder.toString();
 	}
 	
+	/**
+	 * 生成会员编号
+	 * @param seq
+	 * @return
+	 */
+	public static String generateOrderNo(Long seq) {
+		if (seq == null) {
+			return null ;
+		}
+		String baseString = "00000000000000" ;
+		LocalDateTime date = LocalDateTime.now() ;
+		StringBuilder noBuilder = new StringBuilder(baseString);
+		noBuilder.append(seq) ;
+		String seqString = noBuilder.substring(noBuilder.length() - 8) ;
+		noBuilder.replace(0, noBuilder.length(), "").append(date.getYear());
+		if (date.getMonthValue() < 10) {
+			noBuilder.append("0");
+		}
+		noBuilder.append(date.getMonthValue());
+		if (date.getDayOfMonth() < 10) {
+			noBuilder.append("0") ;
+		}
+		noBuilder.append(date.getDayOfMonth()) ;
+		if (date.getHour() < 10) {
+			noBuilder.append("0") ;
+		}
+		noBuilder.append(date.getHour()) ;
+		if (date.getMinute() < 10) {
+			noBuilder.append("0") ;
+		}
+		noBuilder.append(date.getMinute()) ;
+		noBuilder.append(seqString);
+		return noBuilder.toString();
+	}
+	
+	public static String formatMoney(BigDecimal ct) {
+		if(ct == null){
+			return "0.00" ;
+		}
+		if (ct.compareTo(BigDecimal.ZERO) == 0) {
+			return "0.00" ;
+		}
+		DecimalFormat df = new DecimalFormat("#.00");  
+		return df.format(ct.doubleValue()) ;
+	}
+	
 	public static void main(String[] args) {
 		System.out.println(generateMemberNo(666666666L));
+	}
+
+	public static long getGoodsMinUnitCount(
+			List<MarketGoodsUnitPrice> goodsUnitPrices, Long count,
+			String punit) {
+		if (goodsUnitPrices == null || goodsUnitPrices.isEmpty()) {
+			return 0 ;
+		}
+		if (count == null) {
+			return 0 ;
+		}
+		if (StringUtils.isBlank(punit)) {
+			return 0 ;
+		}
+		Collections.sort(goodsUnitPrices, new Comparator<MarketGoodsUnitPrice>() {
+			@Override
+			public int compare(MarketGoodsUnitPrice o1,
+					MarketGoodsUnitPrice o2) {
+				if (o1 == null) {
+					return 1 ;
+				}
+				if (o2 == null) {
+					return -1 ;
+				}
+				return o1.getGoodsUnitRate().compareTo(o2.getGoodsUnitRate());
+			}
+		});
+		boolean find = false ;
+		for (MarketGoodsUnitPrice up : goodsUnitPrices) {
+			int ff = up.getGoodsUnitRate() ;
+			if (up.getGoodsUnitName().equals(punit)) {
+				find = true ;
+				ff = 1 ;
+			}
+			if (find) {
+				count = count * ff ;
+			}
+		}
+		return count;
 	}
 }

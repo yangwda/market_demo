@@ -10,4 +10,5 @@ public interface MemberBO {
 	MarketMember saveMember(MarketMember member) ;
 	void updateMember(Long memberId ,String memberName ,String memberTel ,String memberPhone ,String memberQQ ,
 			String memberWeixin ,String memberAddress ,String memberBusiRemark ,String common);
+	MarketMember getByMemberId(Long memberId);
 }

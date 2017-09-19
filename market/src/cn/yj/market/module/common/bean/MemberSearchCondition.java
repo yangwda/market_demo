@@ -17,6 +17,7 @@ public class MemberSearchCondition {
 	private String memberBusiRemark ;
 	private String common ;
 	private String createTime ;
+	private String likeStr ;
 	
 	public String getMemberId() {
 		return memberId;
@@ -90,4 +91,11 @@ public class MemberSearchCondition {
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
+	public String getLikeStr() {
+		return likeStr;
+	}
+	public void setLikeStr(String likeStr) {
+		this.likeStr = likeStr;
+	}
+	
 }

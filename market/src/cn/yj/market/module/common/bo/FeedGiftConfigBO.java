@@ -12,4 +12,6 @@ public interface FeedGiftConfigBO {
 	Page<MarketGiftCTConfig> getPage(GiftConfigSearchCondition condition ,PageRequestParams pageRequestParams) ;
 	MarketGiftCTConfig saveGiftConfig(MarketGiftCTConfig cfg ,List<MarketGiftCTConfigLine> lineList) ;
 	void updateGiftConfig(MarketGiftCTConfig cfg ,List<MarketGiftCTConfigLine> lineList) ;
+	List<MarketGiftCTConfig> queryFeedGiftConfigListByGoodsIdList(
+			List<Long> giftFeedGoodsIdList);
 }

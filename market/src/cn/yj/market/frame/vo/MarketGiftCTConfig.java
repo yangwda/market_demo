@@ -41,6 +41,43 @@ public class MarketGiftCTConfig extends BasePojo {
 	
 	@OneToMany(mappedBy="giftConfigId",fetch=FetchType.LAZY)
 	private List<MarketGiftCTConfigLine> lineList ;
+	/*
+	 * for(var i=0;i<row.lineList.length ;i++){
+		    			var line = row.lineList[i] ;
+		    			var ct = line.checkType ;
+		    			var act = "买" ;
+		    			if(ct == "累积"){
+		    				act = "累积" ;
+		    			}
+		    			var info = "<strong>" + ct + "</strong>[ "+act + " " + line.buyLimit + " " + line.buyLimitPunit + 
+		    			                   " ，送 " + line.giftGoodsName+" " +line.giftGoodsCount + line.giftGoodsCountUnit+" ]<br>" ; 
+		    			msg += info ;
+		    		}
+	 */
+	
+	public String giftCommonStr(){
+		if (lineList == null || lineList.isEmpty()) {
+			return "无" ;
+		}
+		StringBuilder cb = new StringBuilder() ;
+		for (MarketGiftCTConfigLine line : lineList) {
+			if (cb.length() > 0) {
+				cb.append("<br>") ;
+			}
+			String ct = line.getCheckType() ;
+			String act = "买" ;
+			if ("累积".equals(ct)) {
+				act = ct ;
+			}
+			cb.append(ct).append("[").append(act).append(" ")
+					.append(line.getBuyLimit()).append(" ")
+					.append(line.getBuyLimitPunit()).append(" ，送")
+					.append(line.getGiftGoodsName()).append(" ")
+					.append(line.getGiftGoodsCount())
+					.append(line.getGiftGoodsCountUnit()).append("]");
+		}
+		return cb.toString() ;
+	}
 	
 	public Long getGiftConfigId() {
 		return giftConfigId;

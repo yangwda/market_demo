@@ -1,6 +1,7 @@
 package cn.yj.market.module.common.dao.hibernate;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
@@ -58,5 +59,24 @@ public class FeedGiftConfigDaoImpl extends GenericDao<MarketGiftCTConfig> implem
 		}
 		
 		return page ;
+	}
+
+	@Override
+	public List<MarketGiftCTConfig> queryFeedGiftConfigListByGoodsIdList(
+			List<Long> giftFeedGoodsIdList) {
+		if (giftFeedGoodsIdList == null || giftFeedGoodsIdList.isEmpty()) {
+			return null ;
+		}
+		Criteria criteria = getCurrentSession().createCriteria(MarketGiftCTConfig.class) ;
+		criteria.add( Restrictions.in("goodsId", giftFeedGoodsIdList)) ;
+		criteria.add( Restrictions.sqlRestriction(" giftConfigBeginTime <= SYSDATE()  and SYSDATE() <= giftConfigEndTime  ")) ;
+		criteria.addOrder(Order.asc("giftConfigBeginTime")) ;
+		List<MarketGiftCTConfig> gl = criteria.list() ;
+		if (gl != null) {
+			for (MarketGiftCTConfig config : gl) {
+				config.loadLine() ;
+			}
+		}
+		return gl;
 	}
 }

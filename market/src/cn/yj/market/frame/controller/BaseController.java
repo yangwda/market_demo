@@ -114,6 +114,15 @@ public abstract class BaseController
 		}
 		return rjd;
 	}
+	protected ResponseJsonData responseSeccess( String msg ) {
+		ResponseJsonData rjd = new ResponseJsonData();
+		rjd.setStatus(SUCESS);
+		if(StringUtils.isNotBlank(msg))
+		{
+			rjd.setMessage(msg);
+		}
+		return rjd;
+	}
 
 	/**
 	 * 加载页面共通方法，子类覆盖此方法同时加上注解，然后调用此方法即可

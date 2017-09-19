@@ -33,6 +33,10 @@ public class MarketMemberVoucher extends BasePojo {
 	private Long sourceOrderId ;
 	private BigDecimal sourceVoucherMoney ;
 	private BigDecimal remainingMoney ;
+	
+	public String giftInfo() {
+		return new StringBuilder("面额").append(sourceVoucherMoney.doubleValue()).append("元").append("代金券一张").toString();
+	}
 
 	public Long getMemberVoucherId() {
 		return memberVoucherId;

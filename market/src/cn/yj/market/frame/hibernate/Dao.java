@@ -53,6 +53,8 @@ public interface Dao<T extends BasePojo> {
 	
 	<P> List<P> find(String query, Object params[], int start, int count);
 	
+	T load(Serializable id);
+	
 	T loadAndLock(Serializable id);
 	
 	T refreshAndLock(Serializable id);

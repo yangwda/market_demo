@@ -83,4 +83,9 @@ public class MemberBOImpl extends BaseBo implements MemberBO {
 		memberDao.update(member);
 	}
 
+	@Override
+	public MarketMember getByMemberId(Long memberId) {
+		return memberDao.load(memberId);
+	}
+
 }

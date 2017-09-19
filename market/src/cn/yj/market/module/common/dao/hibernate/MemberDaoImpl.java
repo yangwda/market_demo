@@ -56,6 +56,15 @@ public class MemberDaoImpl extends GenericDao<MarketMember> implements
 						.add(Restrictions.like("memberTel", "%"+condition.getMemberPhone()+"%"))
 				) ;
 			}
+			if (StringUtils.isNotBlank(condition.getLikeStr())) {
+				criteria.add(Restrictions.disjunction()
+						.add(Restrictions.like("memberPhone", "%"+condition.getLikeStr()+"%"))
+						.add(Restrictions.like("memberTel", "%"+condition.getLikeStr()+"%"))
+						.add(Restrictions.like("memberName", "%"+condition.getLikeStr()+"%"))
+						.add(Restrictions.like("memberNo", "%"+condition.getLikeStr()+"%"))
+						.add(Restrictions.like("memberAddress", "%"+condition.getLikeStr()+"%"))
+						) ;
+			}
 		}
 		
 		criteria.addOrder(Order.asc("memberId")) ;

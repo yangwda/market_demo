@@ -110,6 +110,11 @@ public class MarketGoodsBOImpl extends BaseBo implements GoodsBO {
 	public List<MarketGoods> getGoodsAutofill(String likeStr) {
 		return goodsDao.getGoodsAutofill(likeStr);
 	}
+	
+	@Override
+	public List<MarketGoods> getBuyGoodsAutofill(String likeStr) {
+		return goodsDao.getBuyGoodsAutofill(likeStr);
+	}
 
 	@Override
 	public List<MarketGoods> getFeedGoodsAutofill(String likeStr) {
@@ -126,5 +131,10 @@ public class MarketGoodsBOImpl extends BaseBo implements GoodsBO {
 			r.getPunit2() ;
 		}
 		return r;
+	}
+
+	@Override
+	public List<MarketGoods> queryGoodsList(List<Long> goodsIdList) {
+		return goodsDao.queryGoodsList(goodsIdList);
 	}
 }

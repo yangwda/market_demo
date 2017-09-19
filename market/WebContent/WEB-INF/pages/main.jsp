@@ -160,6 +160,21 @@
 //       var ii = $('#win'+index).find("iframe").attr("src");  
       //$('#win'+index).window('refresh', url);
     }
+    
+    // 打开模态窗体
+    function openMWinAndMax(index, title, url, width, height) {
+      $('#win'+index).window({
+        width:width, height:height, title:title, 
+        modal:true, resizable:true, shadow:true, maximizable:false,
+        closable:true, collapsible:false, minimizable:false, draggable:true
+      });
+      
+      var content = '<iframe scrolling="no" frameborder="0" src="' + url + '" style="width:100%;height:99%;"></iframe>';
+      $('#win'+index).html(content);  
+      $('#win'+index).window('open');
+      $('#win'+index).window('center');
+      $('#win'+index).window('maximize');
+    }
     // 关闭模态窗体
     function closeMWin(index) {
       $('#win'+index).window('close');
@@ -361,7 +376,7 @@
       <div class="easyui-accordion" data-options="fit:true,border:false" style="padding: 0px 0px 9px 0px;">
         <div title="日常业务" style="padding:1px;" data-options="iconCls:'icon-daily-busi'">
           <ul class="easyui-tree">
-            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('药料销售', '/jump/sysBuilding', 'icon-tab-light', false)" >药料销售</a></li>
+            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('药料销售', '/order/', 'icon-tab-light', false)" >药料销售</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('销售退货', '/jump/sysBuilding', 'icon-tab-light', false)" >销售退货</a></li>
           </ul>
         </div>

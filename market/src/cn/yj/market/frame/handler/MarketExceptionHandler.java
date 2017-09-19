@@ -29,7 +29,7 @@ public class MarketExceptionHandler implements HandlerExceptionResolver {
 		if (FrameConstants.RESPONSE_DATA_TYPE_JSON.equalsIgnoreCase(responseDataType)) {
 			ResponseJsonData rj = new ResponseJsonData() ;
 			rj.setStatus(FrameConstants.RESPONSE_DATA_FLAG_ERROR);
-			String errMsg = exception.getMessage();
+			String errMsg ;
 			if (exception instanceof RunException) {
 				if (FrameConstants.RESPONSE_DATA_FLAG_NOAUTH.equals(exception.getMessage())) {
 					errMsg = "没有权限执行该操作！";
@@ -42,6 +42,9 @@ public class MarketExceptionHandler implements HandlerExceptionResolver {
 				else {
 					errMsg = exception.getMessage();
 				}
+			}
+			else {
+				errMsg = "系统错误，请联系管理员！" ;
 			}
 			rj.setMessage(errMsg);
 			ResponseJsonUtils.responseJson(response, rj.getResult());

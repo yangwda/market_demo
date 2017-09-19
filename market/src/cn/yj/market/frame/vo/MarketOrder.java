@@ -2,14 +2,19 @@ package cn.yj.market.frame.vo;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import cn.yj.market.frame.hibernate.BasePojo;
+
+import com.alibaba.fastjson.annotation.JSONField;
 
 @Entity
 @Table(name="yj_market_order") 
@@ -34,6 +39,7 @@ public class MarketOrder extends BasePojo {
 	private String memberName ;
 	private String memberNo ;
 	private Long callBackId ;
+	private String orderStatus ;
 	private String orderRemark ;
 	private Date createTime ;
 	private BigDecimal orderTotalMoney ;
@@ -45,6 +51,10 @@ public class MarketOrder extends BasePojo {
 	private String payOffStatus ;
 	private String salesReturn ;
 
+	@JSONField(serialize=false)  
+	@OneToMany(mappedBy="orderId",fetch=FetchType.LAZY)
+	private List<MarketOrderLine> orderLineSet ;
+	
 	public Long getOrderId() {
 		return orderId;
 	}
@@ -86,6 +96,12 @@ public class MarketOrder extends BasePojo {
 	}
 	public void setCallBackId(Long callBackId) {
 		this.callBackId = callBackId;
+	}
+	public String getOrderStatus() {
+		return orderStatus;
+	}
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
 	}
 	public String getOrderRemark() {
 		return orderRemark;
@@ -147,4 +163,11 @@ public class MarketOrder extends BasePojo {
 	public void setSalesReturn(String salesReturn) {
 		this.salesReturn = salesReturn;
 	}
+	public List<MarketOrderLine> getOrderLineSet() {
+		return orderLineSet;
+	}
+	public void setOrderLineSet(List<MarketOrderLine> orderLineSet) {
+		this.orderLineSet = orderLineSet;
+	}
+	
 }

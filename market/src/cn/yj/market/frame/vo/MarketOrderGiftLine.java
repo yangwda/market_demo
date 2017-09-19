@@ -25,17 +25,29 @@ public class MarketOrderGiftLine extends BasePojo {
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)	
 	private Long giftLineId ;
+	private Long orderId ;
 	private Long orderLineId ;
 	private Long goodsId ;
 	private String goodsName ;
 	private Long goodsCount ;
+	private String goodsCountUnit ;
 	private String giftLogic ;
+	
+	public String giftInfo() {
+		return new StringBuilder("赠：").append(getGoodsName()).append(" ").append(getGoodsCount()).append(" ").append(getGoodsCountUnit()).toString();
+	}
 
 	public Long getGiftLineId() {
 		return giftLineId;
 	}
 	public void setGiftLineId(Long giftLineId) {
 		this.giftLineId = giftLineId;
+	}
+	public Long getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
 	}
 	public Long getOrderLineId() {
 		return orderLineId;
@@ -60,6 +72,12 @@ public class MarketOrderGiftLine extends BasePojo {
 	}
 	public void setGoodsCount(Long goodsCount) {
 		this.goodsCount = goodsCount;
+	}
+	public String getGoodsCountUnit() {
+		return goodsCountUnit;
+	}
+	public void setGoodsCountUnit(String goodsCountUnit) {
+		this.goodsCountUnit = goodsCountUnit;
 	}
 	public String getGiftLogic() {
 		return giftLogic;

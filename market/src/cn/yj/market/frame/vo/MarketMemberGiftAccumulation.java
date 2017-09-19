@@ -35,6 +35,10 @@ public class MarketMemberGiftAccumulation extends BasePojo {
 	private Long buyCount ;
 	private Date checkTime ;
 	private Long checkCount ;
+	
+	public String giftInfo() {
+		return new StringBuilder("消费累积：").append(getGoodsName()).append(" ").append(buyCount).toString();
+	}
 
 	public Long getGiftAccumulationId() {
 		return giftAccumulationId;

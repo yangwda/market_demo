@@ -1,5 +1,7 @@
 package cn.yj.market.module.common.bo.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +44,12 @@ public class MarketGiftConfigBOImpl extends BaseBo implements GiftConfigBO {
 	public void updateGiftConfig(MarketGiftConfig cfg, MarketGiftConfigLine line) {
 		configDao.update(cfg);
 		lineDao.update(line);
+	}
+
+	@Override
+	public List<MarketGiftConfig> queryGiftConfigListByGoodsIdList(
+			List<Long> giftGoodsIdList) {
+		return configDao.queryGiftConfigListByGoodsIdList(giftGoodsIdList);
 	}
 
 }

@@ -149,7 +149,7 @@ public class FeedGiftPayoffController extends BaseController {
 				line.setGiftConfigId(NumberUtils.toLong(giftConfigForm.getGiftConfigId()));
 			}
 			line.setCheckType(lineProps[0]);
-			line.setBuyLimit(Integer.valueOf(lineProps[1]));
+			line.setBuyLimit(Long.valueOf(lineProps[1]));
 			line.setBuyLimitPunit(lineProps[2]);
 			line.setGiftGoodsId(Long.valueOf(lineProps[3]));
 			line.setGiftGoodsName(lineProps[4]);

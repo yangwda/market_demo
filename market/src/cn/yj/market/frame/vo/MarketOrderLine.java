@@ -1,11 +1,14 @@
 package cn.yj.market.frame.vo;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import cn.yj.market.frame.hibernate.BasePojo;
@@ -31,10 +34,18 @@ public class MarketOrderLine extends BasePojo {
 	private Long goodsId ;
 	private String goodsName ;
 	private Long goodsCount ;
+	private String goodsCountUnit ;
 	private String goodsPrice;
 	private BigDecimal goodsOrderPrice;
 	private String goodsGift ;
 	private String goodsGiftCheck ;
+	private Long goodsGiftConfigId ;
+	
+	@OneToMany(mappedBy="orderLineId",fetch=FetchType.LAZY)
+	private List<MarketOrderGiftLine> orderGiftLineSet ;
+	
+	@OneToMany(mappedBy="orderLineId",fetch=FetchType.LAZY)
+	private List<MarketMemberGiftAccumulation> orderGiftAccLineSet ;
 
 	public Long getOrderLineId() {
 		return orderLineId;
@@ -66,6 +77,12 @@ public class MarketOrderLine extends BasePojo {
 	public void setGoodsCount(Long goodsCount) {
 		this.goodsCount = goodsCount;
 	}
+	public String getGoodsCountUnit() {
+		return goodsCountUnit;
+	}
+	public void setGoodsCountUnit(String goodsCountUnit) {
+		this.goodsCountUnit = goodsCountUnit;
+	}
 	public String getGoodsPrice() {
 		return goodsPrice;
 	}
@@ -90,4 +107,24 @@ public class MarketOrderLine extends BasePojo {
 	public void setGoodsGiftCheck(String goodsGiftCheck) {
 		this.goodsGiftCheck = goodsGiftCheck;
 	}
+	public List<MarketOrderGiftLine> getOrderGiftLineSet() {
+		return orderGiftLineSet;
+	}
+	public void setOrderGiftLineSet(List<MarketOrderGiftLine> orderGiftLineSet) {
+		this.orderGiftLineSet = orderGiftLineSet;
+	}
+	public List<MarketMemberGiftAccumulation> getOrderGiftAccLineSet() {
+		return orderGiftAccLineSet;
+	}
+	public void setOrderGiftAccLineSet(
+			List<MarketMemberGiftAccumulation> orderGiftAccLineSet) {
+		this.orderGiftAccLineSet = orderGiftAccLineSet;
+	}
+	public Long getGoodsGiftConfigId() {
+		return goodsGiftConfigId;
+	}
+	public void setGoodsGiftConfigId(Long goodsGiftConfigId) {
+		this.goodsGiftConfigId = goodsGiftConfigId;
+	}
+	
 }

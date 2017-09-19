@@ -17,4 +17,6 @@ public interface GoodsBO {
 	List<MarketGoods> getGiftGoodsAutofill(String likeStr);
 	List<MarketGoods> getFeedGoodsAutofill(String likeStr);
 	MarketGoods getGoodsById(Long goodsId);
+	List<MarketGoods> getBuyGoodsAutofill(String likeStr);
+	List<MarketGoods> queryGoodsList(List<Long> goodsIdList);
 }
