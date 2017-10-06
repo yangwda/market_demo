@@ -2,6 +2,8 @@ package cn.yj.market.module.common.dao.hibernate;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
 
 import cn.yj.market.frame.hibernate.GenericDao;
@@ -13,7 +15,10 @@ public class CallbackDaoImpl extends GenericDao<MarketCallBack> implements Callb
 
 	@Override
 	public List<MarketCallBack> getCallbackList() {
-		return null;
+		Criteria criteria = getCurrentSession().createCriteria(MarketCallBack.class) ;
+		criteria.add(Restrictions.isNull("callBackOverTime"));
+		List<MarketCallBack>  rLines = criteria.list();
+		return rLines ;
 	}
 
 }

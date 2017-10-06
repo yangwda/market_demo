@@ -57,7 +57,7 @@
 	    			<td><input class="easyui-textbox"  type="text" name="goodsUsage" data-options="width:345" ></input></td>
 	    		</tr>
 	    		<tr>
-	    			<td>销售状态:</td>
+	    			<td>在售/停售:</td>
 	    			<td><input class="easyui-textbox"  type="text" name="goodsStatus" data-options="width:345" ></input></td>
 	    		</tr>
 	    		<tr>

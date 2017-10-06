@@ -50,6 +50,27 @@
   var GLOBLE_STR_MSGTITLE_INFO = '信息' ;
   var GLOBLE_STR_MSGTITLE_WARNING = '警告' ;
   
+  ///
+  $(document).ready(function(){
+	  doRefreshDataGrid() ;
+    });
+    
+    var doRefreshDataGrid = function(){
+		$('#callbackGrid').datagrid('loadData', { total: 0, rows: [] }); 
+		doSearch();
+	};
+
+	// 查询
+	function doSearch(){
+	    $('#callbackGrid').datagrid({
+	    	loader: function(param, success, error) {
+		      	boDataLoader('${ctx}/callBack/getCallBackList', {}, success, error);
+		   }
+	    });//.datagrid('load' ,params);
+	}
+	function memberTelFormator(value,row,index){
+		return row.memberTel + "," + row.memberPhone ;
+	}
 </script>
 
     <script type="text/javascript" src="/scripts/jquery.portal.js"></script>
@@ -90,17 +111,17 @@
 			</div>
 			<div style="width:50%;">
 				<div id="pgrid" title="回访提示" closable="false" style="height:407px;">
-					<table class="easyui-datagrid" style="width:650px;height:auto"
+					<table class="easyui-datagrid" id="callbackGrid" style="width:650px;height:auto"
 							fit="true" border="false"
-							singleSelect="true"
+							singleSelect="true" nowrap="false"
 							idField="itemid" url="">
 						<thead>
 							<tr>
-								<th field="itemid" width="15%">日期</th>
-								<th field="productid" width="20%">客户</th>
-								<th field="listprice" width="10%">电话</th>
-								<th field="attr1" width="45%">备注</th>
-								<th field="status" width="10%" align="center">回访</th>
+<!-- 								<th field="createTime" width="15%">日期</th> -->
+								<th field="memberName" width="20%">客户</th>
+								<th field="memberPhone" formatter="memberTelFormator" width="35%">电话</th>
+								<th field="callBackRemarks" width="45%">备注</th>
+<!-- 								<th field="callBackOver" width="10%" align="center">回访</th> -->
 							</tr>
 						</thead>
 					</table>
