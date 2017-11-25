@@ -21,6 +21,7 @@
 		    rownumbers: true,
 		    pagination: true,
 		    pageSize: 20,
+		    pageNumber:1,   
 		    pageList: [20,30,40,50,100],
 		    singleSelect: true,
 		    loadMsg: '加载中，请稍后......',
@@ -51,10 +52,16 @@
 
 	// 查询
 	function doSearch(){
-		var params = $("#drugGoodsSearchForm").serialize();
 	    $('#drugGoodsListTable').datagrid({
 	    	loader: function(param, success, error) {
-		      	boDataLoader('${ctx}/drug/getGoodsPageList', params, success, error);
+				var params = $("#drugGoodsSearchForm").serializeArray() || [] ;
+	    		var pa = [] ;
+				pa.push( {name: "page" ,value: param.page} ) ;
+				pa.push({name: "rows" ,value: param.rows}) ;
+				pa.push({name:"order",value:param.order});
+				pa.push({name:"sort",value:param.sort});
+				param = $.merge(pa, params);
+		      	boDataLoader('${ctx}/drug/getGoodsPageList', param, success, error);
 		   }
 	    });//.datagrid('load' ,params);
 	}

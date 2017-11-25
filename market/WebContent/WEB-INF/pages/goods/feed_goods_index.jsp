@@ -50,10 +50,16 @@
 
 	// 查询
 	function doSearch(){
-		var params = $("#feedGoodsSearchForm").serialize();
 	    $('#feedGoodsListTable').datagrid({
 	    	loader: function(param, success, error) {
-		      	boDataLoader('${ctx}/feed/getGoodsPageList', params, success, error);
+				var params = $("#feedGoodsSearchForm").serializeArray() || [] ;
+	    		var pa = [] ;
+				pa.push( {name: "page" ,value: param.page} ) ;
+				pa.push({name: "rows" ,value: param.rows}) ;
+				pa.push({name:"order",value:param.order});
+				pa.push({name:"sort",value:param.sort});
+				param = $.merge(pa, params);
+		      	boDataLoader('${ctx}/feed/getGoodsPageList', param, success, error);
 		   }
 	    });//.datagrid('load' ,params);
 	}

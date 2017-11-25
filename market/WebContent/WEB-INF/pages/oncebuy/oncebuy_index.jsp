@@ -41,10 +41,16 @@
 
 	// 查询
 	function doSearch(){
-		var params = $("#oncebuySearchForm").serialize();
 	    $('#oncebuyListTable').datagrid({
 	    	loader: function(param, success, error) {
-		      	boDataLoader('${ctx}/oncebuy/getOncebuyPageList', params, success, error);
+				var params = $("#oncebuySearchForm").serializeArray() || [] ;
+				var pa = [] ;
+				pa.push( {name: "page" ,value: param.page} ) ;
+				pa.push({name: "rows" ,value: param.rows}) ;
+				pa.push({name:"order",value:param.order});
+				pa.push({name:"sort",value:param.sort});
+				param = $.merge(pa, params);
+		      	boDataLoader('${ctx}/oncebuy/getOncebuyPageList', param, success, error);
 		   }
 	    });//.datagrid('load' ,params);
 	}

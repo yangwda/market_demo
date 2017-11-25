@@ -66,11 +66,17 @@
 
 	// 查询
 	function doSearch(){
-		$("#giftDetailsInfoPanel").html("") ;
-		var params = $("#feedGiftPayoffSearchForm").serialize();
 	    $('#feedGiftPayoffListTable').datagrid({
 	    	loader: function(param, success, error) {
-		      	boDataLoader('${ctx}/feedGift/getFeedGiftPageList', params, success, error);
+				$("#giftDetailsInfoPanel").html("") ;
+				var params = $("#feedGiftPayoffSearchForm").serializeArray() || [] ;
+	    		var pa = [] ;
+				pa.push( {name: "page" ,value: param.page} ) ;
+				pa.push({name: "rows" ,value: param.rows}) ;
+				pa.push({name:"order",value:param.order});
+				pa.push({name:"sort",value:param.sort});
+				param = $.merge(pa, params);
+		      	boDataLoader('${ctx}/feedGift/getFeedGiftPageList', param, success, error);
 		   }
 	    });//.datagrid('load' ,params);
 	}

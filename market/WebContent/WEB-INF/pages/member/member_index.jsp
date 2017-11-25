@@ -47,10 +47,16 @@
 
 	// 查询
 	function doSearch(){
-		var params = $("#memberSearchForm").serialize();
 	    $('#memberListTable').datagrid({
 	    	loader: function(param, success, error) {
-		      	boDataLoader('${ctx}/member/getMemberPageList', params, success, error);
+				var params = $("#memberSearchForm").serializeArray() || [] ;
+	    		var pa = [] ;
+				pa.push( {name: "page" ,value: param.page} ) ;
+				pa.push({name: "rows" ,value: param.rows}) ;
+				pa.push({name:"order",value:param.order});
+				pa.push({name:"sort",value:param.sort});
+				param = $.merge(pa, params);
+		      	boDataLoader('${ctx}/member/getMemberPageList', param, success, error);
 		   }
 	    });//.datagrid('load' ,params);
 	}

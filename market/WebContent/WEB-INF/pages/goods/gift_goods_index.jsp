@@ -45,10 +45,16 @@
 
 	// 查询
 	function doSearch(){
-		var params = $("#giftGoodsSearchForm").serialize();
 	    $('#giftGoodsListTable').datagrid({
 	    	loader: function(param, success, error) {
-		      	boDataLoader('${ctx}/gift/getGoodsPageList', params, success, error);
+				var params = $("#giftGoodsSearchForm").serializeArray() || [] ;
+	    		var pa = [] ;
+				pa.push( {name: "page" ,value: param.page} ) ;
+				pa.push({name: "rows" ,value: param.rows}) ;
+				pa.push({name:"order",value:param.order});
+				pa.push({name:"sort",value:param.sort});
+				param = $.merge(pa, params);
+		      	boDataLoader('${ctx}/gift/getGoodsPageList', param, success, error);
 		   }
 	    });//.datagrid('load' ,params);
 	}

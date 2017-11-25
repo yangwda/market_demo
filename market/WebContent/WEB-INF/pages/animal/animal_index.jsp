@@ -38,10 +38,16 @@
 
 	// 查询
 	function doSearch(){
-		var params = $("#animalSearchForm").serialize();
 	    $('#animalListTable').datagrid({
 	    	loader: function(param, success, error) {
-		      	boDataLoader('${ctx}/animal/getAnimalPageList', params, success, error);
+				var params = $("#animalSearchForm").serializeArray() || [] ;
+				var pa = [] ;
+				pa.push( {name: "page" ,value: param.page} ) ;
+				pa.push({name: "rows" ,value: param.rows}) ;
+				pa.push({name:"order",value:param.order});
+				pa.push({name:"sort",value:param.sort});
+				param = $.merge(pa, params);
+		      	boDataLoader('${ctx}/animal/getAnimalPageList', param, success, error);
 		   }
 	    });//.datagrid('load' ,params);
 	}
