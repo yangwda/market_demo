@@ -30,7 +30,7 @@
 		<tr>
 			<td colspan="2" align="left" style="color:blue;cursor:pointer" onclick="$('#printLink').show() ;">2017-09-01 08:08:08</td>
 			<td colspan="2" align="left">诚意药房（城子坦店）</td>
-			<td colspan="3" align="left">李哥，041188888888,18888888888</td>
+			<td colspan="3" align="left">李哥，13009459378</td>
 		</tr>
 		<tr><td colspan="7"><hr></td></tr>
 		<tr>

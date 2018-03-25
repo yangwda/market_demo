@@ -8,51 +8,6 @@
 	}
 	function saveFeedGiftPayoff(){
 	      var params = $("#feedGiftPayoffForm").serializeArray();
-			var dl = $('#giftDetailListTable').datagrid('getRows') ;
-			if(!dl || dl.length < 1){
-				msg_alert("提示", "请添加优惠明细！") ;
-				return ; 
-			}
-			for(var i=0;i<dl.length;i++){
-				var rcd = dl[i] ;
-				var checkType = rcd.checkType ;
-				if(!checkType){
-					checkType="NULL" ;
-				}
-				var buyLimit = rcd.buyLimit ;
-				if(!buyLimit){
-					buyLimit="NULL" ;
-				}
-				var buyLimitPunit = rcd.buyLimitPunit ;
-				if(!buyLimitPunit){
-					buyLimitPunit="NULL" ;
-				}
-				var goodsId = rcd.goodsId ;
-				if(!goodsId){
-					goodsId="NULL" ;
-				}
-				var goodsName = rcd.goodsName ;
-				if(!goodsName){
-					goodsName="NULL" ;
-				}
-				var goodsNo = rcd.goodsNo ;
-				if(!goodsNo){
-					goodsNo="NULL" ;
-				}
-				var giftGoodsCount = rcd.giftGoodsCount ;
-				if(!giftGoodsCount){
-					giftGoodsCount="NULL" ;
-				}
-				var giftGoodsCountUnit = rcd.giftGoodsCountUnit ;
-				if(!giftGoodsCountUnit){
-					giftGoodsCountUnit="NULL" ;
-				}
-				
-				var ss = checkType + "@@@" + buyLimit + "@@@" + buyLimitPunit + "@@@" 
-					+ goodsId + "@@@" + goodsName + "@@@" + goodsNo + "@@@" + giftGoodsCount + "@@@" + giftGoodsCountUnit ;
-				
-				params.push({name: 'lineStrArr' ,value: ss}) ;
-			}
 			
 	      execAjax("${ctx}/feedGift/saveFeedGiftPayoff", params, true, function(retData){
 	    	  doRefreshDataGrid() ;
@@ -65,9 +20,6 @@
 <div class="easyui-layout" data-options="fit:true">
 	<div data-options="region:'center',border:false" >
 		<div class="easyui-layout" data-options="fit:true,border:false">
-			<div data-options="region:'east',split:false,border:false,collapsible:false,tools:'#tt'" title="活动规则" style="width:560px;padding: 10px;">
-				<table id="giftDetailListTable"></table>
-			</div>
 			<div data-options="region:'center',border:false">
 		  		<form id="feedGiftPayoffForm" class="easyui-form" method="post" data-options="">
 			    	<table cellpadding="5" style="width:100%">
@@ -95,6 +47,13 @@
 			    			<td><input class="easyui-textbox"  type="text" name="giftConfigEndTime" data-options="width:300,prompt:'yyyy-mm-dd'" ></input></td>
 			    		</tr>
 			    		<tr>
+			    			<td><strong>等值产品金额:</strong></td>
+			    			<td>
+			    				<input class="easyui-textbox"  type="text" name="giftAmount" data-options="width:300,prompt:'金额，如：50.00'" ></input>
+			    				<br>（**该金额是每桶的金额，客户结算时，会根据桶数进行计算，然后进行等值产品金额提示）
+			    			</td>
+			    		</tr>
+			    		<tr>
 			    			<td>活动备注:</td>
 			    			<td><input class="easyui-textbox" name="giftConfigRemarks" data-options="multiline:true,width:300" style="height:100px"></input></td>
 			    		</tr>
@@ -103,64 +62,10 @@
 			</div>
 		</div>
 	</div>
-	<div id="tt">
-		<a href="javascript:void(0)" class="icon-add" title="添加明细" onclick="javascript:addGiftDetails()"></a>
-<!-- 		<a href="javascript:void(0)" class="icon-edit" title="修改明细" onclick="javascript:editGiftDetails()"></a> -->
-		<a href="javascript:void(0)" class="icon-remove" title="删除明细" onclick="javascript:deleteGiftDetails()"></a>
-	</div>
 	<div data-options="region:'south',border:false" style="height:30px" align="center">
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="saveFeedGiftPayoff();" style="width:15%">保存</a>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="closeWin();" style="width:15%">取消</a>
-	</div>
-</div>
-<div id="addGiftDetailWin" class="easyui-window" title="新增饲料赠品明细" 
-			data-options="modal:true,closed:true,iconCls:'icon-excel',cache:false,minimizable:false,maximizable:false,collapsible:false,resizable:false
-						 ,href:''" style="width:500px;height:272px;padding:5px;">
-	<div class="easyui-layout" data-options="fit:true">
-		<div data-options="region:'center',border:false" >
-			<table border="0">
-		   		<tr>
-		   			<td>优惠方式:</td>
-		   			<td>
-		   				<select class="easyui-combobox" name="checkType" id="addGiftDetail_checkType" data-options="panelHeight:57,editable:false">
-		   					<option value="当时兑现">当时兑现</option><option value="累积">累积</option>
-		   				</select>
-		   			</td>
-		   		</tr>
-		   		<tr>
-		   			<td>购买额度:</td>
-		   			<td>
-		   				<input class="easyui-textbox" type="text" name="buyLimit" id="addGiftDetail_buyLimit" data-options="required:true,width:72"></input>
-		   				<select class="easyui-combobox" name="buyLimitPunit" id="addFormFeedGoodsCountUnit" 
-		   					data-options="panelHeight:100,valueField:'punit',textField:'punit',width:72,editable:false">
-		   				</select>
-		   			</td>
-		   		</tr>
-		   		<tr>
-		   			<td>赠品:</td>
-		   			<td>
-		   				<input type="hidden" name="giftGoodsId" id="addGiftDetail_giftGoodsId" />
-		   				<input type="hidden" name="giftGoodsNo" id="addGiftDetail_giftGoodsNo" />
-		   				<input class="easyui-textbox" type="text" name="giftGoodsName" id="addFormGiftGoodsName" data-options="required:true,width:270"></input>
-		   			</td>
-		   		</tr>
-		   		<tr>
-		   			<td>赠送数量:</td>
-		   			<td>
-		   				<input class="easyui-textbox" type="text" name="giftGoodsCount" id="addGiftDetail_giftGoodsCount" data-options="required:true,width:72"></input>
-		   				<input type="hidden" name="giftGoodsPunit2" id="addGiftDetail_giftGoodsPunit2" />
-		   				<select class="easyui-combobox" name="giftGoodsCountUnit" id="addFormGiftGoodsCountUnit" 
-		   					data-options="panelHeight:100,valueField:'punit',textField:'punit',width:72,editable:false">
-		   				</select>
-		   			</td>
-		   		</tr>
-		   	</table>
-		</div>
-		<div data-options="region:'south',border:false" style="height:30px" align="center">
-			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" onclick="addGiftDetailToList();" style="width:15%">确定</a>
-			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-back'" onclick="backToParent();" style="width:15%">返回</a>
-		</div>
 	</div>
 </div>
 

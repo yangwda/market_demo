@@ -32,7 +32,7 @@
 		<tr>
 			<td colspan="2" align="left" style="color:blue;cursor:pointer" onclick="$('#printLink').show() ;">${printDate }</td>
 			<td colspan="2" align="left">诚意药房（城子坦店）</td>
-			<td colspan="3" align="left">李哥，041188888888,18888888888</td>
+			<td colspan="3" align="left">李哥，13009459378</td>
 		</tr>
 		<tr><td colspan="7"><hr></td></tr>
 		<tr>
@@ -53,7 +53,7 @@
 		</c:forEach>
 		<tr><td colspan="5">&nbsp;</td><td colspan="2"><hr></td></tr>
 		<tr style=""><td colspan="6" align="right">金额总计</td><td align="right">${order.orderTotalMoney }</td></tr>
-		<tr style=""><td colspan="6" align="right">可用代金券</td><td align="right">${order.payOffVoucherTotalMoney }</td></tr>
+		<tr style=""><td colspan="6" align="right">代金券</td><td align="right">${order.payOffVoucherTotalMoney }</td></tr>
 		<tr style=""><td colspan="6" align="right">已支付金额</td><td align="right">${order.payOffCashTotalMoney }</td></tr>
 		<c:if test="${cutMoney  != 0}">
 			<tr style=""><td colspan="6" align="right">抹零</td><td align="right">${order.orderCutMoney }</td></tr>
@@ -75,15 +75,15 @@
 		<tr style="color:green">
 			<td colspan="7" align="left"><b>会员累积信息：</b></td>
 		</tr>
-		<tr style="color:green">
-			<td colspan="7" align="left" style="padding: 0 20px;">这部分信息待明确，后续补充；</td>
-		</tr>
-		<tr style="color:green">
-			<td colspan="7" align="left" style="padding: 0 20px;">15元代金券，2张；</td>
-		</tr>
-		<tr style="color:green">
-			<td colspan="7" align="left" style="padding: 0 20px;">肥肥肥肥肥，累积5包（累积满10包送热水壶1个）；</td>
-		</tr>
+<!-- 		<tr style="color:green"> -->
+<!-- 			<td colspan="7" align="left" style="padding: 0 20px;">这部分信息待明确，后续补充；</td> -->
+<!-- 		</tr> -->
+<!-- 		<tr style="color:green"> -->
+<!-- 			<td colspan="7" align="left" style="padding: 0 20px;">15元代金券，2张；</td> -->
+<!-- 		</tr> -->
+<!-- 		<tr style="color:green"> -->
+<!-- 			<td colspan="7" align="left" style="padding: 0 20px;">肥肥肥肥肥，累积5包（累积满10包送热水壶1个）；</td> -->
+<!-- 		</tr> -->
 		<tr><td colspan="7">&nbsp;</td></tr>
 		<tr><td colspan="7" align="left" style="padding: 0 30px;">&nbsp;</td></tr>
 		<tr><td colspan="7" align="right">

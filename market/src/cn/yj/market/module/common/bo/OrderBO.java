@@ -14,6 +14,8 @@ public interface OrderBO {
 	Page<MarketOrder> getPage(OrderSearchCondition condition ,PageRequestParams pageRequestParams) ;
 
 	String getMemberAcmBuyInfo(Long memberId);
+	
+	String getMemberAcmVoucherInfo(Long memberId);
 
 	MarketOrder getByOrderId(Long orderId);
 
@@ -21,7 +23,8 @@ public interface OrderBO {
 
 	List<MarketOrderLine> getOrderLineList(Long orderId);
 
-	void doPayOrder(MarketOrder order, String callBackRemarks, String onceBuyGift, BigDecimal pay);
+	void doPayOrder(MarketOrder order, String callBackRemarks, String onceBuyGift, BigDecimal pay, String giftFlag);
 
 	List<MarketMemberVoucher> getOrderVoucher(Long orderId);
+
 }

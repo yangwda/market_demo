@@ -29,29 +29,30 @@
 		      {title:'饲料编号', field:'goodsNo', width:120},
 		      {title:'饲料名称', field:'goodsName', width:120},
 		      {title:'赠品活动描述', field:'giftConfigDesc', width:200},
-		      {title:'开始日期', field:'giftConfigBeginTime',formatter:giftTimeFormater, width:150},
+		      {title:'活动时间', field:'giftConfigBeginTime',formatter:giftTimeFormater, width:150},
+		      {title:'等值产品金额', field:'giftAmount', width:150},
 		      {title:'活动备注', field:'giftConfigRemarks', width:200}
-		    ]],
-		    onSelect: function(index,row){
-		    	var msg = "" ;
-		    	if(row.lineList && row.lineList.length > 0){
-		    		for(var i=0;i<row.lineList.length ;i++){
-		    			var line = row.lineList[i] ;
-		    			var ct = line.checkType ;
-		    			var act = "买" ;
-		    			if(ct == "累积"){
-		    				act = "累积" ;
-		    			}
-		    			var info = "<strong>" + ct + "</strong>[ "+act + " " + line.buyLimit + " " + line.buyLimitPunit + 
-		    			                   " ，送 " + line.giftGoodsName+" " +line.giftGoodsCount + line.giftGoodsCountUnit+" ]<br>" ; 
-		    			msg += info ;
-		    		}
-		    	}
-		    	if(msg == ""){
-		    		msg = "无" ;
-		    	}
-		    	$("#giftDetailsInfoPanel").html(msg) ;
-		    }
+		    ]]
+//     		,onSelect: function(index,row){
+// 		    	var msg = "" ;
+// 		    	if(row.lineList && row.lineList.length > 0){
+// 		    		for(var i=0;i<row.lineList.length ;i++){
+// 		    			var line = row.lineList[i] ;
+// 		    			var ct = line.checkType ;
+// 		    			var act = "买" ;
+// 		    			if(ct == "累积"){
+// 		    				act = "累积" ;
+// 		    			}
+// 		    			var info = "<strong>" + ct + "</strong>[ "+act + " " + line.buyLimit + " " + line.buyLimitPunit + 
+// 		    			                   " ，送 " + line.giftGoodsName+" " +line.giftGoodsCount + line.giftGoodsCountUnit+" ]<br>" ; 
+// 		    			msg += info ;
+// 		    		}
+// 		    	}
+// 		    	if(msg == ""){
+// 		    		msg = "无" ;
+// 		    	}
+// 		    	$("#giftDetailsInfoPanel").html(msg) ;
+// 		    }
 		  });
     });
     
@@ -140,12 +141,12 @@
 	</div>
 	<div data-options="region:'center',border:false" style="padding:0px;" id="tableDiv">
 		<div class="easyui-layout" data-options="fit:true,border:false">
-			<div data-options="region:'east',split:false" id="giftDetailsInfoPanel" title="活动规则" style="width:360px;padding: 10px;">
+<!-- 			<div data-options="region:'east',split:false" id="giftDetailsInfoPanel" title="活动规则" style="width:360px;padding: 10px;"> -->
 <!-- 				当时兑现：买 1 件，送 2 袋；<br> -->
 <!-- 				当时兑现：买 1 件，送 热水器；<br> -->
 <!-- 				累积：满 10 桶，送 1 桶；<br> -->
 <!-- 				累积：满 20 桶，送 电磁炉；<br> -->
-			</div>
+<!-- 			</div> -->
 			<div data-options="region:'center',border:false">
 		  		<table id="feedGiftPayoffListTable"></table>
 			</div>
@@ -153,7 +154,7 @@
 	</div>
 	<div id="newFeedGiftPayoffWin" class="easyui-window" title="新增饲料赠品" 
 			data-options="modal:true,closed:true,iconCls:'icon-add',cache:false,minimizable:false,maximizable:false,collapsible:false,resizable:false
-						 ,href:''" style="width:1000px;height:490px;padding:5px;">
+						 ,href:''" style="width:500px;height:460px;padding:5px;">
 		</div>
   </body>
 </html>

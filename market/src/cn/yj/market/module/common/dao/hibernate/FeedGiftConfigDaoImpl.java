@@ -72,11 +72,11 @@ public class FeedGiftConfigDaoImpl extends GenericDao<MarketGiftCTConfig> implem
 		criteria.add( Restrictions.sqlRestriction(" giftConfigBeginTime <= SYSDATE()  and SYSDATE() <= giftConfigEndTime  ")) ;
 		criteria.addOrder(Order.asc("giftConfigBeginTime")) ;
 		List<MarketGiftCTConfig> gl = criteria.list() ;
-		if (gl != null) {
-			for (MarketGiftCTConfig config : gl) {
-				config.loadLine() ;
-			}
-		}
+//		if (gl != null) {
+//			for (MarketGiftCTConfig config : gl) {
+//				config.loadLine() ;
+//			}
+//		}
 		return gl;
 	}
 }

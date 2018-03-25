@@ -377,30 +377,35 @@
         <div title="日常业务" style="padding:1px;" data-options="iconCls:'icon-daily-busi'">
           <ul class="easyui-tree">
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('药料销售', '/order/', 'icon-tab-light', false)" >药料销售</a></li>
-            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('销售退货', '/jump/sysBuilding', 'icon-tab-light', false)" >销售退货</a></li>
-          </ul>
-        </div>
-        <div title="优惠促销" style="padding:1px;" data-options="iconCls:'icon-favorable'">
-          <ul class="easyui-tree">
-            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('药品赠品[按金额]', '/drugGift/', 'icon-tab-light', false)" >药品赠品[按金额]</a></li>
-            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('饲料赠品[按数量]', '/feedGift/', 'icon-tab-light', false)" >饲料赠品[按数量]</a></li>
-            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('单次购买活动', '/oncebuy/', 'icon-tab-light', false)" >单次购买活动</a></li>
-          </ul>
-        </div>
-        <div title="会员管理" style="padding:1px;" data-options="iconCls:'icon-member'">
-          <ul class="easyui-tree">
+<!--             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('销售退货', '/jump/sysBuilding', 'icon-tab-light', false)" >销售退货</a></li> -->
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('会员信息', '/member/', 'icon-tab-light', false)" >会员信息</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('会员对账单', '/jump/sysBuilding', 'icon-tab-light', false)" >会员对账单</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('年末累积', '/jump/sysBuilding', 'icon-tab-light', false)" >年末累积</a></li>
           </ul>
         </div>
+<!--         <div title="优惠促销" style="padding:1px;" data-options="iconCls:'icon-favorable'"> -->
+<!--           <ul class="easyui-tree"> -->
+<!--             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('药品赠品[按金额]', '/drugGift/', 'icon-tab-light', false)" >药品赠品[按金额]</a></li> -->
+<!--             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('饲料赠品[按数量]', '/feedGift/', 'icon-tab-light', false)" >饲料赠品[按数量]</a></li> -->
+<!--             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('单次购买活动', '/oncebuy/', 'icon-tab-light', false)" >单次购买活动</a></li> -->
+<!--           </ul> -->
+<!--         </div> -->
+<!--         <div title="会员管理" style="padding:1px;" data-options="iconCls:'icon-member'"> -->
+<!--           <ul class="easyui-tree"> -->
+<!--             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('会员信息', '/member/', 'icon-tab-light', false)" >会员信息</a></li> -->
+<!--             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('会员对账单', '/jump/sysBuilding', 'icon-tab-light', false)" >会员对账单</a></li> -->
+<!--             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('年末累积', '/jump/sysBuilding', 'icon-tab-light', false)" >年末累积</a></li> -->
+<!--           </ul> -->
+<!--         </div> -->
         <div title="药料管理" style="padding:1px;" data-options="iconCls:'icon-product'">
           <ul class="easyui-tree">
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('兽种类', '/animal/', 'icon-tab-light', false)" >兽种类</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('疾病种类', '/illness/', 'icon-tab-light', false)" >疾病种类</a></li>
-            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('其他赠品管理', '/gift/', 'icon-tab-light', false)" >其他赠品管理</a></li>
+<!--             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('其他赠品管理', '/gift/', 'icon-tab-light', false)" >其他赠品管理</a></li> -->
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('药品管理', '/drug/', 'icon-tab-light', false)" >药品管理</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('饲料管理', '/feed/', 'icon-tab-light', false)" >饲料管理</a></li>
+            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('饲料惠赠', '/feedGift/', 'icon-tab-light', false)" >饲料惠赠</a></li>
+            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('单次购买活动', '/oncebuy/', 'icon-tab-light', false)" >单次购买活动</a></li>
           </ul>
         </div>
         <div title="统计报表" style="padding:1px;" data-options="iconCls:'icon-statis-report'">

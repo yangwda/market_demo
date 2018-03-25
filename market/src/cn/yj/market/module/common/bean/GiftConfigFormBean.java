@@ -13,6 +13,7 @@ public class GiftConfigFormBean {
 	private String goodsName;
 	private String goodsNo;
 	private String buyLimit;
+	private String giftAmount;
 	
 	// line
 	private String giftConfigLineId ;
@@ -84,6 +85,12 @@ public class GiftConfigFormBean {
 	}
 	public void setBuyLimit(String buyLimit) {
 		this.buyLimit = buyLimit;
+	}
+	public String getGiftAmount() {
+		return giftAmount;
+	}
+	public void setGiftAmount(String giftAmount) {
+		this.giftAmount = giftAmount;
 	}
 	public String getGiftConfigLineId() {
 		return giftConfigLineId;

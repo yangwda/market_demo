@@ -40,6 +40,7 @@ public class MarketOrderLine extends BasePojo {
 	private String goodsGift ;
 	private String goodsGiftCheck ;
 	private Long goodsGiftConfigId ;
+	private BigDecimal giftAmount ;
 	
 	@OneToMany(mappedBy="orderLineId",fetch=FetchType.LAZY)
 	private List<MarketOrderGiftLine> orderGiftLineSet ;
@@ -125,6 +126,12 @@ public class MarketOrderLine extends BasePojo {
 	}
 	public void setGoodsGiftConfigId(Long goodsGiftConfigId) {
 		this.goodsGiftConfigId = goodsGiftConfigId;
+	}
+	public BigDecimal getGiftAmount() {
+		return giftAmount;
+	}
+	public void setGiftAmount(BigDecimal giftAmount) {
+		this.giftAmount = giftAmount;
 	}
 	
 }

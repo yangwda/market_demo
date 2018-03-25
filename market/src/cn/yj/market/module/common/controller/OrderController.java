@@ -25,8 +25,6 @@ import cn.yj.market.frame.page.Page;
 import cn.yj.market.frame.util.CoreUtils;
 import cn.yj.market.frame.util.SessionUtil;
 import cn.yj.market.frame.vo.MarketGiftCTConfig;
-import cn.yj.market.frame.vo.MarketGiftCTConfigLine;
-import cn.yj.market.frame.vo.MarketGiftConfig;
 import cn.yj.market.frame.vo.MarketGoods;
 import cn.yj.market.frame.vo.MarketGoodsUnitPrice;
 import cn.yj.market.frame.vo.MarketMember;
@@ -78,7 +76,7 @@ public class OrderController extends BaseController {
     	ModelAndView r = new ModelAndView("order/order_buy_detail");
     	String[] rq = ppp.split("@@@") ;
     	String memberIdStr = rq[0].substring(rq[0].indexOf("=")+1) ;
-    	BigDecimal voucher = BigDecimal.ZERO ;
+//    	BigDecimal voucher = BigDecimal.ZERO ;
     	if(CoreUtils.isLong(memberIdStr)){
     		Long memberId = Long.valueOf(memberIdStr) ;
     		//-- TODO 查询会员的累积消费消息、代金券等信息
@@ -90,7 +88,7 @@ public class OrderController extends BaseController {
 				String row = rq[i] ;
 //				System.out.println("+++++++++++row==================" + row);
 				String[] ra = row.split("___") ;
-				if (ra.length != 4) {
+				if (ra.length != 5) {
 					continue ;
 				}
 				if (!CoreUtils.isLong(ra[0])) {
@@ -106,6 +104,7 @@ public class OrderController extends BaseController {
 				p.put("pct", Long.valueOf(ra[1])) ;
 				p.put("pctu", ra[2]) ;
 				p.put("gftcfg", ra[3]) ;
+				p.put("gamid", ra[4]) ;
 //				p.put("payment", "88.88");
 //				p.put("pname", "剁椒鱼头一大份儿") ;
 				pdiList.add(p) ;
@@ -113,11 +112,13 @@ public class OrderController extends BaseController {
 		}
     	List<MarketGoods> goodsList = goodsBO.queryGoodsList(pidList) ;
     	Map<Long, MarketGoods> goodsMap = new HashMap<Long, MarketGoods>(); 
-    	Map<Long, MarketGiftConfig> ggM = new HashMap<Long, MarketGiftConfig>() ;
+//    	Map<Long, MarketGiftConfig> ggM = new HashMap<Long, MarketGiftConfig>() ;
     	Map<Long, MarketGiftCTConfig> ggFM = new HashMap<Long, MarketGiftCTConfig>() ;
     	List<Long> giftGoodsIdList = new ArrayList<Long>() ;
     	List<Long> giftFeedGoodsIdList = new ArrayList<Long>() ;
     	BigDecimal totalPrice = BigDecimal.ZERO ;
+    	BigDecimal totalGiftAmount = BigDecimal.ZERO ;
+    	Long totalBuyCount = 0L ;
     	if (goodsList != null && !goodsList.isEmpty()) {
     		for (MarketGoods goods : goodsList) {
     			goodsMap.put(goods.getGoodsId(), goods) ;
@@ -129,17 +130,17 @@ public class OrderController extends BaseController {
     				giftFeedGoodsIdList.add(goods.getGoodsId()) ;
 				}
 			}
-    		if(!giftGoodsIdList.isEmpty()){
-    			List<MarketGiftConfig> gcl = giftConfigBO.queryGiftConfigListByGoodsIdList(giftGoodsIdList) ;
-    			if (gcl != null && !gcl.isEmpty()) {
-					for (MarketGiftConfig gc : gcl) {
-						if(ggM.get(gc.getGoodsId()) != null){
-							continue ;
-						}
-						ggM.put(gc.getGoodsId(), gc) ;
-					}
-				}
-    		}
+//    		if(!giftGoodsIdList.isEmpty()){
+//    			List<MarketGiftConfig> gcl = giftConfigBO.queryGiftConfigListByGoodsIdList(giftGoodsIdList) ;
+//    			if (gcl != null && !gcl.isEmpty()) {
+//					for (MarketGiftConfig gc : gcl) {
+//						if(ggM.get(gc.getGoodsId()) != null){
+//							continue ;
+//						}
+//						ggM.put(gc.getGoodsId(), gc) ;
+//					}
+//				}
+//    		}
     		if (!giftFeedGoodsIdList.isEmpty()) {
 				List<MarketGiftCTConfig> gctl = feedGiftConfigBO.queryFeedGiftConfigListByGoodsIdList(giftFeedGoodsIdList) ;
 				if(gctl != null && !gctl.isEmpty()){
@@ -163,6 +164,7 @@ public class OrderController extends BaseController {
 				if(pct < 1){
 					continue ;
 				}
+				totalBuyCount += pct ;
 				String pctu = pi.getString("pctu");
 				if (StringUtils.isBlank(goods.getPunit1()) || StringUtils.isBlank(goods.getPunit2()) || StringUtils.isBlank(goods.getPunit3())) {
 					iterator.remove();
@@ -184,51 +186,59 @@ public class OrderController extends BaseController {
 				prc.setScale(2, BigDecimal.ROUND_HALF_UP) ;
 				pi.put("payment", CoreUtils.formatMoney(prc)) ;
 				totalPrice = totalPrice.add(prc) ;
-				if ("药品".equals(goods.getGoodsType())) {
-					MarketGiftConfig gc = ggM.get(goods.getGoodsId()) ;
-					if(gc != null){
-						JSONObject gift = new JSONObject() ;
-						gift.put("common", gc.giftCommonStr()) ;
-						if (gc.getLine() != null) {
-							pi.put("giftConfigLineId", gc.getLine().getGiftConfigLineId()) ;
-						}
-						else {
-							pi.put("giftConfigLineId", 0) ;
-						}
-						pi.put("gift", gift) ;
-					}
-				}
+//				if ("药品".equals(goods.getGoodsType())) {
+//					MarketGiftConfig gc = ggM.get(goods.getGoodsId()) ;
+//					if(gc != null){
+//						JSONObject gift = new JSONObject() ;
+//						gift.put("common", gc.giftCommonStr()) ;
+//						if (gc.getLine() != null) {
+//							pi.put("giftConfigLineId", gc.getLine().getGiftConfigLineId()) ;
+//						}
+//						else {
+//							pi.put("giftConfigLineId", 0) ;
+//						}
+//						pi.put("gift", gift) ;
+//					}
+//				}
 				if ("饲料".equals(goods.getGoodsType())) {
 					MarketGiftCTConfig gct = ggFM.get(goods.getGoodsId());
 					if(gct != null){
-						List<MarketGiftCTConfigLine> ll = gct.getLineList() ;
-						if(ll != null && !ll.isEmpty()){
-							List<JSONObject> configLine = new ArrayList<JSONObject>() ;
-//							boolean ck = true;
-							long gftcfg = pi.getLong("gftcfg") ;
-							long giftConfigLineId = 0L ;
-							for (MarketGiftCTConfigLine line : ll) {
-								JSONObject gift = new JSONObject() ;
-								gift.put("nm", gct.getGoodsId()) ;
-								gift.put("vl", line.getGiftConfigLineId()) ;
-								boolean ff =(gftcfg == line.getGiftConfigLineId()) ;
-								if (ff) {
-									giftConfigLineId = line.getGiftConfigLineId() ;
-								}
-								gift.put("ck", ff ? "checked" : "") ;
-								gift.put("common", line.giftCommonStr()) ;
-//								ck = false ;
-								configLine.add(gift) ;
-							}
-							if (giftConfigLineId == 0) {
-								JSONObject gift = configLine.get(0) ;
-								gift.put("ck", "checked") ;
-								giftConfigLineId = ll.get(0).getGiftConfigLineId() ;
-							}
-							JSONObject giftL = new JSONObject() ;
-							giftL.put("configLine", configLine) ;
-							pi.put("gift", giftL) ;
-							pi.put("giftConfigLineId", giftConfigLineId) ;
+//						List<MarketGiftCTConfigLine> ll = gct.getLineList() ;
+//						if(ll != null && !ll.isEmpty()){
+//							List<JSONObject> configLine = new ArrayList<JSONObject>() ;
+////							boolean ck = true;
+//							long gftcfg = pi.getLong("gftcfg") ;
+//							long giftConfigLineId = 0L ;
+//							for (MarketGiftCTConfigLine line : ll) {
+//								JSONObject gift = new JSONObject() ;
+//								gift.put("nm", gct.getGoodsId()) ;
+//								gift.put("vl", line.getGiftConfigLineId()) ;
+//								boolean ff =(gftcfg == line.getGiftConfigLineId()) ;
+//								if (ff) {
+//									giftConfigLineId = line.getGiftConfigLineId() ;
+//								}
+//								gift.put("ck", ff ? "checked" : "") ;
+//								gift.put("common", line.giftCommonStr()) ;
+////								ck = false ;
+//								configLine.add(gift) ;
+//							}
+//							if (giftConfigLineId == 0) {
+//								JSONObject gift = configLine.get(0) ;
+//								gift.put("ck", "checked") ;
+//								giftConfigLineId = ll.get(0).getGiftConfigLineId() ;
+//							}
+//							JSONObject giftL = new JSONObject() ;
+//							giftL.put("configLine", configLine) ;
+//							pi.put("gift", giftL) ;
+//							pi.put("giftConfigLineId", giftConfigLineId) ;
+//						}
+						if ("桶".endsWith(pctu)) {
+							BigDecimal giftAmount = new BigDecimal(gct.getGiftAmount()).multiply(new BigDecimal(pct)) ;
+							pi.put("giftAmount", CoreUtils.formatMoney(giftAmount)) ;
+							totalGiftAmount = totalGiftAmount.add(giftAmount) ;
+						}
+						else {
+							pi.put("giftAmount", "0.00") ;
 						}
 					}
 				}
@@ -239,23 +249,25 @@ public class OrderController extends BaseController {
 		}
     	
     	totalPrice.setScale(2, BigDecimal.ROUND_HALF_UP);
-    	voucher.setScale(2, BigDecimal.ROUND_HALF_UP) ;
-    	BigDecimal pay = totalPrice.subtract(voucher) ;
-    	if (pay.compareTo(BigDecimal.ZERO) < 0) {
-    		pay = BigDecimal.ZERO ;
-		}
-    	pay.setScale(2, BigDecimal.ROUND_HALF_UP) ;
+//    	voucher.setScale(2, BigDecimal.ROUND_HALF_UP) ;
+//    	BigDecimal pay = totalPrice.subtract(voucher) ;
+//    	if (pay.compareTo(BigDecimal.ZERO) < 0) {
+//    		pay = BigDecimal.ZERO ;
+//		}
+//    	pay.setScale(2, BigDecimal.ROUND_HALF_UP) ;
     	r.addObject("totalPayment", CoreUtils.formatMoney(totalPrice)) ;
-    	r.addObject("voucher", CoreUtils.formatMoney(voucher)) ;
-    	r.addObject("pay", CoreUtils.formatMoney(pay)) ;
+//    	r.addObject("voucher", CoreUtils.formatMoney(voucher)) ;
+//    	r.addObject("pay", CoreUtils.formatMoney(pay)) ;
+    	r.addObject("totalGiftAmount", CoreUtils.formatMoney(totalGiftAmount)) ;
+    	r.addObject("totalBuyCount", totalBuyCount) ;
     	r.addObject("pdiList", pdiList) ;
     	List<MarketOnceBuy> onceBuyList = oncebuyBO.getList() ;
     	r.addObject("onceBuyList", onceBuyList) ;
     	return r ;
     }
     
-    @RequestMapping(value = "/Order", method = {RequestMethod.GET, RequestMethod.POST})
-    public ModelAndView Order(String orderId) {
+    @RequestMapping(value = "/editOrder", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView editOrder(String orderId) {
     	if (!CoreUtils.isLong(orderId)) {
 			return orderNew(null) ;
 		}
@@ -267,13 +279,39 @@ public class OrderController extends BaseController {
 			return orderNew(order) ;
 		}
     	if ("生效".equals(order.getOrderStatus())) {
-			if ("部分付款".equals(order.getPayOffStatus()) || "未付款".equals(order.getPayOffStatus())) {
+    		if ("未付款".equals(order.getPayOffStatus())) {
+    			return orderNew(order) ;
+			}
+			if ("部分付款".equals(order.getPayOffStatus())) {
 				return orderConfirm(order) ;
 			}
 			else {
 				return orderPayoff(order) ;
 			}
 		}
+    	return orderPayoff(order);
+    }
+    
+    @RequestMapping(value = "/Order", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView Order(String orderId) {
+    	if (!CoreUtils.isLong(orderId)) {
+    		return orderNew(null) ;
+    	}
+    	MarketOrder order = orderBO.getByOrderId(Long.valueOf(orderId)) ;
+    	if (order == null) {
+    		return orderNew(null) ;
+    	}
+    	if ("新建".equals(order.getOrderStatus())) {
+    		return orderNew(order) ;
+    	}
+    	if ("生效".equals(order.getOrderStatus())) {
+    		if ("部分付款".equals(order.getPayOffStatus()) || "未付款".equals(order.getPayOffStatus())) {
+    			return orderConfirm(order) ;
+    		}
+    		else {
+    			return orderPayoff(order) ;
+    		}
+    	}
     	return orderPayoff(order);
     }
     
@@ -313,11 +351,16 @@ public class OrderController extends BaseController {
     	view.addObject("order", order ) ;
 		MarketMember member = memberBO.getByMemberId(order.getMemberId()) ;
 		view.addObject("member", member ) ;
+		String totalVoucher = orderBO.getMemberAcmVoucherInfo(member.getMemberId()) ;
+		view.addObject("totalVoucher", totalVoucher) ;
 //		BigDecimal charge = order.getOrderChargeMoney().subtract(order.getPayOffCashTotalMoney()) ;
 		BigDecimal charge = order.getOrderTotalMoney().subtract(order.getOrderCutMoney()).subtract(order.getPayOffVoucherTotalMoney()).subtract(order.getPayOffCashTotalMoney());
 		view.addObject("charge", charge) ;
 		if (BigDecimal.ZERO.compareTo(order.getOrderCutMoney()) == 0) {
 			view.addObject("cutMoney", 0) ;
+		}
+		if (BigDecimal.ZERO.compareTo(order.getPayOffCashTotalMoney()) == 0) {
+			view.addObject("firstPay", 1) ;
 		}
 		List<MarketOrderLine> orderLines = orderBO.getOrderLineList(order.getOrderId()) ;
 		List<JSONObject> lineList = new ArrayList<JSONObject>() ;
@@ -328,22 +371,23 @@ public class OrderController extends BaseController {
 				lObject.put("goodsCount", line.getGoodsCount()) ;
 				lObject.put("goodsCountUnit", line.getGoodsCountUnit()) ;
 				lObject.put("goodsOrderPrice", line.getGoodsOrderPrice()) ;
-				List<String> gl = new ArrayList<String>() ;
-				List<MarketOrderGiftLine> giftLines = line.getOrderGiftLineSet() ;
-				if (giftLines != null && !giftLines.isEmpty()) {
-					for (MarketOrderGiftLine gline : giftLines) {
-						gl.add(gline.giftInfo()) ; 
-					}
-				}
-				List<MarketMemberGiftAccumulation> mglines = line.getOrderGiftAccLineSet() ;
-				if (mglines != null && !mglines.isEmpty()) {
-					for (MarketMemberGiftAccumulation mgl : mglines) {
-						gl.add(mgl.giftInfo()) ;
-					}
-				}
-				if (!gl.isEmpty()) {
-					lObject.put("giftInfo", gl) ;
-				}
+				lObject.put("giftAmount", line.getGiftAmount()) ;
+//				List<String> gl = new ArrayList<String>() ;
+//				List<MarketOrderGiftLine> giftLines = line.getOrderGiftLineSet() ;
+//				if (giftLines != null && !giftLines.isEmpty()) {
+//					for (MarketOrderGiftLine gline : giftLines) {
+//						gl.add(gline.giftInfo()) ; 
+//					}
+//				}
+//				List<MarketMemberGiftAccumulation> mglines = line.getOrderGiftAccLineSet() ;
+//				if (mglines != null && !mglines.isEmpty()) {
+//					for (MarketMemberGiftAccumulation mgl : mglines) {
+//						gl.add(mgl.giftInfo()) ;
+//					}
+//				}
+//				if (!gl.isEmpty()) {
+//					lObject.put("giftInfo", gl) ;
+//				}
 				lineList.add(lObject) ;
 			}
 		}
@@ -437,11 +481,11 @@ public class OrderController extends BaseController {
 				r.put("msg", "数据有误，查询不到单据信息 ！") ;
 				return response.getResult() ;
 			}
-    		if (!"新建".equals(order.getOrderStatus())) {
-				r.put("msg", "单据不是新建单据，不能进行当前操作！") ;
+    		if (!"未付款".equals(order.getPayOffStatus())) {
+				r.put("msg", "单据已进行过付款操作，不能进行当前操作！") ;
 				return response.getResult() ;
 			}
-    		order.setOrderRemark(null);
+    		order.setOrderRemark("");
 		}
     	else {
 			order.setOrderNo(CoreUtils.generateOrderNo(0L));
@@ -455,10 +499,12 @@ public class OrderController extends BaseController {
     	order.setMemberName(member.getMemberName());
     	order.setMemberNo(member.getMemberNo());
     	BigDecimal orderTotalMoney = BigDecimal.ZERO ;
+    	BigDecimal totalGiftAmount = BigDecimal.ZERO ;
     	//明细  r.gid+"___" + r.gct + "___" + r.gctu + "___" + r.gftcfg;
     	if (StringUtils.isNotBlank(orderLineInfo)) {
 			String[] lineStrArr = orderLineInfo.split("@@@") ;
 			List<MarketOrderLine> orderLines = new ArrayList<MarketOrderLine>() ;
+			List<Long> giftFeedGoodsIdList = new ArrayList<Long>() ;
 			for (String lineStr : lineStrArr) {
 				String[] fieldStrArr = lineStr.split("___") ;
 				if (fieldStrArr.length != 7) {
@@ -491,18 +537,45 @@ public class OrderController extends BaseController {
 				orderLine.setGoodsCountUnit(fieldStrArr[2]);
 				orderLine.setGoodsGiftConfigId(Long.valueOf(fieldStrArr[3]));
 				orderLine.setGoodsOrderPrice(new BigDecimal(fieldStrArr[4]));
+				//detail的时候，已经算过了 
+//				orderLine.setGoodsOrderPrice(orderLine.getGoodsOrderPrice().multiply(new BigDecimal(orderLine.getGoodsCount())));
 				orderLine.setGoodsName(fieldStrArr[5]);
 				orderLine.setGoodsPrice(fieldStrArr[6]);
 				orderLines.add(orderLine) ;
 				orderTotalMoney = orderTotalMoney.add(orderLine.getGoodsOrderPrice()) ;
+				giftFeedGoodsIdList.add(orderLine.getGoodsId()) ;
 			}
-			if (!orderLines.isEmpty()) {
+			if (!giftFeedGoodsIdList.isEmpty()) {
+				Map<Long, MarketGiftCTConfig> ggFM = new HashMap<Long, MarketGiftCTConfig>() ;
+				List<MarketGiftCTConfig> gctl = feedGiftConfigBO.queryFeedGiftConfigListByGoodsIdList(giftFeedGoodsIdList) ;
+				if(gctl != null && !gctl.isEmpty()){
+					for (MarketGiftCTConfig gct : gctl) {
+						if (ggFM.get(gct.getGoodsId()) != null) {
+							continue ;
+						}
+						ggFM.put(gct.getGoodsId(), gct) ;
+					}
+				}
+				for (MarketOrderLine line : orderLines) {
+					MarketGiftCTConfig gct = ggFM.get(line.getGoodsId());
+					if(gct != null){
+						if ("桶".endsWith(line.getGoodsCountUnit())) {
+							BigDecimal giftAmount = new BigDecimal(gct.getGiftAmount()).multiply(new BigDecimal(line.getGoodsCount())) ;
+							line.setGiftAmount(giftAmount);
+							totalGiftAmount = totalGiftAmount.add(giftAmount) ;
+						}
+						else {
+							line.setGiftAmount(new BigDecimal("0.00"));
+						}
+					}
+				}
 				order.setOrderLineSet(orderLines);
 			}
 		}
     	
     	order.setOrderTotalMoney(orderTotalMoney);
     	order.setOrderChargeMoney(orderTotalMoney);
+    	order.setOrderTotalGiftAmount(totalGiftAmount);
     	order.setOrderCutMoney(BigDecimal.ZERO);
     	order.setYearAccumulationMoney(BigDecimal.ZERO);
     	order.setPayOffVoucherTotalMoney(BigDecimal.ZERO);
@@ -517,7 +590,9 @@ public class OrderController extends BaseController {
     }
     @RequestMapping(value = "/payOrder", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public JSONObject payOrder(String orderId ,String cutMoney,String chargeMoney, String callBackRemarks, String orderRemarks, String onceBuyGift) {
+	public JSONObject payOrder(String orderId, String cutMoney,
+			String chargeMoney, String callBackRemarks, String orderRemarks,
+			String onceBuyGift, String giftFlag, String voucherMoney) {
     	ResponseJsonData response = new ResponseJsonData() ;
     	JSONObject r = new JSONObject() ;
     	response.setRetData(r);
@@ -532,6 +607,10 @@ public class OrderController extends BaseController {
 		}
     	if (!CoreUtils.isDouble(chargeMoney)) {
     		r.put("msg", "付款信息无效！") ;
+    		return response.getResult() ;
+    	}
+    	if (!CoreUtils.isDouble(voucherMoney)) {
+    		r.put("msg", "代金券信息无效！") ;
     		return response.getResult() ;
     	}
     	MarketOrder order = orderBO.getByOrderId(Long.valueOf(orderId)) ;
@@ -551,27 +630,43 @@ public class OrderController extends BaseController {
 //    		r.put("msg", "单据已做过抹零，不能再做抹零！") ;
 //    		return response.getResult() ;
 //		}
+    	//如果不是第一次付款，忽略giftFlag=Y，置G
+    	if (order.getPayOffCashTotalMoney() == null) {
+			order.setPayOffCashTotalMoney(BigDecimal.ZERO);
+		}
+    	if (BigDecimal.ZERO.compareTo(order.getPayOffCashTotalMoney()) < 0) {
+			giftFlag = "G" ;
+		}
     	order.setOrderCutMoney(new BigDecimal(cutMoney));
+    	order.setPayOffVoucherTotalMoney(new BigDecimal(voucherMoney));
     	BigDecimal pay = new BigDecimal(chargeMoney) ;
+    	if (BigDecimal.ZERO.compareTo(pay) == 0) {
+    		r.put("msg", "没有付款金额，不能进行付款操作！") ;
+    		return response.getResult() ;
+		}
     	BigDecimal shuldPay = order.getOrderTotalMoney().subtract(order.getOrderCutMoney()).subtract(order.getPayOffVoucherTotalMoney()).subtract(order.getPayOffCashTotalMoney()) ;
     	if (pay.compareTo(shuldPay) > 0) {
     		r.put("msg", "付款金额大于待付款金额！") ;
     		return response.getResult() ;
 		}
     	if (pay.compareTo(shuldPay) < 0) {
+    		if (BigDecimal.ZERO.compareTo(order.getPayOffVoucherTotalMoney()) < 0) {
+    			r.put("msg", "部分付款，不能使用代金券！") ;
+        		return response.getResult() ;
+			}
 			order.setPayOffStatus("部分付款");
 		}
     	else {
 			order.setPayOffStatus("已付款");
 		}
-    	if ("null".equalsIgnoreCase(order.getOrderRemark())) {
-			order.setOrderRemark("");
+    	if (StringUtils.isNotBlank(order.getOrderRemark())) {
+    		order.setOrderRemark(order.getOrderRemark().replaceAll("null", ""));
 		}
     	if (StringUtils.isNotBlank(orderRemarks)) {
     		order.setOrderRemark(order.getOrderRemark() + ";;" + orderRemarks);
 		}
     	order.setPayOffCashTotalMoney(pay.add(order.getPayOffCashTotalMoney()));
-    	orderBO.doPayOrder(order, callBackRemarks, onceBuyGift,pay) ;
+    	orderBO.doPayOrder(order, callBackRemarks, onceBuyGift,pay,giftFlag) ;
     	r.put("flag", "OK") ;
     	return response.getResult();
     }
@@ -616,6 +711,27 @@ public class OrderController extends BaseController {
 		else {
 			try {
 				String acmInfo = orderBO.getMemberAcmBuyInfo(Long.valueOf(memberId)) ;
+				retdata.put("info", acmInfo) ;
+			} catch (Exception e) {
+				retdata.put("info", "未知") ;
+			}
+		}
+		
+		return response.getResult() ;
+	}
+	@RequestMapping(value = "/getMemberAcmVoucherInfo", method = { RequestMethod.GET,
+			RequestMethod.POST })
+	@ResponseBody
+	public JSONObject getMemberAcmVoucherInfo(String memberId) {
+		ResponseJsonData response = new ResponseJsonData() ;
+		JSONObject retdata = new JSONObject() ;
+		response.setRetData(retdata);
+		if (!CoreUtils.isLong(memberId)) {
+			retdata.put("info", "无") ;
+		}
+		else {
+			try {
+				String acmInfo = orderBO.getMemberAcmVoucherInfo(Long.valueOf(memberId)) ;
 				retdata.put("info", acmInfo) ;
 			} catch (Exception e) {
 				retdata.put("info", "未知") ;

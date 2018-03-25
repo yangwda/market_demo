@@ -38,6 +38,7 @@ public class MarketGiftCTConfig extends BasePojo {
 	private Long goodsId;
 	private String goodsName;
 	private String goodsNo;
+	private Double giftAmount;
 	
 	@OneToMany(mappedBy="giftConfigId",fetch=FetchType.LAZY)
 	private List<MarketGiftCTConfigLine> lineList ;
@@ -132,6 +133,12 @@ public class MarketGiftCTConfig extends BasePojo {
 	}
 	public void setGoodsNo(String goodsNo) {
 		this.goodsNo = goodsNo;
+	}
+	public Double getGiftAmount() {
+		return giftAmount;
+	}
+	public void setGiftAmount(Double giftAmount) {
+		this.giftAmount = giftAmount;
 	}
 	public List<MarketGiftCTConfigLine> getLineList() {
 		return lineList;

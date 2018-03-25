@@ -50,6 +50,7 @@ public class MarketOrder extends BasePojo {
 	private BigDecimal payOffCashTotalMoney ;
 	private String payOffStatus ;
 	private String salesReturn ;
+	private BigDecimal orderTotalGiftAmount ;
 
 	@JSONField(serialize=false)  
 	@OneToMany(mappedBy="orderId",fetch=FetchType.LAZY)
@@ -168,6 +169,12 @@ public class MarketOrder extends BasePojo {
 	}
 	public void setOrderLineSet(List<MarketOrderLine> orderLineSet) {
 		this.orderLineSet = orderLineSet;
+	}
+	public BigDecimal getOrderTotalGiftAmount() {
+		return orderTotalGiftAmount;
+	}
+	public void setOrderTotalGiftAmount(BigDecimal orderTotalGiftAmount) {
+		this.orderTotalGiftAmount = orderTotalGiftAmount;
 	}
 	
 }

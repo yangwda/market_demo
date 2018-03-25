@@ -35,26 +35,26 @@ public class MarketFeedGiftConfigBOImpl extends BaseBo implements FeedGiftConfig
 			List<MarketGiftCTConfigLine> lineList) {
 		Long configId = (Long) configDao.save(cfg) ;
 		cfg.setGiftConfigId(configId);
-		for (MarketGiftCTConfigLine line : lineList) {
-			line.setGiftConfigId(configId);
-			lineDao.save(line) ;
-		}
+//		for (MarketGiftCTConfigLine line : lineList) {
+//			line.setGiftConfigId(configId);
+//			lineDao.save(line) ;
+//		}
 		return cfg;
 	}
 
 	@Override
 	public void updateGiftConfig(MarketGiftCTConfig cfg, List<MarketGiftCTConfigLine> lineList) {
 		configDao.update(cfg);
-		List<MarketGiftCTConfigLine> ll =  lineDao.getLineListByGiftConfigId(cfg.getGiftConfigId()) ;
-		if (ll != null) {
-			for (MarketGiftCTConfigLine line : ll) {
-				lineDao.remove(line);
-			}
-		}
-		for (MarketGiftCTConfigLine line : lineList) {
-			line.setGiftConfigId(cfg.getGiftConfigId());
-			lineDao.save(line) ;
-		}
+//		List<MarketGiftCTConfigLine> ll =  lineDao.getLineListByGiftConfigId(cfg.getGiftConfigId()) ;
+//		if (ll != null) {
+//			for (MarketGiftCTConfigLine line : ll) {
+//				lineDao.remove(line);
+//			}
+//		}
+//		for (MarketGiftCTConfigLine line : lineList) {
+//			line.setGiftConfigId(cfg.getGiftConfigId());
+//			lineDao.save(line) ;
+//		}
 	}
 
 	@Override

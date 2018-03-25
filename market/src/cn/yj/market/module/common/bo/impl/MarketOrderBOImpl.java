@@ -83,6 +83,15 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 		// TODO 具体逻辑待完善
 		return "暂无";
 	}
+	
+	@Override
+	public String getMemberAcmVoucherInfo(Long memberId) {
+		if (memberId == null || memberId.longValue() < 1) {
+			return "0.00" ;
+		}
+		BigDecimal voucherTotal = memberVoucherDao.getTotalAvlVoucher(memberId) ;
+		return CoreUtils.formatMoney(voucherTotal);
+	}
 
 	@Override
 	public MarketOrder getByOrderId(Long orderId) {
@@ -91,7 +100,7 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 	
 	@Override
 	public void doPayOrder(MarketOrder order, String callBackRemarks,
-			String onceBuyGift, BigDecimal pay) {
+			String onceBuyGift, BigDecimal pay, String giftFlag) {
 		if (order == null) {
 			throw new RunException("无法获取单据信息！") ;
 		}
@@ -101,8 +110,47 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 		}
 		orderOld.setOrderCutMoney(order.getOrderCutMoney());
 		orderOld.setPayOffStatus(order.getPayOffStatus());
-		orderOld.setOrderRemark(order.getOrderRemark());
+		String remarks = order.getOrderRemark(); 
+		if (remarks == null) {
+			remarks = "" ;
+		}
+		remarks = remarks.replace("null;;", "") ;
+		orderOld.setOrderRemark(remarks);
 		orderOld.setPayOffCashTotalMoney(order.getPayOffCashTotalMoney());
+		BigDecimal payVoucher = order.getPayOffVoucherTotalMoney() ;
+		if (payVoucher == null) {
+			payVoucher = BigDecimal.ZERO ;
+		}
+		orderOld.setPayOffVoucherTotalMoney(payVoucher);
+		if (payVoucher.compareTo(BigDecimal.ZERO) > 0) {
+			List<MarketMemberVoucher> vouchers = memberVoucherDao.getMemberVoucherList(order.getMemberId()) ; 
+			if (vouchers == null || vouchers.isEmpty()) {
+				throw new RunException("当前客户没有代金券！") ;
+			}
+			for (MarketMemberVoucher voucher : vouchers) {
+				if (voucher.getRemainingMoney() == null) {
+					continue ;
+				}
+				if (payVoucher.compareTo(voucher.getRemainingMoney()) >= 0) {
+					payVoucher = payVoucher.subtract(voucher.getRemainingMoney()) ;
+					voucher.setRemainingMoney(BigDecimal.ZERO);
+				}
+				else {
+					voucher.setRemainingMoney(voucher.getRemainingMoney().subtract(payVoucher));
+					payVoucher = BigDecimal.ZERO ;
+				}
+				memberVoucherDao.update(voucher);
+				if (payVoucher.compareTo(BigDecimal.ZERO) == 0) {
+					break ;
+				}
+			}
+		}
+		//此时应该==0
+		if (payVoucher.compareTo(BigDecimal.ZERO) > 0) {
+			throw new RunException("当前客户代金券不够！") ;
+		}
+		
+		
 		if (StringUtils.isNotBlank(callBackRemarks)) {
 			MarketCallBack callBack = new MarketCallBack() ;
 			MarketMember member = memberDao.get(order.getMemberId()) ;
@@ -118,6 +166,16 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 				orderOld.setCallBackId(callbackId);
 			}
 		}
+		if ("V".equals(giftFlag)) {
+			MarketMemberVoucher voucher = new MarketMemberVoucher() ;
+			voucher.setCreateTime(new Date());
+			voucher.setMemberId(order.getMemberId());
+			voucher.setRemainingMoney(order.getOrderTotalGiftAmount());
+			voucher.setSourceOrderId(order.getOrderId());
+			voucher.setSourceVoucherMoney(order.getOrderTotalGiftAmount());
+			voucher.setRemarks("等值产品金额生成的代金券");
+			memberVoucherDao.save(voucher) ;
+		}
 		if (StringUtils.isNotBlank(onceBuyGift)) {
 			String[] obgca = onceBuyGift.split("__") ;
 			if (obgca.length == 2) {
@@ -129,10 +187,11 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 							BigDecimal vd = pay.multiply(new BigDecimal(onceBuy.getPerRate())).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP) ;
 							MarketMemberVoucher voucher = new MarketMemberVoucher() ;
 							voucher.setCreateTime(new Date());
-							voucher.setMemberId(order.getOrderId());
+							voucher.setMemberId(order.getMemberId());
 							voucher.setRemainingMoney(vd);
 							voucher.setSourceOrderId(order.getOrderId());
 							voucher.setSourceVoucherMoney(vd);
+							voucher.setRemarks("单次购买活动生成的代金券");
 							memberVoucherDao.save(voucher) ;
 						}
 					}
@@ -249,13 +308,14 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 			if (orderOld == null) {
 				throw new RunException("无法获取原单据信息！") ;
 			}
-			if (!"新建".equals(orderOld.getOrderStatus())) {
-				throw new RunException("不是新建单据，无法修改！") ;
+			if (!"未付款".equals(orderOld.getPayOffStatus())) {
+				throw new RunException("单据已进行过付款操作，无法修改！") ;
 			}
 			orderOld.setMemberId(order.getMemberId());
 			orderOld.setMemberName(order.getMemberName());
 			orderOld.setMemberNo(order.getMemberNo());
 			orderOld.setOrderTotalMoney(order.getOrderTotalMoney());
+			orderOld.setOrderTotalGiftAmount(order.getOrderTotalGiftAmount());
 			orderOld.setOrderStatus("生效");
 			orderDao.update(orderOld);
 			Long ordreId = order.getOrderId();

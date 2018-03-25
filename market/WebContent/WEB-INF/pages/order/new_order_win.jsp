@@ -38,6 +38,7 @@
 				$("#memberTel").html(record.memberTel + "," + record.memberPhone) ;
 				$("#memberAds").html(record.memberAddress) ;
 				getMemberAcmBuyInfo() ;
+				getMemberAcmVoucherInfo() ;
 			},
 			onChange: function(newValue, oldValue){
 				$("#memberId").val('') ;
@@ -45,6 +46,7 @@
 				$("#memberTel").html('') ;
 				$("#memberAds").html('') ;
 				$("#acmBuyInfo").html('') ;
+				$("#acmVoucherInfo").html('') ;
 			}
 		});
     	$('#addFormBuyGoodsName').combobox({
@@ -68,8 +70,10 @@
     			if(record.punit2){
     				var pl = record.punit2.split("*") ;
     				for(var i=0;i<pl.length;i++){
-    					sl = {punit: pl[i]} ;
-    					dl.push(sl) ;
+    					if(i==0){
+    						sl = {punit: pl[i]} ;	
+    					}
+    					dl.push({punit: pl[i]}) ;
     				}
     			}
     			else{
@@ -80,6 +84,7 @@
     			$("#addFormBuyGoodsCountUnit").combobox('loadData',dl) ;
     			$("#addFormBuyGoodsCountUnit").combobox('select',sl.punit) ;
     			$("#addFormBuyGoodsId").val(record.goodsId) ;
+    			$("#addFormBuyGoodsAMId").val(GAM_ID_INDEX++) ;
     		},
     		onChange: function(newValue, oldValue){
     			if(EDIT_GOODS_DETAIL){
@@ -99,9 +104,10 @@
 			$("#memberTel").html("${member.memberTel},${member.memberPhone}") ;
 			$("#memberAds").html("${member.memberAddress}") ;
 			getMemberAcmBuyInfo() ;
+			getMemberAcmVoucherInfo() ;
 			var rows = [] ;
 			<c:forEach var="ol" items="${lineList}">
-				rows.push({gid:"${ol.gid}",gn: "${ol.gn}",gct: "${ol.gct}",gctu: "${ol.gctu}", gftcfg: "${ol.gftcfg}", punitstr2: "${ol.punitstr2}"}) 
+				rows.push({gamid:GAM_ID_INDEX++,gid:"${ol.gid}",gn: "${ol.gn}",gct: "${ol.gct}",gctu: "${ol.gctu}", gftcfg: "${ol.gftcfg}", punitstr2: "${ol.punitstr2}"}) 
 			</c:forEach>
 			$("#addFormBuyGoodsList").datagrid( 'loadData',rows) ;
 			$("#confirmFormOrderId").val(ORDER_ID) ;
@@ -114,6 +120,12 @@
     	var params = {memberId:$("#memberId").val() } ;
     	execAjax("${ctx}/order/getMemberAcmBuyInfo", params, false, function(retData){
     		$("#acmBuyInfo").html(retData.info) ;
+	    });
+    }
+    function getMemberAcmVoucherInfo(){
+    	var params = {memberId:$("#memberId").val() } ;
+    	execAjax("${ctx}/order/getMemberAcmVoucherInfo", params, false, function(retData){
+    		$("#acmVoucherInfo").html(retData.info) ;
 	    });
     }
     function showMemberWin(){
@@ -138,7 +150,7 @@
     	if(prl && prl.length){
     		for(var i=0;i<prl.length;i++){//{gid:gid,gn: gn,gct:gct,gctu:gctu} ;
     			var r = prl[i] ;
-    			ppp += "@@@" + r.gid+"___" + r.gct + "___" + r.gctu + "___" + r.gftcfg ;
+    			ppp += "@@@" + r.gid+"___" + r.gct + "___" + r.gctu + "___" + r.gftcfg + "___" + r.gamid ;
     		}
     	}
     	$('#buyDetailInfoPanel').panel('refresh', '${ctx}/order/loadBuyInfoDetail?ppp='+ppp);
@@ -202,16 +214,21 @@
  			$("#addFormBuyGoodsCountUnit").combobox('loadData',[]) ;
  			$("#addFormBuyGoodsCount").textbox('setValue','') ;
  			$("#addFormBuyGoodsId").val('') ;
+ 			$("#addFormBuyGoodsAMId").val('') ;
  			EDIT_GOODS_DETAIL = false ;
 	}
 	function addGoodsDetail(){
 		var gn = $("#addFormBuyGoodsName").combobox('getValue') ;
+		var gamid = $("#addFormBuyGoodsAMId").val() ;
 		var gid = $("#addFormBuyGoodsId").val() ;
 		var gct = $("#addFormBuyGoodsCount").textbox('getValue') ;
 		var gctu = $("#addFormBuyGoodsCountUnit").combobox('getValue') ;
 		$("#addFormBuyGoodsName").combobox('setValue','') ;
 		$("#addFormBuyGoodsName").combobox('setText','') ;
 		cleanAddForm() ;
+		if(!gamid){
+			return ;
+		}
 		if(!gid){
 			return ;
 		}
@@ -222,11 +239,12 @@
 		if(gct > 100000){return ;}
 		var punitstr2 = $("#addFormBuyGoodsPUnitStr").val() ;
 		var prl = $("#addFormBuyGoodsList").datagrid('getRows') ;
+		//gamid，标记品行
     	if(prl && prl.length){
     		var gg = false ;
     		for(var i=0;i<prl.length;i++){
     			var r = prl[i] ;
-    			if(r.gid == gid){
+    			if(r.gamid == gamid){
     				var rcd = r ;
     				rcd.gct = gct ;
     				rcd.gctu = gctu ;
@@ -235,17 +253,18 @@
     			}
     		}
    			if(!gg){
-   				var rcd = {gid:gid,gn: gn,gct:gct,gctu:gctu, gftcfg:0, punitstr2:punitstr2} ;
+   				var rcd = {gamid:gamid,gid:gid,gn: gn,gct:gct,gctu:gctu, gftcfg:0, punitstr2:punitstr2} ;
    				$("#addFormBuyGoodsList").datagrid( 'appendRow',rcd) ;
    			}
     	}
     	else{
-			var rcd = {gid:gid,gn: gn,gct:gct,gctu:gctu, gftcfg:0, punitstr2:punitstr2} ;
+			var rcd = {gamid:gamid,gid:gid,gn: gn,gct:gct,gctu:gctu, gftcfg:0, punitstr2:punitstr2} ;
 			$("#addFormBuyGoodsList").datagrid( 'appendRow',rcd) ;
     	}
 		loadBuyInfoDetail() ;
 	}
 	var EDIT_GOODS_DETAIL = false ;
+	var GAM_ID_INDEX = 100 ;
 	function selectPL(index,row){
 		var gid = $("#addFormBuyGoodsId").val() ;
 		if(gid){
@@ -270,6 +289,7 @@
 		$("#addFormBuyGoodsCountUnit").combobox('loadData',dl) ;
 		$("#addFormBuyGoodsCountUnit").combobox('select',row.gctu) ;
 		$("#addFormBuyGoodsId").val(row.gid) ;
+		$("#addFormBuyGoodsAMId").val(row.gamid) ;
 		$("#addFormBuyGoodsCount").textbox('setValue',row.gct) ;
 		row.gct=0;
 		$("#addFormBuyGoodsList").datagrid( 'refreshRow',index) ;
@@ -296,7 +316,7 @@
 	 	<input type="hidden" name="orderId" id="confirmFormOrderId">
   	 </form>
   </div>
-	<div data-options="region:'east',split:true,collapsed:true,title:'商品明细'" style="width:500px;padding:0px;">
+	<div data-options="region:'east',split:true,collapsed:false,title:'商品明细'" style="width:500px;padding:0px;">
 		<table class="easyui-datagrid" id="addFormBuyGoodsList"
 			data-options="rownumbers:true,singleSelect:true,fit:true,border:false,url:'',onSelect:selectPL,method:'get',toolbar:'#goodsInputBar'">
 			<thead>
@@ -309,6 +329,7 @@
 		<div id="goodsInputBar" style="padding:0px;">
 			<input class="" id="addFormBuyGoodsName" data-options="width:270"></input>
 			<input class="" type="hidden" id="addFormBuyGoodsId" ></input>
+			<input class="" type="hidden" id="addFormBuyGoodsAMId" ></input>
 			<input class="" type="hidden" id="addFormBuyGoodsPUnitStr" ></input>
 			<input class="easyui-combobox" id="addFormBuyGoodsCountUnit" 
 	    					data-options="panelHeight:90,editable:false ,valueField:'punit' ,textField:'punit' ,width:70,prompt:'单位'"></input>
@@ -336,7 +357,9 @@
 	    		</tr>
 	    		<tr>
 	    			<td><strong>累积信息:</strong></td>
-	    			<td colspan="5" id="acmBuyInfo"></td>
+	    			<td colspan="3" id="acmBuyInfo"></td>
+	    			<td><strong>可用代金券:</strong></td>
+	    			<td colspan="3" id="acmVoucherInfo"></td>
 	    		</tr>
 	    	</table>
 	    </form>
