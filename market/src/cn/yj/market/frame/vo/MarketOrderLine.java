@@ -37,6 +37,7 @@ public class MarketOrderLine extends BasePojo {
 	private String goodsCountUnit ;
 	private String goodsPrice;
 	private BigDecimal goodsOrderPrice;
+	private BigDecimal goodsDrfDiffAmount;
 	private String goodsGift ;
 	private String goodsGiftCheck ;
 	private Long goodsGiftConfigId ;
@@ -95,6 +96,12 @@ public class MarketOrderLine extends BasePojo {
 	}
 	public void setGoodsOrderPrice(BigDecimal goodsOrderPrice) {
 		this.goodsOrderPrice = goodsOrderPrice;
+	}
+	public BigDecimal getGoodsDrfDiffAmount() {
+		return goodsDrfDiffAmount;
+	}
+	public void setGoodsDrfDiffAmount(BigDecimal goodsDrfDiffAmount) {
+		this.goodsDrfDiffAmount = goodsDrfDiffAmount;
 	}
 	public String getGoodsGift() {
 		return goodsGift;

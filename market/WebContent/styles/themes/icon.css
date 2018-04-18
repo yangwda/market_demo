@@ -243,4 +243,19 @@
   display:inline-block;
   background-position:-240px -80px;
 }
+/*资金*/
+.icon-money-yuan{
+  background:url('icons/tabicons.png') no-repeat center center;
+  width:16px;
+  line-height:16px;
+  display:inline-block;
+  background-position:-340px -260px;
+}
+.icon-money-dollar{
+  background:url('icons/tabicons.png') no-repeat center center;
+  width:16px;
+  line-height:16px;
+  display:inline-block;
+  background-position:-280px -260px;
+}
 

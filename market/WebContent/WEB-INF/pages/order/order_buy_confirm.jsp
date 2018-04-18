@@ -15,6 +15,8 @@
       if(event.keyCode==116) return false;  //屏蔽F5刷新键
     });
     
+    var drfDiffAmount = '${drfDiffAmount}' ;
+    
     $(document).ready(function(){
     	
     });
@@ -89,6 +91,7 @@
 	function changeChargeMoney(newValue){
 		var obc = 0 ;
 		var pay = parseFloat(newValue) ;
+		pay = pay - parseFloat(drfDiffAmount) ;
 		for(var i=0;i<onceBuyConfig.length;i++){
 			var tt = onceBuyConfig[i] ;
 			if(pay >= tt.beginAmount && pay <= tt.endAmount){
@@ -174,6 +177,10 @@
 					<input type="hidden" id="cutMoneyInput" name="cutMoneyInput" value="0" />
 				</td>
 			</c:if>
+			<td colspan="2" align="right" style="color:yellow;">
+				&nbsp;
+				代乳粉差：${drfDiffAmount }
+			</td>
 		</tr>
 		<tr style="">
 			<td colspan="6" align="right">待支付<input type="hidden" id="initChargeMoney" value="${charge }" /></td>

@@ -8,6 +8,7 @@ import cn.yj.market.frame.page.PageRequestParams;
 import cn.yj.market.frame.vo.MarketMemberVoucher;
 import cn.yj.market.frame.vo.MarketOrder;
 import cn.yj.market.frame.vo.MarketOrderLine;
+import cn.yj.market.frame.vo.MarketPayoff;
 import cn.yj.market.module.common.bean.OrderSearchCondition;
 
 public interface OrderBO {
@@ -26,5 +27,7 @@ public interface OrderBO {
 	void doPayOrder(MarketOrder order, String callBackRemarks, String onceBuyGift, BigDecimal pay, String giftFlag);
 
 	List<MarketMemberVoucher> getOrderVoucher(Long orderId);
+
+	List<MarketPayoff> getPayoffHis(Long orderId);
 
 }

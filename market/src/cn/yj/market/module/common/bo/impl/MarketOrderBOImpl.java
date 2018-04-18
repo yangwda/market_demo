@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Property;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,7 @@ import cn.yj.market.frame.vo.MarketOrderLine;
 import cn.yj.market.frame.vo.MarketPayoff;
 import cn.yj.market.module.common.bean.OrderSearchCondition;
 import cn.yj.market.module.common.bo.OrderBO;
+import cn.yj.market.module.common.constants.RatioConstants;
 import cn.yj.market.module.common.dao.CallbackDao;
 import cn.yj.market.module.common.dao.FeedGiftConfigLineDao;
 import cn.yj.market.module.common.dao.GiftConfigDao;
@@ -219,10 +222,27 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 			order.setOrderId(ordreId);
 			order = orderDao.get(ordreId) ;
 			order.setOrderNo(CoreUtils.generateOrderNo(ordreId));
+			order.setYearAccumulationMoney(BigDecimal.ZERO);
 			// 明细
 			List<MarketOrderLine> lines = order.getOrderLineSet() ;
 			if (lines != null && !lines.isEmpty()) {
 				for (MarketOrderLine marketOrderLine : lines) {
+					
+					if ("代乳粉".equals(marketOrderLine.getGoodsName())) {
+						marketOrderLine.setGoodsDrfDiffAmount(marketOrderLine
+								.getGoodsOrderPrice().multiply(
+										RatioConstants
+												.getDrfRate(marketOrderLine
+														.getGoodsCountUnit())));
+					}
+					else {
+						marketOrderLine.setGoodsDrfDiffAmount(BigDecimal.ZERO);
+					}
+					order.setYearAccumulationMoney(order
+							.getYearAccumulationMoney()
+							.add(marketOrderLine.getGoodsOrderPrice().subtract(
+									marketOrderLine.getGoodsDrfDiffAmount())));
+					
 					Long giftConfigLineId = marketOrderLine.getGoodsGiftConfigId() ;
 					MarketOrderGiftLine giftLine = null ;
 					MarketMemberGiftAccumulation giftAccumulation = null ;
@@ -288,6 +308,9 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 						marketOrderLine.setGoodsGiftCheck("无赠送");
 					}
 					marketOrderLine.setOrderId(ordreId);
+					if (marketOrderLine.getGiftAmount() == null) {
+						marketOrderLine.setGiftAmount(BigDecimal.ZERO);
+					}
 					Long lineId = (Long) lineDao.save(marketOrderLine) ;
 					if (giftLine != null) {
 						giftLine.setOrderLineId(lineId);
@@ -317,6 +340,7 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 			orderOld.setOrderTotalMoney(order.getOrderTotalMoney());
 			orderOld.setOrderTotalGiftAmount(order.getOrderTotalGiftAmount());
 			orderOld.setOrderStatus("生效");
+			orderOld.setYearAccumulationMoney(BigDecimal.ZERO);
 			orderDao.update(orderOld);
 			Long ordreId = order.getOrderId();
 			lineDao.deleteByOrderId(ordreId);
@@ -327,6 +351,22 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 			List<MarketOrderLine> lines = order.getOrderLineSet() ;
 			if (lines != null && !lines.isEmpty()) {
 				for (MarketOrderLine marketOrderLine : lines) {
+					
+					if ("代乳粉".equals(marketOrderLine.getGoodsName())) {
+						marketOrderLine.setGoodsDrfDiffAmount(marketOrderLine
+								.getGoodsOrderPrice().multiply(
+										RatioConstants
+												.getDrfRate(marketOrderLine
+														.getGoodsCountUnit())));
+					}
+					else {
+						marketOrderLine.setGoodsDrfDiffAmount(BigDecimal.ZERO);
+					}
+					order.setYearAccumulationMoney(order
+							.getYearAccumulationMoney()
+							.add(marketOrderLine.getGoodsOrderPrice().subtract(
+									marketOrderLine.getGoodsDrfDiffAmount())));
+					
 					Long giftConfigLineId = marketOrderLine.getGoodsGiftConfigId() ;
 					MarketOrderGiftLine giftLine = null ;
 					MarketMemberGiftAccumulation giftAccumulation = null ;
@@ -392,6 +432,9 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 						marketOrderLine.setGoodsGiftCheck("无赠送");
 					}
 					marketOrderLine.setOrderId(ordreId);
+					if (marketOrderLine.getGiftAmount() == null) {
+						marketOrderLine.setGiftAmount(BigDecimal.ZERO);
+					}
 					Long lineId = (Long) lineDao.save(marketOrderLine) ;
 					if (giftLine != null) {
 						giftLine.setOrderLineId(lineId);
@@ -403,6 +446,9 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 					}
 				}
 			}
+			
+			orderOld.setYearAccumulationMoney(order.getYearAccumulationMoney());
+			orderDao.update(orderOld);
 		}
 	}
 
@@ -414,5 +460,14 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 	@Override
 	public List<MarketMemberVoucher> getOrderVoucher(Long orderId) {
 		return memberVoucherDao.queryOrderVoucherList(orderId);
+	}
+
+	@Override
+	public List<MarketPayoff> getPayoffHis(Long orderId) {
+		if (orderId == null) {
+			return null ;
+		}
+		DetachedCriteria criteria = DetachedCriteria.forClass(MarketPayoff.class).add( Property.forName("orderId").eq(orderId) );   
+		return payoffDao.criteriaQuery(criteria);
 	}
 }

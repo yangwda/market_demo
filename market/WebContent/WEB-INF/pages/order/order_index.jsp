@@ -29,6 +29,9 @@
     function formatPOMoney(value,row,index){
     	return formatMoney(row.payOffCashTotalMoney) ;
     }
+    function formatYCMoney(value,row,index){
+    	return formatMoney(row.yearAccumulationMoney) ;
+    }
     $(document).ready(function(){
     	$('#orderListTable').datagrid({
 		    fit: true,
@@ -48,7 +51,8 @@
 		      {title:'备注', field:'orderRemark', width:150},
 		      {title:'总金额（元）', field:'orderTotalMoney', width:72,align:'right',formatter:formatTTMoney},
 		      {title:'实收金额（元）', field:'payOffCashTotalMoney', width:72,align:'right',formatter:formatPOMoney},
-		      {title:'抹零（元）', field:'orderCutMoney', width:72,align:'right',formatter:formatCTMoney}
+		      {title:'抹零（元）', field:'orderCutMoney', width:72,align:'right',formatter:formatCTMoney},
+		      {title:'年末累积（元）', field:'yearAccumulationMoney', width:72,align:'right',formatter:formatYCMoney}
 		    ]],
 		    onSelect: function(index,row){}
 		  });
@@ -91,6 +95,14 @@
 		}
 		parent.parent.openMWinAndMax(1, "销售单据", "${ctx}/order/Order?orderId="+row.orderId, 10, 60) ;
 	}
+	function orderPayoffDetail(){
+		var row = $('#orderListTable').datagrid('getSelected');
+		if(!row){
+			msg_warning('提示' ,'请选择要查看的单据。');
+			return ;
+		}
+		parent.parent.openMWin(1, "单据付款记录", "${ctx}/order/payOffHis?orderId="+row.orderId, 720, 520) ;
+	}
 	
 
 	function printPage(){
@@ -127,6 +139,9 @@
 						<a href="#" class="easyui-linkbutton"
 						data-options="plain:true,iconCls:'icon-excel'"
 						style="padding-left: 14px" onclick="orderDetail();">查看</a>
+						<a href="#" class="easyui-linkbutton"
+						data-options="plain:true,iconCls:'icon-money-dollar'"
+						style="padding-left: 14px" onclick="orderPayoffDetail();">付款记录</a>
 						</td>
 					<td width="10px"></td>
 				</tr>

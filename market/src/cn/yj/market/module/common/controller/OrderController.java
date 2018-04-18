@@ -34,6 +34,7 @@ import cn.yj.market.frame.vo.MarketOnceBuy;
 import cn.yj.market.frame.vo.MarketOrder;
 import cn.yj.market.frame.vo.MarketOrderGiftLine;
 import cn.yj.market.frame.vo.MarketOrderLine;
+import cn.yj.market.frame.vo.MarketPayoff;
 import cn.yj.market.module.common.bean.OrderSearchCondition;
 import cn.yj.market.module.common.bo.FeedGiftConfigBO;
 import cn.yj.market.module.common.bo.GiftConfigBO;
@@ -292,6 +293,27 @@ public class OrderController extends BaseController {
     	return orderPayoff(order);
     }
     
+    @RequestMapping(value = "/payOffHis", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView payOffHis(String orderId) {
+    	if (!CoreUtils.isLong(orderId)) {
+    		return orderNew(null) ;
+    	}
+    	ModelAndView view = new ModelAndView("order/order_payoff_his");
+    	MarketOrder order = orderBO.getByOrderId(Long.valueOf(orderId)) ;
+    	BigDecimal ttmny = BigDecimal.ZERO ;
+    	if (order != null) {
+    		List<MarketPayoff> payoffs = orderBO.getPayoffHis(order.getOrderId()) ;
+    		if (payoffs != null && !payoffs.isEmpty()) {
+    			for (MarketPayoff marketPayoff : payoffs) {
+					ttmny = ttmny.add(marketPayoff.getPayOffMoney()) ;
+				}
+				view.addObject("payoffs", payoffs) ;
+			}
+    	}
+    	view.addObject("ttmny", ttmny) ;
+    	return view;
+    }
+    
     @RequestMapping(value = "/Order", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView Order(String orderId) {
     	if (!CoreUtils.isLong(orderId)) {
@@ -364,6 +386,7 @@ public class OrderController extends BaseController {
 		}
 		List<MarketOrderLine> orderLines = orderBO.getOrderLineList(order.getOrderId()) ;
 		List<JSONObject> lineList = new ArrayList<JSONObject>() ;
+		BigDecimal drfDiffAmount = BigDecimal.ZERO ;
 		if (orderLines != null && !orderLines.isEmpty()) {
 			for (MarketOrderLine line : orderLines) {
 				JSONObject lObject = new JSONObject() ;
@@ -372,6 +395,7 @@ public class OrderController extends BaseController {
 				lObject.put("goodsCountUnit", line.getGoodsCountUnit()) ;
 				lObject.put("goodsOrderPrice", line.getGoodsOrderPrice()) ;
 				lObject.put("giftAmount", line.getGiftAmount()) ;
+				drfDiffAmount = drfDiffAmount.add(line.getGoodsDrfDiffAmount()) ;
 //				List<String> gl = new ArrayList<String>() ;
 //				List<MarketOrderGiftLine> giftLines = line.getOrderGiftLineSet() ;
 //				if (giftLines != null && !giftLines.isEmpty()) {
@@ -391,6 +415,7 @@ public class OrderController extends BaseController {
 				lineList.add(lObject) ;
 			}
 		}
+		view.addObject("drfDiffAmount", drfDiffAmount) ;
 		view.addObject("lineList", lineList) ;
 		List<MarketOnceBuy> onceBuyList = oncebuyBO.getList() ;
     	view.addObject("onceBuyList", onceBuyList) ;
