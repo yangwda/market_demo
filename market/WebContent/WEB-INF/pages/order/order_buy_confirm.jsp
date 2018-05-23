@@ -92,6 +92,7 @@
 		var obc = 0 ;
 		var pay = parseFloat(newValue) ;
 		pay = pay - parseFloat(drfDiffAmount) ;
+		
 		for(var i=0;i<onceBuyConfig.length;i++){
 			var tt = onceBuyConfig[i] ;
 			if(pay >= tt.beginAmount && pay <= tt.endAmount){
@@ -101,7 +102,17 @@
 		}
 		if(obc){
 			//单次购买，${onceBuy.beginAmount} ~ ${onceBuy.endAmount}元，惠赠${onceBuy.perRate}%的代金券或等值商品！！
+			var obga = pay * obc.perRate / 100 ;
+			obga = parseFloat(obga).toFixed(2) ;
+			var fff = '' ;
+			if(drfDiffAmount){
+				fff = "("+newValue+" - "+drfDiffAmount+")" ;
+			}
+			else{
+				fff = newValue ;
+			}
 			var html = "单次购买，"+obc.beginAmount+" ~ "+obc.endAmount+"元，惠赠"+obc.perRate+"%的代金券或等值商品！！<br>" ;
+			html += '<label> '+fff+' × '+obc.perRate+'% = '+obga+'</label>' ;
 			html += '<label> <input name="onceBuyGift" type="radio" value="'+(obc.onceById + '__D')+'" checked> 代金券</label>' ;
 			html += '<label> <input name="onceBuyGift" type="radio" value="'+(obc.onceById + '__C')+'"> 兑现产品</label>' ;
 			$("#onceBuyGiftTextTd").html(html) ;
@@ -177,7 +188,7 @@
 					<input type="hidden" id="cutMoneyInput" name="cutMoneyInput" value="0" />
 				</td>
 			</c:if>
-			<td colspan="2" align="right" style="color:yellow;">
+			<td colspan="2" align="right" style="color:blue;">
 				&nbsp;
 				代乳粉差：${drfDiffAmount }
 			</td>

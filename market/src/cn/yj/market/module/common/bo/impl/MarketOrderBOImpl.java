@@ -187,6 +187,13 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 						//-- TODO 单次购买的优惠逻辑，后续补充处理
 						MarketOnceBuy onceBuy = oncebuyDao.load(Long.valueOf(obgca[0])) ;
 						if (onceBuy != null) {
+							List<MarketOrderLine> oll = orderOld.getOrderLineSet() ;
+							if (oll != null) {
+								for (MarketOrderLine ol : oll) {
+									pay = pay.subtract(ol.getGoodsDrfDiffAmount()) ;
+								}
+							}
+							
 							BigDecimal vd = pay.multiply(new BigDecimal(onceBuy.getPerRate())).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP) ;
 							MarketMemberVoucher voucher = new MarketMemberVoucher() ;
 							voucher.setCreateTime(new Date());
