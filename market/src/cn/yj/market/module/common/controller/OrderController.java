@@ -655,6 +655,8 @@ public class OrderController extends BaseController {
     	order.setPayOffCashTotalMoney(BigDecimal.ZERO);
     	order.setPayOffStatus("未付款");
     	order.setSalesReturn("无退货");
+    	order.setGiftCheckAmount(BigDecimal.ZERO);
+    	order.setOrderGiftVoucherTotalMoney(BigDecimal.ZERO);
     	orderBO.saveOrder(order) ;
     	r.put("orderId", order.getOrderId()) ;
 //    	r.put("orderId", 1) ;

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50624
 File Encoding         : 65001
 
-Date: 2018-04-18 23:44:26
+Date: 2018-06-14 09:37:16
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -48,7 +48,7 @@ CREATE TABLE `yj_market_callback` (
   `callBackOver` varchar(255) DEFAULT NULL,
   `callBackOverTime` datetime DEFAULT NULL,
   PRIMARY KEY (`callBackId`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='电话回访';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='电话回访';
 
 -- ----------------------------
 -- Records of yj_market_callback
@@ -56,6 +56,7 @@ CREATE TABLE `yj_market_callback` (
 INSERT INTO `yj_market_callback` VALUES ('1', '10', '4', '老王', '', '15566666666', '2017-10-06 07:00:52', '测试，回访备注', null, null);
 INSERT INTO `yj_market_callback` VALUES ('3', '10', '4', '老王', '', '15566666666', '2017-10-06 07:22:16', '再访，再访，再访，再访，再访，再访，再访，再访，再访，再访，再访，再访，再访，再访，再访，再访，再访，再访，再访，再访，再访', null, null);
 INSERT INTO `yj_market_callback` VALUES ('4', '11', '4', '老王', '', '15566666666', '2018-03-23 15:20:50', '跟踪消炎药使用情况', null, null);
+INSERT INTO `yj_market_callback` VALUES ('6', '30', '1', '老张', '0411-83030011', '186', '2018-06-08 00:32:41', '好了吗', null, null);
 
 -- ----------------------------
 -- Table structure for yj_market_callback_record
@@ -72,6 +73,25 @@ CREATE TABLE `yj_market_callback_record` (
 -- ----------------------------
 -- Records of yj_market_callback_record
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for yj_market_common_gift
+-- ----------------------------
+DROP TABLE IF EXISTS `yj_market_common_gift`;
+CREATE TABLE `yj_market_common_gift` (
+  `commonGiftId` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `commonGiftName` varchar(2000) NOT NULL COMMENT '惠赠商品备注名称',
+  `commonGiftUnit` varchar(2000) NOT NULL COMMENT '惠赠商品备注包装规格',
+  PRIMARY KEY (`commonGiftId`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='惠赠商品备注明细，单据付款时，备注惠赠商品快速录入使用，可随时做增删改查操作';
+
+-- ----------------------------
+-- Records of yj_market_common_gift
+-- ----------------------------
+INSERT INTO `yj_market_common_gift` VALUES ('1', '白大褂', '套');
+INSERT INTO `yj_market_common_gift` VALUES ('2', '手套', '包*捆*双');
+INSERT INTO `yj_market_common_gift` VALUES ('5', '喷壶', '个');
+INSERT INTO `yj_market_common_gift` VALUES ('6', '铲子', '个');
 
 -- ----------------------------
 -- Table structure for yj_market_gift_config
@@ -278,6 +298,26 @@ INSERT INTO `yj_market_member` VALUES ('7', '怡亚通', '20170900000000000106',
 INSERT INTO `yj_market_member` VALUES ('8', '乔峰', '20170900000000000107', '', '132222222222', '', '', '丐帮总舵', '', '帮主', '2017-09-05 02:36:43');
 
 -- ----------------------------
+-- Table structure for yj_market_member_gift
+-- ----------------------------
+DROP TABLE IF EXISTS `yj_market_member_gift`;
+CREATE TABLE `yj_market_member_gift` (
+  `memberGiftId` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `memberId` int(11) NOT NULL COMMENT '会员ID',
+  `createTime` datetime NOT NULL COMMENT '生成时间',
+  `sourceOrderId` int(11) NOT NULL COMMENT '生成等值商品累积的源单据号',
+  `sourceGiftMoney` decimal(9,2) NOT NULL COMMENT '生成时的等值商品累积金额',
+  `remainingMoney` decimal(9,2) NOT NULL COMMENT '当前还剩余的等值商品累积金额',
+  `remarks` varchar(2000) DEFAULT NULL COMMENT '备注信息',
+  PRIMARY KEY (`memberGiftId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='记录会员的等值商品累积金额明细';
+
+-- ----------------------------
+-- Records of yj_market_member_gift
+-- ----------------------------
+INSERT INTO `yj_market_member_gift` VALUES ('1', '1', '2018-06-08 00:32:54', '30', '1507.11', '319.11', '小桶一对');
+
+-- ----------------------------
 -- Table structure for yj_market_member_gift_accumulation
 -- ----------------------------
 DROP TABLE IF EXISTS `yj_market_member_gift_accumulation`;
@@ -328,7 +368,7 @@ CREATE TABLE `yj_market_member_voucher` (
   `remainingMoney` decimal(9,2) NOT NULL,
   `remarks` varchar(200) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`memberVoucherId`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='会员代金券记录';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COMMENT='会员代金券记录';
 
 -- ----------------------------
 -- Records of yj_market_member_voucher
@@ -340,6 +380,11 @@ INSERT INTO `yj_market_member_voucher` VALUES ('4', '1', '2018-03-28 00:39:06', 
 INSERT INTO `yj_market_member_voucher` VALUES ('5', '1', '2018-03-28 00:56:47', '21', '10.00', '10.00', '单次购买活动生成的代金券');
 INSERT INTO `yj_market_member_voucher` VALUES ('6', '1', '2018-03-28 01:00:45', '22', '179.43', '179.43', '等值产品金额生成的代金券');
 INSERT INTO `yj_market_member_voucher` VALUES ('7', '1', '2018-03-28 01:01:51', '22', '12.89', '12.89', '单次购买活动生成的代金券');
+INSERT INTO `yj_market_member_voucher` VALUES ('8', '1', '2018-05-23 19:48:48', '26', '992.00', '992.00', '单次购买活动生成的代金券');
+INSERT INTO `yj_market_member_voucher` VALUES ('9', '1', '2018-05-23 20:02:35', '27', '54.20', '54.20', '单次购买活动生成的代金券');
+INSERT INTO `yj_market_member_voucher` VALUES ('10', '1', '2018-05-23 21:37:42', '29', '54.20', '54.20', '单次购买活动生成的代金券');
+INSERT INTO `yj_market_member_voucher` VALUES ('12', '1', '2018-06-08 00:32:54', '30', '278.30', '278.30', '单次购买活动生成的代金券');
+INSERT INTO `yj_market_member_voucher` VALUES ('13', '1', '2018-06-09 23:45:13', '30', '278.30', '278.30', '单次购买活动生成的代金券');
 
 -- ----------------------------
 -- Table structure for yj_market_member_year_accumulation
@@ -422,39 +467,48 @@ CREATE TABLE `yj_market_order` (
   `orderChargeMoney` decimal(9,2) NOT NULL DEFAULT '0.00',
   `orderCutMoney` decimal(9,2) NOT NULL DEFAULT '0.00',
   `yearAccumulationMoney` decimal(9,2) NOT NULL DEFAULT '0.00',
-  `payOffVoucherTotalMoney` decimal(9,2) NOT NULL DEFAULT '0.00',
+  `payOffVoucherTotalMoney` decimal(9,2) NOT NULL DEFAULT '0.00' COMMENT '使用代金券抵值',
   `payOffCashTotalMoney` decimal(9,2) NOT NULL DEFAULT '0.00',
   `payOffStatus` varchar(20) NOT NULL COMMENT '赠品兑换/已付款/部分付款/未付款',
   `salesReturn` varchar(20) NOT NULL COMMENT '有退货/无退货',
-  `orderTotalGiftAmount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '等值产品金额',
+  `orderTotalGiftAmount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '等值产品累积金额',
+  `orderGiftVoucherTotalMoney` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '单据赠送的代金券金额',
+  `giftCheckAmount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '等值商品兑换金额，需要兑换的时候，在这里记录',
+  `giftCheckRemark` varchar(2000) DEFAULT NULL COMMENT '等值商品累积兑换备注',
+  `orderCommonGiftRemark` varchar(2000) DEFAULT NULL COMMENT '单据的惠赠备注，常规惠赠',
   PRIMARY KEY (`orderId`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COMMENT='销售单价信息；2018-03-24，调整，等值产品金额，记录到order和order line，付款的时候，显示，供参考';
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COMMENT='销售单价信息；2018-03-24，调整，等值产品金额，记录到order和order line，付款的时候，显示，供参考';
 
 -- ----------------------------
 -- Records of yj_market_order
 -- ----------------------------
-INSERT INTO `yj_market_order` VALUES ('1', '20170927011300000001', '销售', '1', '老张', '20170200000000000100', null, '新建', null, '2017-09-27 01:13:32', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '0.00');
-INSERT INTO `yj_market_order` VALUES ('2', '20170927020300000002', '销售', '1', '老张', '20170200000000000100', null, '新建', null, '2017-09-27 02:02:50', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '0.00');
-INSERT INTO `yj_market_order` VALUES ('3', '20170927020900000003', '销售', '3', '老李', '20170300000000000102', null, '新建', null, '2017-09-27 02:09:26', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '0.00');
-INSERT INTO `yj_market_order` VALUES ('6', '20170927022200000006', '销售', '4', '老王', '20170300000000000103', null, '生效', null, '2017-09-27 02:22:37', '147232.58', '0.00', '7232.58', '0.00', '0.00', '140000.00', '已付款', '无退货', '0.00');
-INSERT INTO `yj_market_order` VALUES ('7', '20170927022600000007', '销售', '4', '老王', '20170300000000000103', null, '新建', null, '2017-09-27 02:26:48', '142830.16', '0.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '0.00');
-INSERT INTO `yj_market_order` VALUES ('8', '20170927022900000008', '销售', '4', '老王', '20170300000000000103', null, '生效', null, '2017-09-27 02:29:27', '142830.16', '0.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '0.00');
-INSERT INTO `yj_market_order` VALUES ('9', '20170929210600000009', '销售', '4', '老王', '20170300000000000103', null, '生效', null, '2017-09-29 21:06:42', '147232.58', '0.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '0.00');
-INSERT INTO `yj_market_order` VALUES ('10', '20170929211100000010', '销售', '4', '老王', '20170300000000000103', '3', '生效', '测试，的地地道道的的;;还没给全', '2017-09-29 21:11:35', '147232.58', '0.00', '32.58', '0.00', '0.00', '147200.00', '已付款', '无退货', '0.00');
-INSERT INTO `yj_market_order` VALUES ('11', '20180323151900000011', '销售', '4', '老王', '20170300000000000103', '4', '生效', 'null;;小幅惠赠', '2018-03-23 15:19:41', '1395.00', '1395.00', '5.00', '0.00', '0.00', '90.00', '部分付款', '无退货', '0.00');
-INSERT INTO `yj_market_order` VALUES ('12', '20180324094500000012', '销售', '4', '老王', '20170300000000000103', null, '生效', null, '2018-03-24 09:45:02', '75.00', '75.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '0.00');
-INSERT INTO `yj_market_order` VALUES ('13', '20180324094900000013', '销售', '4', '老王', '20170300000000000103', null, '生效', 'null;;手套10双，白大褂2套', '2018-03-24 09:49:14', '90.00', '90.00', '0.00', '0.00', '0.00', '90.00', '已付款', '无退货', '0.00');
-INSERT INTO `yj_market_order` VALUES ('14', '20180324095300000014', '销售', '4', '老王', '20170300000000000103', null, '生效', 'null;;赠水壶1个', '2018-03-24 09:53:33', '454.24', '454.24', '0.00', '0.00', '0.00', '0.00', '部分付款', '无退货', '0.00');
-INSERT INTO `yj_market_order` VALUES ('15', '20180324095600000015', '销售', '4', '老王', '20170300000000000103', null, '生效', 'null;;现在好了没', '2018-03-24 09:56:43', '3747.48', '3747.48', '7.48', '0.00', '0.00', '3740.00', '已付款', '无退货', '0.00');
-INSERT INTO `yj_market_order` VALUES ('16', '20180324100000000016', '销售', '1', '老张', '20170200000000000100', null, '生效', '美玉呵呵呵呵呵呵', '2018-03-24 10:00:46', '990.00', '990.00', '0.00', '0.00', '0.00', '0.00', '部分付款', '无退货', '0.00');
-INSERT INTO `yj_market_order` VALUES ('17', '20180324224500000017', '销售', '1', '老张', '20170200000000000100', null, '生效', null, '2018-03-24 22:45:06', '6120.00', '360.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '1471.36');
-INSERT INTO `yj_market_order` VALUES ('18', '20180327232400000018', '销售', '1', '老张', '20170200000000000100', null, '生效', null, '2018-03-27 23:24:33', '7920.00', '7920.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '133.76');
-INSERT INTO `yj_market_order` VALUES ('19', '20180327234400000019', '销售', '1', '老张', '20170200000000000100', null, '生效', null, '2018-03-27 23:44:07', '10180.00', '10180.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '133.76');
-INSERT INTO `yj_market_order` VALUES ('20', '20180327235000000020', '销售', '1', '老张', '20170200000000000100', null, '生效', null, '2018-03-27 23:50:32', '10180.00', '10180.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '133.76');
-INSERT INTO `yj_market_order` VALUES ('21', '20180327235400000021', '销售', '1', '老张', '20170200000000000100', null, '生效', '试试;;再试试', '2018-03-27 23:54:40', '1790.00', '1790.00', '90.00', '0.00', '200.00', '1500.00', '已付款', '无退货', '133.76');
-INSERT INTO `yj_market_order` VALUES ('22', '20180328005800000022', '销售', '1', '老张', '20170200000000000100', null, '生效', ';;号了好了', '2018-03-28 00:58:28', '2246.00', '2246.00', '6.00', '0.00', '111.00', '2129.00', '已付款', '无退货', '179.43');
-INSERT INTO `yj_market_order` VALUES ('23', '20180418212500000023', '销售', '4', '老王', '20170300000000000103', null, '生效', null, '2018-04-18 21:25:37', '2190.00', '2190.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '200.64');
-INSERT INTO `yj_market_order` VALUES ('25', '20180418214400000025', '销售', '4', '老王', '20170300000000000103', null, '生效', '试试代乳粉', '2018-04-18 21:44:16', '27330.00', '27330.00', '30.00', '22260.00', '0.00', '27300.00', '已付款', '无退货', '66.88');
+INSERT INTO `yj_market_order` VALUES ('1', '20170927011300000001', '销售', '1', '老张', '20170200000000000100', null, '新建', null, '2017-09-27 01:13:32', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('2', '20170927020300000002', '销售', '1', '老张', '20170200000000000100', null, '新建', null, '2017-09-27 02:02:50', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('3', '20170927020900000003', '销售', '3', '老李', '20170300000000000102', null, '新建', null, '2017-09-27 02:09:26', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('6', '20170927022200000006', '销售', '4', '老王', '20170300000000000103', null, '生效', null, '2017-09-27 02:22:37', '147232.58', '0.00', '7232.58', '0.00', '0.00', '140000.00', '已付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('7', '20170927022600000007', '销售', '4', '老王', '20170300000000000103', null, '新建', null, '2017-09-27 02:26:48', '142830.16', '0.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('8', '20170927022900000008', '销售', '4', '老王', '20170300000000000103', null, '生效', null, '2017-09-27 02:29:27', '142830.16', '0.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('9', '20170929210600000009', '销售', '4', '老王', '20170300000000000103', null, '生效', null, '2017-09-29 21:06:42', '147232.58', '0.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('10', '20170929211100000010', '销售', '4', '老王', '20170300000000000103', '3', '生效', '测试，的地地道道的的;;还没给全', '2017-09-29 21:11:35', '147232.58', '0.00', '32.58', '0.00', '0.00', '147200.00', '已付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('11', '20180323151900000011', '销售', '4', '老王', '20170300000000000103', '4', '生效', 'null;;小幅惠赠', '2018-03-23 15:19:41', '1395.00', '1395.00', '5.00', '0.00', '0.00', '90.00', '部分付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('12', '20180324094500000012', '销售', '4', '老王', '20170300000000000103', null, '生效', null, '2018-03-24 09:45:02', '75.00', '75.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('13', '20180324094900000013', '销售', '4', '老王', '20170300000000000103', null, '生效', 'null;;手套10双，白大褂2套', '2018-03-24 09:49:14', '90.00', '90.00', '0.00', '0.00', '0.00', '90.00', '已付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('14', '20180324095300000014', '销售', '4', '老王', '20170300000000000103', null, '生效', 'null;;赠水壶1个', '2018-03-24 09:53:33', '454.24', '454.24', '0.00', '0.00', '0.00', '0.00', '部分付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('15', '20180324095600000015', '销售', '4', '老王', '20170300000000000103', null, '生效', 'null;;现在好了没', '2018-03-24 09:56:43', '3747.48', '3747.48', '7.48', '0.00', '0.00', '3740.00', '已付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('16', '20180324100000000016', '销售', '1', '老张', '20170200000000000100', null, '生效', '美玉呵呵呵呵呵呵', '2018-03-24 10:00:46', '990.00', '990.00', '0.00', '0.00', '0.00', '0.00', '部分付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('17', '20180324224500000017', '销售', '1', '老张', '20170200000000000100', null, '生效', null, '2018-03-24 22:45:06', '6120.00', '360.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '1471.36', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('18', '20180327232400000018', '销售', '1', '老张', '20170200000000000100', null, '生效', null, '2018-03-27 23:24:33', '7920.00', '7920.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '133.76', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('19', '20180327234400000019', '销售', '1', '老张', '20170200000000000100', null, '生效', null, '2018-03-27 23:44:07', '10180.00', '10180.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '133.76', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('20', '20180327235000000020', '销售', '1', '老张', '20170200000000000100', null, '生效', null, '2018-03-27 23:50:32', '10180.00', '10180.00', '0.00', '0.00', '0.00', '0.00', '未付款', '无退货', '133.76', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('21', '20180327235400000021', '销售', '1', '老张', '20170200000000000100', null, '生效', '试试;;再试试', '2018-03-27 23:54:40', '1790.00', '1790.00', '90.00', '0.00', '200.00', '1500.00', '已付款', '无退货', '133.76', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('22', '20180328005800000022', '销售', '1', '老张', '20170200000000000100', null, '生效', ';;号了好了', '2018-03-28 00:58:28', '2246.00', '2246.00', '6.00', '0.00', '111.00', '2129.00', '已付款', '无退货', '179.43', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('23', '20180418212500000023', '销售', '4', '老王', '20170300000000000103', null, '生效', null, '2018-04-18 21:25:37', '42490.00', '2190.00', '0.00', '33355.00', '0.00', '0.00', '未付款', '无退货', '200.64', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('25', '20180418214400000025', '销售', '4', '老王', '20170300000000000103', null, '生效', '试试代乳粉', '2018-04-18 21:44:16', '27330.00', '27330.00', '30.00', '22260.00', '0.00', '27300.00', '已付款', '无退货', '66.88', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('26', '20180523172900000026', '销售', '1', '老张', '20170200000000000100', null, '生效', '', '2018-05-23 17:29:12', '12400.00', '12400.00', '0.00', '8620.00', '0.00', '12400.00', '已付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('27', '20180523200000000027', '销售', '1', '老张', '20170200000000000100', null, '生效', '', '2018-05-23 20:00:55', '4200.00', '4200.00', '200.00', '2910.00', '0.00', '4000.00', '已付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('28', '20180523212100000028', '销售', '1', '老张', '20170200000000000100', null, '生效', '', '2018-05-23 21:21:18', '4200.00', '4200.00', '200.00', '2910.00', '0.00', '4000.00', '已付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('29', '20180523213000000029', '销售', '1', '老张', '20170200000000000100', null, '生效', '', '2018-05-23 21:30:46', '4200.00', '4200.00', '200.00', '2910.00', '0.00', '4000.00', '已付款', '无退货', '0.00', '0.00', '0.00', null, null);
+INSERT INTO `yj_market_order` VALUES ('30', '20180523213800000030', '销售', '1', '老张', '20170200000000000100', '6', '生效', '小桶一对', '2018-05-23 21:38:07', '15048.00', '10032.00', '8.00', '15048.00', '0.00', '11172.00', '部分付款', '无退货', '1507.11', '278.30', '300.00', '好哈哈哈哈', '手套1包,手套2捆,手套3双');
 
 -- ----------------------------
 -- Table structure for yj_market_order_gift_line
@@ -505,7 +559,7 @@ CREATE TABLE `yj_market_order_line` (
   `goodsGiftCheck` varchar(20) NOT NULL COMMENT '当时兑现/累积/无赠送',
   `giftAmount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '等值产品金额',
   PRIMARY KEY (`orderLineId`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8 COMMENT='2018-03-24，调整，等值产品金额，记录到order和order line，付款的时候，显示，供参考';
+) ENGINE=InnoDB AUTO_INCREMENT=159 DEFAULT CHARSET=utf8 COMMENT='2018-03-24，调整，等值产品金额，记录到order和order line，付款的时候，显示，供参考';
 
 -- ----------------------------
 -- Records of yj_market_order_line
@@ -546,11 +600,24 @@ INSERT INTO `yj_market_order_line` VALUES ('63', '21', '2', '猪长的快', '22'
 INSERT INTO `yj_market_order_line` VALUES ('64', '22', '2', '猪长的快', '2', '桶', '1*50<br>桶*袋<br>730.00*15.00', '1460.00', '0.00', '0', '无赠送', '无赠送', '133.76');
 INSERT INTO `yj_market_order_line` VALUES ('65', '22', '2', '猪长的快', '22', '袋', '1*50<br>桶*袋<br>730.00*15.00', '330.00', '0.00', '0', '无赠送', '无赠送', '0.00');
 INSERT INTO `yj_market_order_line` VALUES ('66', '22', '7', '貂喜欢', '1', '桶', '1*30<br>桶*袋<br>456.00*15.00', '456.00', '0.00', '0', '无赠送', '无赠送', '45.67');
-INSERT INTO `yj_market_order_line` VALUES ('67', '23', '2', '猪长的快', '3', '桶', '1*50<br>桶*袋<br>730.00*15.00', '2190.00', '0.00', '0', '无赠送', '无赠送', '200.64');
 INSERT INTO `yj_market_order_line` VALUES ('77', '25', '8', '代乳粉', '1', '吨', '1*20*50<br>吨*袋*包<br>20000.00*20.00*400.00', '20000.00', '3000.00', '0', '无赠送', '无赠送', '0.00');
 INSERT INTO `yj_market_order_line` VALUES ('78', '25', '8', '代乳粉', '15', '包', '1*20*50<br>吨*袋*包<br>20000.00*20.00*400.00', '6000.00', '1800.00', '0', '无赠送', '无赠送', '0.00');
 INSERT INTO `yj_market_order_line` VALUES ('79', '25', '8', '代乳粉', '30', '袋', '1*20*50<br>吨*袋*包<br>20000.00*20.00*400.00', '600.00', '270.00', '0', '无赠送', '无赠送', '0.00');
 INSERT INTO `yj_market_order_line` VALUES ('80', '25', '2', '猪长的快', '1', '桶', '1*50<br>桶*袋<br>730.00*15.00', '730.00', '0.00', '0', '无赠送', '无赠送', '66.88');
+INSERT INTO `yj_market_order_line` VALUES ('85', '23', '2', '猪长的快', '3', '桶', '1*50<br>桶*袋<br>730.00*15.00', '2190.00', '0.00', '0', '无赠送', '无赠送', '200.64');
+INSERT INTO `yj_market_order_line` VALUES ('86', '23', '8', '代乳粉', '1', '吨', '1*20*50<br>吨*袋*包<br>20000.00*20.00*400.00', '20000.00', '3000.00', '0', '无赠送', '无赠送', '0.00');
+INSERT INTO `yj_market_order_line` VALUES ('87', '23', '8', '代乳粉', '15', '袋', '1*20*50<br>吨*袋*包<br>20000.00*20.00*400.00', '300.00', '135.00', '0', '无赠送', '无赠送', '0.00');
+INSERT INTO `yj_market_order_line` VALUES ('88', '23', '8', '代乳粉', '50', '包', '1*20*50<br>吨*袋*包<br>20000.00*20.00*400.00', '20000.00', '6000.00', '0', '无赠送', '无赠送', '0.00');
+INSERT INTO `yj_market_order_line` VALUES ('89', '26', '8', '代乳粉', '20', '袋', '1*20*50<br>吨*袋*包<br>20000.00*20.00*400.00', '400.00', '180.00', '0', '无赠送', '无赠送', '0.00');
+INSERT INTO `yj_market_order_line` VALUES ('90', '26', '8', '代乳粉', '30', '包', '1*20*50<br>吨*袋*包<br>20000.00*20.00*400.00', '12000.00', '3600.00', '0', '无赠送', '无赠送', '0.00');
+INSERT INTO `yj_market_order_line` VALUES ('91', '27', '8', '代乳粉', '10', '袋', '1*20*50<br>吨*袋*包<br>20000.00*20.00*400.00', '200.00', '90.00', '0', '无赠送', '无赠送', '0.00');
+INSERT INTO `yj_market_order_line` VALUES ('92', '27', '8', '代乳粉', '10', '包', '1*20*50<br>吨*袋*包<br>20000.00*20.00*400.00', '4000.00', '1200.00', '0', '无赠送', '无赠送', '0.00');
+INSERT INTO `yj_market_order_line` VALUES ('93', '28', '8', '代乳粉', '10', '袋', '1*20*50<br>吨*袋*包<br>20000.00*20.00*400.00', '200.00', '90.00', '0', '无赠送', '无赠送', '0.00');
+INSERT INTO `yj_market_order_line` VALUES ('94', '28', '8', '代乳粉', '10', '包', '1*20*50<br>吨*袋*包<br>20000.00*20.00*400.00', '4000.00', '1200.00', '0', '无赠送', '无赠送', '0.00');
+INSERT INTO `yj_market_order_line` VALUES ('97', '29', '8', '代乳粉', '10', '袋', '1*20*50<br>吨*袋*包<br>20000.00*20.00*400.00', '200.00', '90.00', '0', '无赠送', '无赠送', '0.00');
+INSERT INTO `yj_market_order_line` VALUES ('98', '29', '8', '代乳粉', '10', '包', '1*20*50<br>吨*袋*包<br>20000.00*20.00*400.00', '4000.00', '1200.00', '0', '无赠送', '无赠送', '0.00');
+INSERT INTO `yj_market_order_line` VALUES ('157', '30', '7', '貂喜欢', '22', '桶', '1*30<br>桶*袋<br>456.00*15.00', '10032.00', '0.00', '0', '无赠送', '无赠送', '1004.74');
+INSERT INTO `yj_market_order_line` VALUES ('158', '30', '7', '貂喜欢', '11', '桶', '1*30<br>桶*袋<br>456.00*15.00', '5016.00', '0.00', '0', '无赠送', '无赠送', '502.37');
 
 -- ----------------------------
 -- Table structure for yj_market_payoff
@@ -565,7 +632,7 @@ CREATE TABLE `yj_market_payoff` (
   `payOffMoney` decimal(9,2) NOT NULL,
   `payOffType` varchar(255) NOT NULL COMMENT '销售付款/退货退款',
   PRIMARY KEY (`payOffId`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of yj_market_payoff
@@ -590,6 +657,14 @@ INSERT INTO `yj_market_payoff` VALUES ('17', '21', '1', '现金', '2018-03-28 00
 INSERT INTO `yj_market_payoff` VALUES ('18', '22', '1', '现金', '2018-03-28 01:00:45', '840.00', '销售付款');
 INSERT INTO `yj_market_payoff` VALUES ('19', '22', '1', '现金', '2018-03-28 01:01:51', '1289.00', '销售付款');
 INSERT INTO `yj_market_payoff` VALUES ('20', '25', '4', '现金', '2018-04-18 22:52:32', '27300.00', '销售付款');
+INSERT INTO `yj_market_payoff` VALUES ('21', '26', '1', '现金', '2018-05-23 19:48:48', '12400.00', '销售付款');
+INSERT INTO `yj_market_payoff` VALUES ('22', '27', '1', '现金', '2018-05-23 20:02:35', '2710.00', '销售付款');
+INSERT INTO `yj_market_payoff` VALUES ('23', '28', '1', '现金', '2018-05-23 21:22:17', '4000.00', '销售付款');
+INSERT INTO `yj_market_payoff` VALUES ('24', '29', '1', '现金', '2018-05-23 21:37:42', '2710.00', '销售付款');
+INSERT INTO `yj_market_payoff` VALUES ('25', '30', '1', '现金', '2018-06-08 00:32:54', '5566.00', '销售付款');
+INSERT INTO `yj_market_payoff` VALUES ('26', '30', '1', '现金', '2018-06-09 23:45:13', '5566.00', '销售付款');
+INSERT INTO `yj_market_payoff` VALUES ('27', '30', '1', '现金', '2018-06-13 20:44:46', '20.00', '销售付款');
+INSERT INTO `yj_market_payoff` VALUES ('28', '30', '1', '现金', '2018-06-13 20:51:10', '20.00', '销售付款');
 
 -- ----------------------------
 -- Table structure for yj_market_user
