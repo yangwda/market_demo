@@ -356,7 +356,7 @@
 	    			<td id="memberAds"></td>
 	    		</tr>
 	    		<tr>
-	    			<td><strong>累积信息:</strong></td>
+	    			<td><strong>等值商品累积:</strong></td>
 	    			<td colspan="3" id="acmBuyInfo"></td>
 	    			<td><strong>可用代金券:</strong></td>
 	    			<td colspan="3" id="acmVoucherInfo"></td>

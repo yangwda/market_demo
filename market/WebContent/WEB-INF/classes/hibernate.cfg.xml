@@ -28,5 +28,7 @@
 		<mapping class="cn.yj.market.frame.vo.MarketOrderLine" />
 		<mapping class="cn.yj.market.frame.vo.MarketPayoff" />
 		<mapping class="cn.yj.market.frame.vo.MarketUser" />
+		<mapping class="cn.yj.market.frame.vo.MarketMemberGift" />
+		<mapping class="cn.yj.market.frame.vo.MarketCommonGift" />
 	</session-factory>
 </hibernate-configuration>

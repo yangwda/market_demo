@@ -379,7 +379,8 @@
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('药料销售', '/order/', 'icon-tab-light', false)" >药料销售</a></li>
 <!--             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('销售退货', '/jump/sysBuilding', 'icon-tab-light', false)" >销售退货</a></li> -->
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('会员信息', '/member/', 'icon-tab-light', false)" >会员信息</a></li>
-            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('会员对账单', '/jump/sysBuilding', 'icon-tab-light', false)" >会员对账单</a></li>
+            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('等值商品兑换 查询', '/memberGift/', 'icon-tab-light', false)" >等值商品兑换查询</a></li>
+            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('会员对账单', '/memberCheckReport/', 'icon-tab-light', false)" >会员对账单</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('年末累积', '/jump/sysBuilding', 'icon-tab-light', false)" >年末累积</a></li>
           </ul>
         </div>
@@ -406,6 +407,7 @@
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('饲料管理', '/feed/', 'icon-tab-light', false)" >饲料管理</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('饲料惠赠', '/feedGift/', 'icon-tab-light', false)" >饲料惠赠</a></li>
             <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('单次购买活动', '/oncebuy/', 'icon-tab-light', false)" >单次购买活动</a></li>
+            <li data-options="iconCls:'icon-menu-link'"><a href="#" onclick="addTab('惠赠商品管理', '/commonGift/', 'icon-tab-light', false)" >惠赠商品管理</a></li>
           </ul>
         </div>
         <div title="统计报表" style="padding:1px;" data-options="iconCls:'icon-statis-report'">

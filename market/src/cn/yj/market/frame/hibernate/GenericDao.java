@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.hibernate.Criteria;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
@@ -23,6 +24,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.transform.ResultTransformer;
+import org.hibernate.transform.Transformers;
 
 import cn.yj.market.frame.page.Page;
 
@@ -359,5 +361,13 @@ public abstract class GenericDao<T extends BasePojo> extends DaoSession implemen
 
         return sqlQuery;
     }
-
+    
+    @SuppressWarnings("unchecked")
+	public final <R> List<R> getListBeanBySql(String sql ,Class<R> beanClass) {
+    	if (beanClass == null) {
+			return null ;
+		}
+        Query query = getSession().createSQLQuery(sql).setResultTransformer(Transformers.aliasToBean(beanClass)) ;
+        return query.list();
+    }
 }

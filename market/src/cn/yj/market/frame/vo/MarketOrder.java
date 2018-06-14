@@ -51,6 +51,10 @@ public class MarketOrder extends BasePojo {
 	private String payOffStatus ;
 	private String salesReturn ;
 	private BigDecimal orderTotalGiftAmount ;
+	private BigDecimal orderGiftVoucherTotalMoney ;
+	private BigDecimal giftCheckAmount ;
+	private String giftCheckRemark ;
+	private String orderCommonGiftRemark ;
 
 	@JSONField(serialize=false)  
 	@OneToMany(mappedBy="orderId",fetch=FetchType.LAZY)
@@ -175,6 +179,30 @@ public class MarketOrder extends BasePojo {
 	}
 	public void setOrderTotalGiftAmount(BigDecimal orderTotalGiftAmount) {
 		this.orderTotalGiftAmount = orderTotalGiftAmount;
+	}
+	public BigDecimal getOrderGiftVoucherTotalMoney() {
+		return orderGiftVoucherTotalMoney;
+	}
+	public void setOrderGiftVoucherTotalMoney(BigDecimal orderGiftVoucherTotalMoney) {
+		this.orderGiftVoucherTotalMoney = orderGiftVoucherTotalMoney;
+	}
+	public BigDecimal getGiftCheckAmount() {
+		return giftCheckAmount;
+	}
+	public void setGiftCheckAmount(BigDecimal giftCheckAmount) {
+		this.giftCheckAmount = giftCheckAmount;
+	}
+	public String getGiftCheckRemark() {
+		return giftCheckRemark;
+	}
+	public void setGiftCheckRemark(String giftCheckRemark) {
+		this.giftCheckRemark = giftCheckRemark;
+	}
+	public String getOrderCommonGiftRemark() {
+		return orderCommonGiftRemark;
+	}
+	public void setOrderCommonGiftRemark(String orderCommonGiftRemark) {
+		this.orderCommonGiftRemark = orderCommonGiftRemark;
 	}
 	
 }

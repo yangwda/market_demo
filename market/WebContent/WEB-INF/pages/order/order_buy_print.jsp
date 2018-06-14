@@ -75,15 +75,12 @@
 		<tr style="color:green">
 			<td colspan="7" align="left"><b>会员累积信息：</b></td>
 		</tr>
-<!-- 		<tr style="color:green"> -->
-<!-- 			<td colspan="7" align="left" style="padding: 0 20px;">这部分信息待明确，后续补充；</td> -->
-<!-- 		</tr> -->
-<!-- 		<tr style="color:green"> -->
-<!-- 			<td colspan="7" align="left" style="padding: 0 20px;">15元代金券，2张；</td> -->
-<!-- 		</tr> -->
-<!-- 		<tr style="color:green"> -->
-<!-- 			<td colspan="7" align="left" style="padding: 0 20px;">肥肥肥肥肥，累积5包（累积满10包送热水壶1个）；</td> -->
-<!-- 		</tr> -->
+		<tr style="color:green">
+			<td colspan="7" align="left" style="padding: 0 20px;">代金券累积：${totalVoucher }</td>
+		</tr>
+		<tr style="color:green">
+			<td colspan="7" align="left" style="padding: 0 20px;">等值商品累积：${memberGiftAcc }</td>
+		</tr>
 		<tr><td colspan="7">&nbsp;</td></tr>
 		<tr><td colspan="7" align="left" style="padding: 0 30px;">&nbsp;</td></tr>
 		<tr><td colspan="7" align="right">

@@ -9,12 +9,13 @@ import cn.yj.market.frame.vo.MarketMemberVoucher;
 import cn.yj.market.frame.vo.MarketOrder;
 import cn.yj.market.frame.vo.MarketOrderLine;
 import cn.yj.market.frame.vo.MarketPayoff;
+import cn.yj.market.module.common.bean.MemberGiftCheckSearchCondition;
 import cn.yj.market.module.common.bean.OrderSearchCondition;
 
 public interface OrderBO {
 	Page<MarketOrder> getPage(OrderSearchCondition condition ,PageRequestParams pageRequestParams) ;
 
-	String getMemberAcmBuyInfo(Long memberId);
+	BigDecimal getMemberAcmBuyInfo(Long memberId);
 	
 	String getMemberAcmVoucherInfo(Long memberId);
 
@@ -29,5 +30,9 @@ public interface OrderBO {
 	List<MarketMemberVoucher> getOrderVoucher(Long orderId);
 
 	List<MarketPayoff> getPayoffHis(Long orderId);
+
+	Page<MarketOrder> getMemberGiftCheckPageList(
+			MemberGiftCheckSearchCondition condition,
+			PageRequestParams pageRequestParams);
 
 }

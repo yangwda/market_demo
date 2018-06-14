@@ -12,7 +12,7 @@
     
     // 页面键盘屏蔽
     $(document).keydown(function(event){
-      if(event.keyCode==116) return false;  //屏蔽F5刷新键
+      if(event.keyCode==116){ return false;}  //屏蔽F5刷新键
     });
     
     var drfDiffAmount = '${drfDiffAmount}' ;
@@ -121,6 +121,7 @@
 			$("#onceBuyGiftTextTd").html("") ;
 		}
 	}
+	
     </script>
 
   </head>
@@ -142,7 +143,8 @@
 			<td colspan="3" align="left">电话：${member.memberTel },${member.memberPhone }</td>
 		</tr>
 		<tr>
-			<td colspan="4" align="left">地址：${member.memberAddress }</td>
+			<td colspan="2" align="left">地址：${member.memberAddress }</td>
+			<td colspan="2" align="left"><strong>等值商品累积：${memberGiftAcc } &nbsp;元</strong></td>
 			<td colspan="3" align="left"><strong>可用代金券：${totalVoucher }</strong></td>
 		</tr>
 		<tr><td colspan="7">&nbsp;</td></tr>
@@ -188,10 +190,12 @@
 					<input type="hidden" id="cutMoneyInput" name="cutMoneyInput" value="0" />
 				</td>
 			</c:if>
+			<!-- 
 			<td colspan="2" align="right" style="color:blue;">
 				&nbsp;
 				代乳粉差：${drfDiffAmount }
 			</td>
+			-->
 		</tr>
 		<tr style="">
 			<td colspan="6" align="right">待支付<input type="hidden" id="initChargeMoney" value="${charge }" /></td>
@@ -200,9 +204,11 @@
 			</td>
 			<td colspan="2" align="right" style="color:blue;">
 				&nbsp;
+				<%-- 
 				<c:if test="${firstPay == 1}">
-					<label>兑换商品<input type="radio" name="giftFlag" value="G" checked="checked"></label>
+					<label>等值商品兑换<input type="radio" name="giftFlag" value="G" checked="checked"></label>
 				</c:if>
+				--%>
 			</td>
 		</tr>
 		<tr style="">
@@ -212,8 +218,23 @@
 			</td>
 			<td colspan="2" align="right" style="color:blue;">
 				&nbsp;
+				<%-- 
 				<c:if test="${firstPay == 1}">
-					<label>赠代金券<input type="radio" name="giftFlag" value="V"></label>
+					<label>等值商品累积<input type="radio" name="giftFlag" value="V"></label>
+				</c:if>
+				--%>
+			</td>
+		</tr>
+		<tr id="memberGiftCheckedRemarkShowTT" style="">
+			<td colspan="6" style="color:blue;font-weight:10px;" align="left" id="memberGiftCheckedRemarkShow">
+				
+			</td>
+			<td align="right" id="">
+			&nbsp;
+			</td>
+			<td colspan="2" align="right" style="color:blue;">
+				<c:if test="${firstGiftCheck == 1}">
+					<a href="#" class="" data-options="iconCls:'icon-ok'" onclick="checkGift();" style="width:15%">等值商品兑换</a>
 				</c:if>
 			</td>
 		</tr>
@@ -221,19 +242,31 @@
 		<tr style="color:blue">
 			<td></td>
 			<td colspan="5" align="left" id="onceBuyGiftTextTd"></td>
+			<td colspan="2" align="left">代乳粉差：${drfDiffAmount }</td>
 		</tr>
 		<tr><td colspan="7">&nbsp;</td></tr>
+		<tr >
+			<td colspan="1" align="left">
+				<a href="#" class="" data-options="iconCls:'icon-product'" onclick="commonGiftRemark();" style="width:15%">惠赠</a>
+			</td>
+			<td colspan="6" align="left" style="color:blue;" id="commonGiftRemarkInfo" >
+				
+			</td>
+		</tr>
+		<tr >
+			<td colspan="7" align="right"><input class="easyui-textbox" name="orderRemarks" data-options="multiline:true,width:720,prompt:'惠赠备注'" style="height:60px"></input></td>
+		</tr>
 		<tr >
 			<td colspan="7" align="right">
 				<input class="easyui-textbox" name="callBackRemarks" data-options="multiline:true,width:720,prompt:'回访备注'" style="height:60px"></input>
 			</td>
 		</tr>
-		<tr >
-			<td colspan="7" align="right"><input class="easyui-textbox" name="orderRemarks" data-options="multiline:true,width:720,prompt:'单据备注'" style="height:60px"></input></td>
-		</tr>
 		<tr><td colspan="7">&nbsp;</td></tr>
 		<tr><td colspan="7" align="right" style="padding: 0 20px;">
 			<input type="hidden" name="orderId" value="${order.orderId }" />
+			<input type="hidden" name="memberGiftCheckAmt" id="memberGiftCheckAmt" value="0.00" />
+			<input type="hidden" name="memberGiftCheckRmk" id="memberGiftCheckRmk" value="" />
+			<input type="hidden" name="commonGiftCheckRmk" id="commonGiftCheckRmk" value="" />
 			<a href="#" class="" data-options="iconCls:'icon-ok'" onclick="orderPayoff();" style="width:15%">付款</a>
 			<c:if test="${order.payOffStatus  == '未付款'}">
 			&nbsp;&nbsp;&nbsp;&nbsp;
@@ -244,5 +277,137 @@
   	
   </form>
   </div>
+  <div id="memberGiftCheckWin" class="easyui-window" title="等值商品累积兑换" 
+  		data-options="iconCls:'icon-product',closed:true,resizable:false,minimizable:false,collapsible:false,maximizable:false,modal:true" 
+  		style="width:400px;height:400px;padding:10px;">
+		<div class="easyui-layout" data-options="fit:true,border:false">
+			<div data-options="region:'north',border:false" style="height:72px">
+				<table cellpadding="5" border="0">
+		    		<tr>
+		    			<td style="width:200px;">之前累积金额：${memberGiftAcc }</td>
+		    			<td style="width:200px;">本单金额：${order.orderTotalGiftAmount }</td>
+		    		</tr>
+		    		<tr>
+		    			<td colspan="2">合计可兑换金额：${ttGiftAcc }</td>
+		    		</tr>
+		    	</table>
+			</div>
+			<div data-options="region:'center',border:false">
+				<table cellpadding="5" border="0">
+		    		<tr>
+		    			<td>兑换金额:</td>
+		    			<td><input class="easyui-textbox" type="text" name="checkAmount" id="checkAmount"></input></td>
+		    		</tr>
+		    		<tr>
+		    			<td>兑换商品:</td>
+		    			<td><input class="easyui-textbox" name="checkGoodsRemark" id="checkGoodsRemark" data-options="multiline:true" style="height:160px"></input></td>
+		    		</tr>
+		    	</table>
+			</div>
+			<div data-options="region:'south',border:false" style="height:50px;">
+				<table cellpadding="5" border="0">
+		    		<tr>
+		    			<td align="center" valign="middle" style="padding-left:100px;">
+		    				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="giftCheckConfirm()">确定兑换</a>
+		    				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	    					<a href="javascript:void(0)" class="easyui-linkbutton" onclick="giftCheckCancel()">撤销</a>
+		    			</td>
+		    		</tr>
+		    	</table>
+			</div>
+		</div>
+  </div>
+  <div id="commonGfitRemarkWin" class="easyui-window" title="惠赠" 
+  		data-options="iconCls:'icon-product',closed:true,resizable:false,minimizable:false,collapsible:false,maximizable:false,modal:true" 
+  		style="width:500px;height:400px;padding:10px;">
+		<div class="easyui-layout" data-options="fit:true,border:false">
+			<div data-options="region:'center',border:false">
+				<table cellpadding="5" border="0">
+		    		${commonGiftLines }
+		    	</table>
+			</div>
+			<div data-options="region:'south',border:false" style="height:50px;">
+				<table cellpadding="5" border="0">
+		    		<tr>
+		    			<td align="center" valign="middle" style="padding-left:10px;">
+		    				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="giftCheckConfirmConfirm()">惠赠</a>
+		    				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		    				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="giftCheckConfirmCancel()">撤销</a>
+		    			</td>
+		    		</tr>
+		    	</table>
+			</div>
+		</div>
+  </div>
   </body>
+  <script type="text/javascript">
+  	var ttGiftAcc = '${ttGiftAcc}'
+  	function checkGift(){
+  		$('#memberGiftCheckWin').window('open') ;
+	}
+  	function giftCheckConfirm(){
+  		var ckat = parseFloat($("#checkAmount").textbox('getValue')).toFixed(2) ;
+  		if(ckat == 'NaN'){
+  			ckat = null ;
+  		}
+  		if(!ckat){
+  			msg_alert('提示', '兑换金额有误！') ;
+  			return ;
+  		}
+  		ttGiftAcc = parseFloat(ttGiftAcc).toFixed(2) ;
+  		if(ttGiftAcc == 'NaN'){
+  			ttGiftAcc = 0 ;
+  		}
+  		if(ckat - ttGiftAcc > 0){
+  			msg_alert('提示', '当前可兑换金额合计：' + ttGiftAcc + '，无法兑换' + ckat + '！') ;
+  			return ;
+  		}
+  		var ckRmk = $("#checkGoodsRemark").textbox('getValue') ;
+  		if(!ckRmk){
+  			msg_alert('提示', '请记录兑换的商品和数量！') ;
+  			return ;
+  		}
+  		$("#memberGiftCheckedRemarkShow").text('兑换金额：' + ckat + '，兑换商品：' + ckRmk) ;
+//   		$("#memberGiftCheckedRemarkShowTT").show() ;
+  		$("#memberGiftCheckAmt").val(ckat) ;
+  		$("#memberGiftCheckRmk").val(ckRmk) ;
+  		$('#memberGiftCheckWin').window('close') ;
+  	}
+  	function giftCheckCancel(){
+  		$("#checkAmount").textbox('clear') ;
+  		$("#checkGoodsRemark").textbox('clear') ;
+//   		$("#memberGiftCheckedRemarkShowTT").hide() ;
+  		$("#memberGiftCheckedRemarkShow").text('') ;
+  		$("#memberGiftCheckAmt").val('0.00') ;
+  		$("#memberGiftCheckRmk").val('') ;
+  		$('#memberGiftCheckWin').window('close') ;
+  	}
+  	function commonGiftRemark(){
+  		$('#commonGfitRemarkWin').window('open') ;
+  	}
+  	function giftCheckConfirmConfirm(){
+  		var txt = "" ;
+  		var ll = $(".ffffff").each(function ( index,element){
+  			var ct = $(this).val() ;
+  			if(!ct){
+  				return ;
+  			}
+  			var pn = $(this).attr("pn") ;
+  			var pu = $(this).attr("pu") ;
+  			if(txt.length > 0){
+  				txt += "," ;
+  			}
+  			txt += pn + ct + pu ;
+  		})  ;
+  		$("#commonGiftRemarkInfo").text(txt) ;
+  		$("#commonGiftCheckRmk").val(txt) ;
+  		$('#commonGfitRemarkWin').window('close') ;
+  	}
+  	function giftCheckConfirmCancel(){
+  		$("#commonGiftRemarkInfo").text('') ;
+  		$("#commonGiftCheckRmk").val('') ;
+  		$('#commonGfitRemarkWin').window('close') ;
+  	}
+  	
+  </script>
 </html>

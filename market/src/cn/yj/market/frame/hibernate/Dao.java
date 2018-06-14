@@ -64,4 +64,6 @@ public interface Dao<T extends BasePojo> {
 	List<T> loadAndLockNowait(Collection<? extends Serializable> ids);
 	
 	List<T> criteriaQuery(DetachedCriteria criteria) ;
+	
+	<R> List<R> getListBeanBySql(String sql ,Class<R> beanClass) ;
 }
