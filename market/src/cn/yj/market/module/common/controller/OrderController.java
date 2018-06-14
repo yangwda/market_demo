@@ -24,6 +24,7 @@ import cn.yj.market.frame.exception.RunException;
 import cn.yj.market.frame.page.Page;
 import cn.yj.market.frame.util.CoreUtils;
 import cn.yj.market.frame.util.SessionUtil;
+import cn.yj.market.frame.vo.MarketCommonGift;
 import cn.yj.market.frame.vo.MarketGiftCTConfig;
 import cn.yj.market.frame.vo.MarketGoods;
 import cn.yj.market.frame.vo.MarketGoodsUnitPrice;
@@ -36,6 +37,7 @@ import cn.yj.market.frame.vo.MarketOrderGiftLine;
 import cn.yj.market.frame.vo.MarketOrderLine;
 import cn.yj.market.frame.vo.MarketPayoff;
 import cn.yj.market.module.common.bean.OrderSearchCondition;
+import cn.yj.market.module.common.bo.CommonGiftBO;
 import cn.yj.market.module.common.bo.FeedGiftConfigBO;
 import cn.yj.market.module.common.bo.GiftConfigBO;
 import cn.yj.market.module.common.bo.GoodsBO;
@@ -62,6 +64,8 @@ public class OrderController extends BaseController {
 	private OncebuyBO oncebuyBO;
 	@Autowired
 	private MemberBO memberBO;
+	@Autowired
+	private CommonGiftBO commonGiftBO;
 	/**
      * index 页
      * 
@@ -373,6 +377,10 @@ public class OrderController extends BaseController {
     	view.addObject("order", order ) ;
 		MarketMember member = memberBO.getByMemberId(order.getMemberId()) ;
 		view.addObject("member", member ) ;
+		BigDecimal memberGiftAcc = orderBO.getMemberAcmBuyInfo(member.getMemberId()) ;
+		view.addObject("memberGiftAcc", CoreUtils.formatMoney(memberGiftAcc) ) ;
+		BigDecimal ttGiftAcc = memberGiftAcc.add(order.getOrderTotalGiftAmount()) ;
+		view.addObject("ttGiftAcc", CoreUtils.formatMoney(ttGiftAcc)) ;
 		String totalVoucher = orderBO.getMemberAcmVoucherInfo(member.getMemberId()) ;
 		view.addObject("totalVoucher", totalVoucher) ;
 //		BigDecimal charge = order.getOrderChargeMoney().subtract(order.getPayOffCashTotalMoney()) ;
@@ -383,6 +391,9 @@ public class OrderController extends BaseController {
 		}
 		if (BigDecimal.ZERO.compareTo(order.getPayOffCashTotalMoney()) == 0) {
 			view.addObject("firstPay", 1) ;
+		}
+		if (BigDecimal.ZERO.compareTo(order.getGiftCheckAmount()) == 0) {
+			view.addObject("firstGiftCheck", 1) ;
 		}
 		List<MarketOrderLine> orderLines = orderBO.getOrderLineList(order.getOrderId()) ;
 		List<JSONObject> lineList = new ArrayList<JSONObject>() ;
@@ -419,6 +430,29 @@ public class OrderController extends BaseController {
 		view.addObject("lineList", lineList) ;
 		List<MarketOnceBuy> onceBuyList = oncebuyBO.getList() ;
     	view.addObject("onceBuyList", onceBuyList) ;
+    	
+    	// 常用惠赠
+    	List<MarketCommonGift> commonGifts = commonGiftBO.getAll() ;
+    	if (commonGifts != null) {
+			StringBuilder gb = new StringBuilder() ;
+			for (MarketCommonGift gift : commonGifts) {
+				gb.append("<tr><td style=\"width:100px;\" nowrap=\"false\" align=\"left\">");
+				gb.append(gift.getCommonGiftName()) ;
+				gb.append("</td><td>");
+				String pu = gift.getCommonGiftUnit() ;
+				if (StringUtils.isBlank(pu)) {
+					pu = "个" ;
+				}
+				String[] ua = pu.split("\\*") ;
+				for (String u : ua) {
+					gb.append("<input class=\"ffffff\" type=\"text\" pn=\"");
+					gb.append(gift.getCommonGiftName()) ;
+					gb.append("\" pu=\"").append(u).append("\" size=\"3\" />").append(u) ;
+				}
+				gb.append("</td></tr>\n") ;
+			}
+			view.addObject("commonGiftLines", gb.toString()) ;
+		}
 		return view ;
     }
     
@@ -468,6 +502,20 @@ public class OrderController extends BaseController {
 				gl.add(voucher.giftInfo())  ;
 			}
 		}
+		
+		if (StringUtils.isNotBlank(order.getGiftCheckRemark())) {
+			gl.add("等值商品累积兑换，金额：" + CoreUtils.formatMoney(order.getGiftCheckAmount()) + "，兑换商品内容：" + order.getGiftCheckRemark()) ;
+		}
+		if (StringUtils.isNotBlank(order.getOrderCommonGiftRemark())) {
+			gl.add(order.getOrderCommonGiftRemark()) ;
+		}
+		if (StringUtils.isNotBlank(order.getOrderRemark())) {
+			gl.add(order.getOrderRemark()) ;
+		}
+		BigDecimal memberGiftAcc = orderBO.getMemberAcmBuyInfo(member.getMemberId()) ;
+		view.addObject("memberGiftAcc", CoreUtils.formatMoney(memberGiftAcc) ) ;
+		String totalVoucher = orderBO.getMemberAcmVoucherInfo(member.getMemberId()) ;
+		view.addObject("totalVoucher", totalVoucher) ;
 		view.addObject("lineList", lineList) ;
 		view.addObject("giftLineList", gl) ;
     	return view ;
@@ -616,7 +664,8 @@ public class OrderController extends BaseController {
     @RequestMapping(value = "/payOrder", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
 	public JSONObject payOrder(String orderId, String cutMoney,
-			String chargeMoney, String callBackRemarks, String orderRemarks,
+			String chargeMoney, String callBackRemarks, String orderRemarks, 
+			String memberGiftCheckAmt, String memberGiftCheckRmk, String commonGiftCheckRmk,
 			String onceBuyGift, String giftFlag, String voucherMoney) {
     	ResponseJsonData response = new ResponseJsonData() ;
     	JSONObject r = new JSONObject() ;
@@ -636,6 +685,10 @@ public class OrderController extends BaseController {
     	}
     	if (!CoreUtils.isDouble(voucherMoney)) {
     		r.put("msg", "代金券信息无效！") ;
+    		return response.getResult() ;
+    	}
+    	if (!CoreUtils.isDouble(memberGiftCheckAmt)) {
+    		r.put("msg", "等值商品兑换数量无效！") ;
     		return response.getResult() ;
     	}
     	MarketOrder order = orderBO.getByOrderId(Long.valueOf(orderId)) ;
@@ -659,11 +712,13 @@ public class OrderController extends BaseController {
     	if (order.getPayOffCashTotalMoney() == null) {
 			order.setPayOffCashTotalMoney(BigDecimal.ZERO);
 		}
+    	giftFlag = "V" ;
     	if (BigDecimal.ZERO.compareTo(order.getPayOffCashTotalMoney()) < 0) {
 			giftFlag = "G" ;
 		}
     	order.setOrderCutMoney(new BigDecimal(cutMoney));
     	order.setPayOffVoucherTotalMoney(new BigDecimal(voucherMoney));
+    	order.setGiftCheckAmount(new BigDecimal(memberGiftCheckAmt));
     	BigDecimal pay = new BigDecimal(chargeMoney) ;
     	if (BigDecimal.ZERO.compareTo(pay) == 0) {
     		r.put("msg", "没有付款金额，不能进行付款操作！") ;
@@ -690,6 +745,12 @@ public class OrderController extends BaseController {
     	if (StringUtils.isNotBlank(orderRemarks)) {
     		order.setOrderRemark(order.getOrderRemark() + ";;" + orderRemarks);
 		}
+    	if (StringUtils.isNotBlank(memberGiftCheckRmk)) {
+    		order.setGiftCheckRemark(memberGiftCheckRmk);
+    	}
+    	if (StringUtils.isNotBlank(commonGiftCheckRmk)) {
+    		order.setOrderCommonGiftRemark(commonGiftCheckRmk);
+    	}
     	order.setPayOffCashTotalMoney(pay.add(order.getPayOffCashTotalMoney()));
     	orderBO.doPayOrder(order, callBackRemarks, onceBuyGift,pay,giftFlag) ;
     	r.put("flag", "OK") ;
@@ -735,8 +796,8 @@ public class OrderController extends BaseController {
 		}
 		else {
 			try {
-				String acmInfo = orderBO.getMemberAcmBuyInfo(Long.valueOf(memberId)) ;
-				retdata.put("info", acmInfo) ;
+				BigDecimal acm = orderBO.getMemberAcmBuyInfo(Long.valueOf(memberId)) ;
+				retdata.put("info", CoreUtils.formatMoney(acm) + " 元") ;
 			} catch (Exception e) {
 				retdata.put("info", "未知") ;
 			}

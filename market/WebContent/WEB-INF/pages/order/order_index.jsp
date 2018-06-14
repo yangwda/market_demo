@@ -32,6 +32,12 @@
     function formatYCMoney(value,row,index){
     	return formatMoney(row.yearAccumulationMoney) ;
     }
+    function formatGVTMoney(value,row,index){
+    	return formatMoney(row.orderGiftVoucherTotalMoney) ;
+    }
+    function formatGFMoney(value,row,index){
+    	return formatMoney(row.orderTotalGiftAmount) ;
+    }
     $(document).ready(function(){
     	$('#orderListTable').datagrid({
 		    fit: true,
@@ -48,11 +54,26 @@
 		      {title:'会员号', field:'memberNo', width:100},
 		      {title:'销售时间', field:'createTime', width:100},
 		      {title:'付款状态', field:'payOffStatus', width:100},
-		      {title:'备注', field:'orderRemark', width:150},
+		      {title:'备注', field:'orderRemark', width:150,formatter:function(value,row,index){
+		    	  var ss = "" ;
+		    	  if(row.orderRemark){
+		    		  ss += row.orderRemark + "<br>" ;
+		    	  }
+		    	  if(row.giftCheckRemark){
+		    		  ss += row.giftCheckRemark + "<br>"  ;
+		    	  }
+		    	  if(row.orderCommonGiftRemark){
+		    		  row.orderCommonGiftRemark
+		    	  }
+		    	  return ss;
+		      }},
 		      {title:'总金额（元）', field:'orderTotalMoney', width:72,align:'right',formatter:formatTTMoney},
-		      {title:'实收金额（元）', field:'payOffCashTotalMoney', width:72,align:'right',formatter:formatPOMoney},
+		      {title:'代金券抵值（元）', field:'payOffVoucherTotalMoney', width:72,align:'right',formatter:formatCTMoney},
 		      {title:'抹零（元）', field:'orderCutMoney', width:72,align:'right',formatter:formatCTMoney},
-		      {title:'年末累积（元）', field:'yearAccumulationMoney', width:72,align:'right',formatter:formatYCMoney}
+		      {title:'实收金额（元）', field:'payOffCashTotalMoney', width:72,align:'right',formatter:formatPOMoney},
+		      {title:'年末累积（元）', field:'yearAccumulationMoney', width:72,align:'right',formatter:formatYCMoney},
+		      {title:'等值商品累积（元）', field:'orderTotalGiftAmount', width:72,align:'right',formatter:formatGFMoney},
+		      {title:'赠代金券（元）', field:'orderGiftVoucherTotalMoney', width:72,align:'right',formatter:formatGVTMoney}
 		    ]],
 		    onSelect: function(index,row){}
 		  });

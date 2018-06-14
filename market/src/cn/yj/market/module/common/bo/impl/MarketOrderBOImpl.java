@@ -22,6 +22,7 @@ import cn.yj.market.frame.vo.MarketGiftConfigLine;
 import cn.yj.market.frame.vo.MarketGoods;
 import cn.yj.market.frame.vo.MarketGoodsUnitPrice;
 import cn.yj.market.frame.vo.MarketMember;
+import cn.yj.market.frame.vo.MarketMemberGift;
 import cn.yj.market.frame.vo.MarketMemberGiftAccumulation;
 import cn.yj.market.frame.vo.MarketMemberVoucher;
 import cn.yj.market.frame.vo.MarketOnceBuy;
@@ -29,6 +30,7 @@ import cn.yj.market.frame.vo.MarketOrder;
 import cn.yj.market.frame.vo.MarketOrderGiftLine;
 import cn.yj.market.frame.vo.MarketOrderLine;
 import cn.yj.market.frame.vo.MarketPayoff;
+import cn.yj.market.module.common.bean.MemberGiftCheckSearchCondition;
 import cn.yj.market.module.common.bean.OrderSearchCondition;
 import cn.yj.market.module.common.bo.OrderBO;
 import cn.yj.market.module.common.constants.RatioConstants;
@@ -39,6 +41,7 @@ import cn.yj.market.module.common.dao.GiftConfigLineDao;
 import cn.yj.market.module.common.dao.GoodsDao;
 import cn.yj.market.module.common.dao.MemberDao;
 import cn.yj.market.module.common.dao.MemberGiftAccumulationDao;
+import cn.yj.market.module.common.dao.MemberGiftDao;
 import cn.yj.market.module.common.dao.MemberVoucherDao;
 import cn.yj.market.module.common.dao.OncebuyDao;
 import cn.yj.market.module.common.dao.OrderDao;
@@ -74,6 +77,8 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 	private MemberVoucherDao memberVoucherDao;
 	@Autowired
 	private PayoffDao payoffDao;
+	@Autowired
+	private MemberGiftDao memberGiftDao;
 	
 	@Override
 	public Page<MarketOrder> getPage(OrderSearchCondition condition,
@@ -82,9 +87,16 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 	}
 
 	@Override
-	public String getMemberAcmBuyInfo(Long memberId) {
-		// TODO 具体逻辑待完善
-		return "暂无";
+	public BigDecimal getMemberAcmBuyInfo(Long memberId) {
+//		BigDecimal act = memberGiftDao.getMemberAcm(memberId) ;
+		List<MarketMemberGift> memberGifts = memberGiftDao.getMemberGiftList(memberId) ;
+		BigDecimal r = BigDecimal.ZERO ;
+		if (memberGifts != null) {
+			for (MarketMemberGift mg : memberGifts) {
+				r = r.add(mg.getRemainingMoney()) ;
+			}
+		}
+		return r;
 	}
 	
 	@Override
@@ -120,6 +132,11 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 		remarks = remarks.replace("null;;", "") ;
 		orderOld.setOrderRemark(remarks);
 		orderOld.setPayOffCashTotalMoney(order.getPayOffCashTotalMoney());
+		
+		orderOld.setGiftCheckAmount(order.getGiftCheckAmount());
+		orderOld.setGiftCheckRemark(order.getGiftCheckRemark());
+		orderOld.setOrderCommonGiftRemark(order.getOrderCommonGiftRemark());
+		
 		BigDecimal payVoucher = order.getPayOffVoucherTotalMoney() ;
 		if (payVoucher == null) {
 			payVoucher = BigDecimal.ZERO ;
@@ -170,21 +187,29 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 			}
 		}
 		if ("V".equals(giftFlag)) {
-			MarketMemberVoucher voucher = new MarketMemberVoucher() ;
-			voucher.setCreateTime(new Date());
-			voucher.setMemberId(order.getMemberId());
-			voucher.setRemainingMoney(order.getOrderTotalGiftAmount());
-			voucher.setSourceOrderId(order.getOrderId());
-			voucher.setSourceVoucherMoney(order.getOrderTotalGiftAmount());
-			voucher.setRemarks("等值产品金额生成的代金券");
-			memberVoucherDao.save(voucher) ;
+//			MarketMemberVoucher voucher = new MarketMemberVoucher() ;
+//			voucher.setCreateTime(new Date());
+//			voucher.setMemberId(order.getMemberId());
+//			voucher.setRemainingMoney(order.getOrderTotalGiftAmount());
+//			voucher.setSourceOrderId(order.getOrderId());
+//			voucher.setSourceVoucherMoney(order.getOrderTotalGiftAmount());
+//			voucher.setRemarks("等值产品金额生成的代金券");
+//			memberVoucherDao.save(voucher) ;
+			// 等值商品做累积
+			MarketMemberGift gift = new MarketMemberGift() ;
+			gift.setCreateTime(new Date());
+			gift.setMemberId(order.getMemberId());
+			gift.setRemainingMoney(order.getOrderTotalGiftAmount());
+			gift.setRemarks("等值商品累积");
+			gift.setSourceGiftMoney(order.getOrderTotalGiftAmount());
+			gift.setSourceOrderId(order.getOrderId());
+			memberGiftDao.save(gift) ;
 		}
 		if (StringUtils.isNotBlank(onceBuyGift)) {
 			String[] obgca = onceBuyGift.split("__") ;
 			if (obgca.length == 2) {
 				if (CoreUtils.isLong(obgca[0])) {
 					if ("D".equals(obgca[1])) {
-						//-- TODO 单次购买的优惠逻辑，后续补充处理
 						MarketOnceBuy onceBuy = oncebuyDao.load(Long.valueOf(obgca[0])) ;
 						if (onceBuy != null) {
 							List<MarketOrderLine> oll = orderOld.getOrderLineSet() ;
@@ -203,11 +228,51 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 							voucher.setSourceVoucherMoney(vd);
 							voucher.setRemarks("单次购买活动生成的代金券");
 							memberVoucherDao.save(voucher) ;
+							
+							BigDecimal vc = orderOld.getOrderGiftVoucherTotalMoney() ;
+							if (vc == null) {
+								vc = BigDecimal.ZERO ;
+							}
+							orderOld.setOrderGiftVoucherTotalMoney(vc.add(voucher.getSourceVoucherMoney()));
 						}
 					}
 				}
 			}
 		}
+		
+		//-- todo 仿照代金券的扣减，实现等值商品累积兑换记录
+		BigDecimal gc = order.getGiftCheckAmount() ;
+		if (gc == null) {
+			gc = BigDecimal.ZERO ;
+		}
+		if (gc.compareTo(BigDecimal.ZERO) > 0) {
+			List<MarketMemberGift> gifts = memberGiftDao.getMemberGiftList(order.getMemberId()) ; 
+			if (gifts == null || gifts.isEmpty()) {
+				throw new RunException("当前客户没有等值商品累积金额！") ;
+			}
+			for (MarketMemberGift gift : gifts) {
+				if (gift.getRemainingMoney() == null) {
+					continue ;
+				}
+				if (gc.compareTo(gift.getRemainingMoney()) >= 0) {
+					gc = gc.subtract(gift.getRemainingMoney()) ;
+					gift.setRemainingMoney(BigDecimal.ZERO);
+				}
+				else {
+					gift.setRemainingMoney(gift.getRemainingMoney().subtract(gc));
+					gc = BigDecimal.ZERO ;
+				}
+				memberGiftDao.update(gift);
+				if (payVoucher.compareTo(BigDecimal.ZERO) == 0) {
+					break ;
+				}
+			}
+		}
+		//此时应该==0
+		if (gc.compareTo(BigDecimal.ZERO) > 0) {
+			throw new RunException("当前客户等值商品累积金额不够！") ;
+		}
+		
 		//付款流水
 		MarketPayoff payoff = new MarketPayoff() ;
 		payoff.setMemberId(order.getMemberId());
@@ -476,5 +541,12 @@ public class MarketOrderBOImpl extends BaseBo implements OrderBO {
 		}
 		DetachedCriteria criteria = DetachedCriteria.forClass(MarketPayoff.class).add( Property.forName("orderId").eq(orderId) );   
 		return payoffDao.criteriaQuery(criteria);
+	}
+
+	@Override
+	public Page<MarketOrder> getMemberGiftCheckPageList(
+			MemberGiftCheckSearchCondition condition,
+			PageRequestParams pageRequestParams) {
+		return orderDao.getMemberGiftCheckPageList(condition,pageRequestParams);
 	}
 }
